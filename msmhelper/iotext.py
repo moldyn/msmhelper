@@ -88,10 +88,7 @@ def opentxt(file_name, comment='#', usecols=None, nrows=None, skiprows=None):
               'python pendent is not yet implemented')
 
 
-def savetxt(file_name,
-            data,
-            header=None,
-            fmt='%.5f'):
+def savetxt(file_name, data, header=None, fmt='%.5f'):
     """
     Save nxm array of floats to a text file.
 
