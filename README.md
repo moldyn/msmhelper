@@ -1,4 +1,9 @@
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/moldyn/msmhelper/"Python package")
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/moldyn/msmhelper/Python%20package)
+![GitHub All Releases](https://img.shields.io/github/downloads/moldyn/msmhelper/total)
+![GitHub last commit](https://img.shields.io/github/last-commit/moldyn/msmhelper)
+
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/moldyn/msmhelper)
+![LGTM Grade](https://img.shields.io/lgtm/grade/python/github/moldyn/msmhelper?label=code%20quality&logo=lgtm)
 
 # msmhelper
 
