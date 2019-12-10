@@ -35,7 +35,8 @@ else:
 
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def opentxt(file_name, comment='#', usecols=None, nrows=None, skiprows=None):
+def opentxt(file_name, comment='#', usecols=None, nrows=None, skiprows=None,
+            dtype=None):
     """
     Open a text file.
 
@@ -59,6 +60,9 @@ def opentxt(file_name, comment='#', usecols=None, nrows=None, skiprows=None):
     skiprows : int, optional
         The number of leading rows which will be skipped.
 
+    dtype : data-type, optional
+        Data-type of the resulting array. Default: float.
+
     Returns
     -------
     data : ndarray
@@ -72,7 +76,8 @@ def opentxt(file_name, comment='#', usecols=None, nrows=None, skiprows=None):
                            comment=comment,
                            usecols=usecols,
                            skiprows=skiprows,
-                           nrows=nrows).values
+                           nrows=nrows,
+                           dtype=dtype).values
         if data.shape[-1] == 1:
             return data.flatten()
         else:
@@ -82,7 +87,8 @@ def opentxt(file_name, comment='#', usecols=None, nrows=None, skiprows=None):
                           comments=comment,
                           usecols=usecols,
                           skiprows=skiprows,
-                          max_rows=nrows)
+                          max_rows=nrows,
+                          dtype=dtype)
     else:
         assert True, "Neither numpy nor pandas were found"
 
@@ -131,7 +137,8 @@ def opentxt_limits(*args, limits_file=None, **kwargs):
     Load file and split according to limit file.
 
     Both, the limit file and the trajectory file needs to be a single column
-    file. If limits_file is not provided it will return [traj].
+    file. If limits_file is not provided it will return [traj]. The trajectory
+    will of dtype np.int16, so the states needs to be smaller than 32767.
 
     Parameters
     ----------
@@ -148,6 +155,12 @@ def opentxt_limits(*args, limits_file=None, **kwargs):
 
     """
     # open trajectory
+    if 'dtype' in kwargs:
+        assert np.issubdtype(kwargs['dtype'], np.integer), \
+            "dtype should be integer"
+    else:
+        kwargs['dtype'] = np.int16
+
     traj = opentxt(*args, **kwargs)
     assert len(traj.shape) == 1, "Should be single column file."
 

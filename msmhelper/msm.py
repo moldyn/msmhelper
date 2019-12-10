@@ -28,7 +28,7 @@ def estimate_markov_model(trajs, lag_time):
         State trajectory/trajectories. The states should start from zero.
 
     lag_time : int
-        Lag time for estimating the markov model.
+        Lag time for estimating the markov model given in [frames].
 
     Returns
     -------
