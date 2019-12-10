@@ -1,4 +1,4 @@
-"""Tests for the reader.feed module"""
+"""Tests for the iotext module."""
 # ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import os.path
 import pytest
@@ -25,6 +25,14 @@ def test_opentxt(traj_file):
     """Test that a file is opened correctly."""
     expected = [1, 1, 1, 1, 1, 2, 2, 1, 2, 3, 2, 2, 3]
     assert (msmhelper.opentxt(traj_file) == expected).all()
+
+
+def test_savetxt(traj_file, tmpdir):
+    """Test that a file is opened correctly."""
+    expected = [1, 1, 1, 1, 1, 2, 2, 1, 2, 3, 2, 2, 3]
+    output = tmpdir.join('test_traj.txt')
+    msmhelper.savetxt(output, expected, fmt='%.0f')
+    assert (msmhelper.opentxt(output) == expected).all()
 
 
 def test_open_limits(limits_file):
