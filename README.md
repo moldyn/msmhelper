@@ -1,3 +1,5 @@
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/moldyn/msmhelper/"Python package")
+
 # msmhelper
 
 This is a package with helper functions to work with state trajectories. Hence, it is mainly used for Markov State Models.
