@@ -53,10 +53,10 @@ def opentxt(file_name, comment='#', usecols=None, nrows=None, skiprows=None):
     usecols : int-array, optional
         Columns to be read from the file (zero indexed).
 
-    nrows : int
+    nrows : int, optional
         The maximum number of lines to be read
 
-    skiprows : int
+    skiprows : int, optional
         The number of leading rows which will be skipped.
 
     Returns
@@ -84,8 +84,7 @@ def opentxt(file_name, comment='#', usecols=None, nrows=None, skiprows=None):
                           skiprows=skiprows,
                           max_rows=nrows)
     else:
-        print('neither pandas nor numpy was found and pure ' +
-              'python pendent is not yet implemented')
+        assert True, "Neither numpy nor pandas were found"
 
 
 def savetxt(file_name, data, header=None, fmt='%.5f'):
@@ -127,29 +126,63 @@ def savetxt(file_name, data, header=None, fmt='%.5f'):
               'yet implemented')
 
 
-def load_limits(limits_file, data_length):
+def opentxt_limits(*args, limits_file=None, **kwargs):
     """
-    Load and check limit file.
+    Load file and split according to limit file.
+
+    Both, the limit file and the trajectory file needs to be a single column
+    file. If limits_file is not provided it will return [traj].
 
     Parameters
     ----------
-    limits_file : str
+    limits_file : str, optional
         File name of limit file. Should be single column ascii file.
 
+    *args and **kwargs
+        The Parameters defines in opentxt.
+
+    Returns
+    -------
+    traj : ndarray
+        Return array of subtrajectories.
+
+    """
+    # open trajectory
+    traj = opentxt(*args, **kwargs)
+    assert len(traj.shape) == 1, "Should be single column file."
+
+    # open limits
+    limits = open_limits(limits_file=limits_file, data_length=len(traj))
+
+    # split trajectory
+    return np.split(traj, limits)[:-1]
+
+
+def open_limits(data_length, limits_file=None):
+    """
+    Load and check limit file.
+
+    The limits give the length of each single trajectory. So e.g.
+    [5, 5, 5] for 3 equally-sized subtrajectories of length 5.
+
+    Parameters
+    ----------
     data_length : int
         Length of data read.
 
+    limits_file : str, optional
+        File name of limit file. Should be single column ascii file.
+
     """
-    if not limits_file:
-        return [data_length]  # for single trajectory
+    if limits_file is None:
+        return np.array([data_length])  # for single trajectory
     else:
+        # open limits file
         limits = opentxt(limits_file)
-        limits = np.cumsum(limits)  # convert to cumulative sum
-        # check consitency
-        if data_length != limits[-1]:
-            print('Length of trajcetory ({}) differs with the stated '
-                  'length in the limits file ({}).'
-                  .format(data_length, limits[-1]))
-            print('break...')
-            sys.exit(1)
+        assert len(limits.shape) == 1, "Should be single column file."
+
+        # convert to cumulative sum
+        limits = np.cumsum(limits)
+        assert data_length == limits[-1], "Limits are inconsistent to data."
+
         return limits
