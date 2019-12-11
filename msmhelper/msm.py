@@ -6,6 +6,7 @@ Copyright (c) 2019, Daniel Nagel
 All rights reserved.
 
 Author: Daniel Nagel
+        Georg Diez
 
 TODO:
     - create todo
@@ -13,9 +14,36 @@ TODO:
 """
 # ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import numpy as np
-
+import pyemma.msm as msm
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+def build_MSM(*args, **kwargs):
+    """
+    Wrapps for pyemmas and daniels estimate_markov_model.
+
+    Based on the choice of reversibility it either calls one of both functions.
+
+    Parameters
+    ----------
+    See args and kwargs of both function.
+
+    Returns
+    -------
+    T : ndarray
+        Transition rate matrix.
+
+    """
+    if 'reversible' in kwargs and kwargs['reversible']:
+        MSMrev = msm.estimate_markov_model(*args, **kwargs, reversible='True')
+        MSM = MSMrev.transition_matrix
+    else:
+        MSM = estimate_markov_model(*args, **kwargs)
+
+    return MSM
+
+
 def estimate_markov_model(trajs, lag_time):
     """
     Estimates Markov State Model.
