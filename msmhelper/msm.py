@@ -21,7 +21,7 @@ import pyemma.msm as msm
 
 def build_MSM(*args, **kwargs):
     """
-    Wrapps for pyemmas and daniels estimate_markov_model.
+    Wrapper for pyemma.msm.estimate_markov_model.
 
     Based on the choice of reversibility it either calls one of both functions.
 
