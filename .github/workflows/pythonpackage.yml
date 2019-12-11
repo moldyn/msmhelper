@@ -23,6 +23,7 @@ jobs:
         # pip install -r requirements.txt
         pip install numpy
         pip install pandas
+        pip install pyemma
         pip install -e .
     - name: Lint with flake8
       run: |
