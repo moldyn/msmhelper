@@ -23,7 +23,7 @@ def build_MSM(*args, **kwargs):
     """
     Wrapper for pyemma.msm.estimate_markov_model.
 
-    Based on the choice of reversibility it either calls one of both functions.
+    Based on the choice of reversibility it either calls pyemma for a reversible matrix or it creates a transition count matrix.
 
     Parameters
     ----------
