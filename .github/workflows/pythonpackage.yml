@@ -33,5 +33,5 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        pip install -q pytest pytest-sugar pytest-cov
+        pip install -q pytest pytest-cov
         pytest --cov-report term-missing --cov=msmhelper test/
