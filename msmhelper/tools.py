@@ -50,7 +50,7 @@ def shift_data(data, val_old, val_new):
     data = data.flatten()
 
     # shift data
-    conv = np.empty(data.max()+1, dtype=val_new.dtype)
+    conv = np.empty(data.max() + 1, dtype=val_new.dtype)
     conv[val_old] = val_new
     data_shifted = conv[data]
 
