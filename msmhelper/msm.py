@@ -36,7 +36,7 @@ def build_MSM(*args, **kwargs):
 
     """
     if 'reversible' in kwargs and kwargs['reversible']:
-        MSMrev = msm.estimate_markov_model(*args, **kwargs, reversible='True')
+        MSMrev = msm.estimate_markov_model(*args, **kwargs)
         MSM = MSMrev.transition_matrix
     else:
         MSM = estimate_markov_model(*args, **kwargs)
