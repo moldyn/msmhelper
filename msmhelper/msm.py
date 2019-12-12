@@ -21,9 +21,10 @@ import pyemma.msm as msm
 
 def build_MSM(*args, **kwargs):
     """
-    Wrapper for pyemma.msm.estimate_markov_model.
+    Wrapps pyemma.msm.estimate_markov_model.
 
-    Based on the choice of reversibility it either calls pyemma for a reversible matrix or it creates a transition count matrix.
+    Based on the choice of reversibility it either calls pyemma for a
+    reversible matrix or it creates a transition count matrix.
 
     Parameters
     ----------
@@ -39,6 +40,8 @@ def build_MSM(*args, **kwargs):
         MSMrev = msm.estimate_markov_model(*args, **kwargs)
         MSM = MSMrev.transition_matrix
     else:
+        if 'reversible' in kwargs:
+            del kwargs['reversible']
         MSM = estimate_markov_model(*args, **kwargs)
 
     return MSM
