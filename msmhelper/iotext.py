@@ -28,34 +28,34 @@ PLATFORM = platform.node()
 EXEC_DATE = datetime.datetime.now()
 try:
     SCRIPT_DIR, SCRIPT_NAME = os.path.split(main.__file__)
-except NameError:
+except AttributeError:
     SCRIPT_DIR, SCRIPT_NAME = None, 'console'
 else:
     pass
 
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def opentxt(file_name, comment='#', usecols=None, nrows=None, skiprows=None,
-            dtype=None):
+def opentxt(file_name, comment='#', nrows=None, **kwargs):
     """
     Open a text file.
 
     This method can load an nxm array of floats from an ascii file. It uses
-    either pandas read_csv or as fallback the slower numpy laodtxt.
+    either pandas read_csv for a single comment or as fallback the slower numpy
+    laodtxt for multiple comments.
 
     Parameters
     ----------
     file_name : string
         Name of file to be opened.
 
-    comment : str, optional
+    comment : str or array of str, optional
         Characters with which a comment starts.
-
-    usecols : int-array, optional
-        Columns to be read from the file (zero indexed).
 
     nrows : int, optional
         The maximum number of lines to be read
+
+    usecols : int-array, optional
+        Columns to be read from the file (zero indexed).
 
     skiprows : int, optional
         The number of leading rows which will be skipped.
@@ -69,28 +69,25 @@ def opentxt(file_name, comment='#', usecols=None, nrows=None, skiprows=None,
         Data read from the text file.
 
     """
-    if 'pandas' in sys.modules and len(comment) < 2:
+    if len(comment) == 1:
+        # pandas does not support array of single char
+        if not isinstance(comment, str):
+            comment = comment[0]
         data = pd.read_csv(file_name,
                            sep=r'\s+',
                            header=None,
                            comment=comment,
-                           usecols=usecols,
-                           skiprows=skiprows,
                            nrows=nrows,
-                           dtype=dtype).values
+                           **kwargs).values
         if data.shape[-1] == 1:
             return data.flatten()
         else:
             return data
-    elif 'numpy' in sys.modules:
+    else:
         return np.loadtxt(file_name,
                           comments=comment,
-                          usecols=usecols,
-                          skiprows=skiprows,
                           max_rows=nrows,
-                          dtype=dtype)
-    else:
-        assert True, "Neither numpy nor pandas were found"
+                          **kwargs)
 
 
 def savetxt(file_name, data, header=None, fmt='%.5f'):
@@ -125,11 +122,7 @@ def savetxt(file_name, data, header=None, fmt='%.5f'):
         header_comment += '\n' + header
 
     # save file
-    if 'numpy' in sys.modules:
-        np.savetxt(file_name, data, fmt=fmt, header=header_comment)
-    else:  # this case should never happen because numpy is required
-        print('numpy was not found and pure python pendent is not ' +
-              'yet implemented')
+    np.savetxt(file_name, data, fmt=fmt, header=header_comment)
 
 
 def opentxt_limits(*args, limits_file=None, **kwargs):
