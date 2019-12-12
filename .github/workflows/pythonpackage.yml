@@ -19,19 +19,19 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
+        python -m pip install -q --upgrade pip
         # pip install -r requirements.txt
-        pip install numpy
-        pip install pandas
-        pip install -e .
+        pip install -q numpy
+        pip install -q pandas
+        pip install -q -e .
     - name: Lint with flake8
       run: |
-        pip install flake8 flake8-docstrings
+        pip install -q flake8 flake8-docstrings
         # stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        pip install pytest pytest-sugar pytest-cov
+        pip install -q pytest pytest-sugar pytest-cov
         pytest --cov-report term-missing --cov=msmhelper test/
