@@ -28,7 +28,7 @@ PLATFORM = platform.node()
 EXEC_DATE = datetime.datetime.now()
 try:
     SCRIPT_DIR, SCRIPT_NAME = os.path.split(main.__file__)
-except:
+except NameError:
     SCRIPT_DIR, SCRIPT_NAME = None, 'console'
 else:
     pass
