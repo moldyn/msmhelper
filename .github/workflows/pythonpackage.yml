@@ -34,4 +34,4 @@ jobs:
     - name: Test with pytest
       run: |
         pip install -q pytest pytest-cov
-        pytest --cov-report term-missing --cov=msmhelper test/
+        pytest --cov-report term-missing --cov-fail-under=98 --cov=msmhelper test/
