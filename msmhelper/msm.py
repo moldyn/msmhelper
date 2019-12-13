@@ -75,7 +75,7 @@ def estimate_markov_model(trajs, lag_time):
 def _generate_transition_count_matrix(trajs, lag_time: int):
     """Generate a simple transition count matrix from multiple trajectories."""
     # get number of states
-    n_states = np.unique(trajs).shape[0]
+    n_states = np.unique(np.concatenate(trajs)).shape[0]
     # initialize matrix
     T_count = np.zeros((n_states, n_states), dtype=int)
 
