@@ -6,6 +6,7 @@ Copyright (c) 2019, Daniel Nagel
 All rights reserved.
 
 Author: Daniel Nagel
+        Georg Diez
 
 TODO:
     - create todo
@@ -13,9 +14,39 @@ TODO:
 """
 # ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import numpy as np
-
+import pyemma.msm
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+def build_MSM(*args, **kwargs):
+    """
+    Wrapps pyemma.msm.estimate_markov_model.
+
+    Based on the choice of reversibility it either calls pyemma for a
+    reversible matrix or it creates a transition count matrix.
+
+    Parameters
+    ----------
+    See args and kwargs of both function.
+
+    Returns
+    -------
+    T : ndarray
+        Transition rate matrix.
+
+    """
+    if 'reversible' in kwargs and kwargs['reversible']:
+        MSMrev = pyemma.msm.estimate_markov_model(*args, **kwargs)
+        MSM = MSMrev.transition_matrix
+    else:
+        if 'reversible' in kwargs:
+            del kwargs['reversible']
+        MSM = estimate_markov_model(*args, **kwargs)
+
+    return MSM
+
+
 def estimate_markov_model(trajs, lag_time):
     """
     Estimates Markov State Model.
@@ -41,10 +72,10 @@ def estimate_markov_model(trajs, lag_time):
     return T_count_norm
 
 
-def _generate_transition_count_matrix(trajs, lag_time: int, n_states: int):
+def _generate_transition_count_matrix(trajs, lag_time: int):
     """Generate a simple transition count matrix from multiple trajectories."""
     # get number of states
-    n_states = np.unique(trajs).shape[0]
+    n_states = np.unique(np.concatenate(trajs)).shape[0]
     # initialize matrix
     T_count = np.zeros((n_states, n_states), dtype=int)
 

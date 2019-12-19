@@ -55,3 +55,28 @@ def shift_data(data, val_old, val_new):
     data_shifted = conv[data]
 
     return data_shifted.reshape(data_shape)
+
+
+def runningmean(data, window):
+    """
+    Computes the running average with window size.
+
+    Function is taken from lapis:
+    https://stackoverflow.com/questions/13728392/moving-average-or-running-mean
+
+    Parameters
+    ----------
+    data : One dimensional numpy array.
+
+    window : Integer which specifies window-width.
+
+    Returns
+    -------
+    data_rmean
+        Data which is time-averaged over the specified window.
+
+    """
+    # Calculate running mean
+    data_runningmean = np.convolve(data, np.ones(window)/window, mode='same')
+
+    return data_runningmean
