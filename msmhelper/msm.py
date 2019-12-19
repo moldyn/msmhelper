@@ -80,8 +80,8 @@ def _generate_transition_count_matrix(trajs, lag_time: int):
     T_count = np.zeros((n_states, n_states), dtype=int)
 
     for traj in trajs:
-        for i in range(len(traj)-lag_time):  # due to sliding window
-            T_count[traj[i], traj[i+lag_time]] += 1
+        for i in range(len(traj) - lag_time):  # due to sliding window
+            T_count[traj[i], traj[i + lag_time]] += 1
 
     return T_count
 
@@ -91,5 +91,5 @@ def _row_normalize_2d_matrix(matrix):
     matrix_norm = np.copy(matrix).astype(dtype=np.float64)
     for i, row in enumerate(matrix):
         sum = np.sum(row)
-        matrix_norm[i] = matrix_norm[i]/sum
+        matrix_norm[i] = matrix_norm[i] / sum
     return matrix_norm

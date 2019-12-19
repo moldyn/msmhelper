@@ -25,13 +25,13 @@ def shift_data(data, val_old, val_new):
 
     Parameters
     ----------
-    data : ndarray
+    data : ndarray or list
         Multi dimensional numpy array.
 
-    val_old : ndarray
+    val_old : ndarray or list
         Values in data which should be replaced
 
-    val_new : ndarray
+    val_new : ndarray or list
         Values which will be used instead of old ones.
 
     Returns
@@ -40,12 +40,17 @@ def shift_data(data, val_old, val_new):
         Shifted data in same shape as input.
 
     """
+    # convert to np.array
+    data = np.asarray(data)
+    val_old = np.asarray(val_old)
+    val_new = np.asarray(val_new)
+
     # flatten data
     data_shape = data.shape
     data = data.flatten()
 
     # shift data
-    conv = np.empty(data.max()+1, dtype=val_new.dtype)
+    conv = np.empty(data.max() + 1, dtype=val_new.dtype)
     conv[val_old] = val_new
     data_shifted = conv[data]
 
