@@ -30,8 +30,6 @@ try:
     SCRIPT_DIR, SCRIPT_NAME = os.path.split(main.__file__)
 except AttributeError:
     SCRIPT_DIR, SCRIPT_NAME = None, 'console'
-else:
-    pass
 
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -150,12 +148,12 @@ def opentxt_limits(*args, limits_file=None, **kwargs):
     # open trajectory
     if 'dtype' in kwargs:
         assert np.issubdtype(kwargs['dtype'], np.integer), \
-            "dtype should be integer"
+            'dtype should be integer'
     else:
         kwargs['dtype'] = np.int16
 
     traj = opentxt(*args, **kwargs)
-    assert len(traj.shape) == 1, "Should be single column file."
+    assert len(traj.shape) == 1, 'Should be single column file.'
 
     # open limits
     limits = open_limits(limits_file=limits_file, data_length=len(traj))
@@ -185,10 +183,10 @@ def open_limits(data_length, limits_file=None):
     else:
         # open limits file
         limits = opentxt(limits_file)
-        assert len(limits.shape) == 1, "Should be single column file."
+        assert len(limits.shape) == 1, 'Should be single column file.'
 
         # convert to cumulative sum
         limits = np.cumsum(limits)
-        assert data_length == limits[-1], "Limits are inconsistent to data."
+        assert data_length == limits[-1], 'Limits are inconsistent to data.'
 
         return limits

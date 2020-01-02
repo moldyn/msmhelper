@@ -12,15 +12,15 @@ HERE = os.path.dirname(__file__)
 @pytest.fixture
 def limits_file():
     """Define limits file."""
-    return os.path.join(HERE, "limits.dat")
+    return os.path.join(HERE, 'limits.dat')
 
 
 # ~~~ TESTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-@pytest.mark.parametrize("traj_file, comment", [
-    (os.path.join(HERE, "data.dat"), '#'),
-    (os.path.join(HERE, "traj1.dat"), '#'),
-    (os.path.join(HERE, "traj1.dat"), ['#']),
-    (os.path.join(HERE, "traj2.dat"), ['#', '@'])])
+@pytest.mark.parametrize('traj_file, comment', [
+    (os.path.join(HERE, 'data.dat'), '#'),
+    (os.path.join(HERE, 'traj1.dat'), '#'),
+    (os.path.join(HERE, 'traj1.dat'), ['#']),
+    (os.path.join(HERE, 'traj2.dat'), ['#', '@'])])
 def test_opentxt(traj_file, comment):
     """Test that a file is opened correctly."""
     expected = [1, 1, 1, 1, 1, 2, 2, 1, 2, 3, 2, 2, 3]
@@ -30,9 +30,9 @@ def test_opentxt(traj_file, comment):
     assert (data == expected).all()
 
 
-@pytest.mark.parametrize("traj_file, header", [
-    (os.path.join(HERE, "traj1.dat"), None),
-    (os.path.join(HERE, "traj1.dat"), "Test header comment.")])
+@pytest.mark.parametrize('traj_file, header', [
+    (os.path.join(HERE, 'traj1.dat'), None),
+    (os.path.join(HERE, 'traj1.dat'), 'Test header comment.')])
 def test_savetxt(traj_file, header, tmpdir):
     """Test that a file is opened correctly."""
     expected = [1, 1, 1, 1, 1, 2, 2, 1, 2, 3, 2, 2, 3]
@@ -47,10 +47,10 @@ def test_open_limits(limits_file):
     assert (msmhelper.open_limits(13) == [13]).all()
 
 
-@pytest.mark.parametrize("traj_file, kwargs", [
-    (os.path.join(HERE, "traj1.dat"), {}),
-    (os.path.join(HERE, "traj1.dat"), {'dtype': np.integer}),
-    (os.path.join(HERE, "traj1.dat"), {'dtype': np.float})])
+@pytest.mark.parametrize('traj_file, kwargs', [
+    (os.path.join(HERE, 'traj1.dat'), {}),
+    (os.path.join(HERE, 'traj1.dat'), {'dtype': np.integer}),
+    (os.path.join(HERE, 'traj1.dat'), {'dtype': np.float})])
 def test_opentxt_limits(limits_file, traj_file, kwargs):
     """Test that the trajectory is split correctly."""
     if 'dtype' in kwargs and kwargs['dtype'] == np.float:
