@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.2" />
+<title>msmhelper.msm API documentation</title>
+<meta name="description" content="Create Markov State Model …" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script async src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS_CHTML'></script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>msmhelper.msm</code></h1>
+</header>
+<section id="section-intro">
+<p>Create Markov State Model.</p>
+<p>BSD 3-Clause License
+Copyright (c) 2019-2020, Daniel Nagel
+All rights reserved.</p>
+<p>Author: Daniel Nagel
+Georg Diez</p>
+<h2 id="todo">TODO</h2>
+<ul>
+<li>create todo</li>
+</ul>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Create Markov State Model.
+
+BSD 3-Clause License
+Copyright (c) 2019-2020, Daniel Nagel
+All rights reserved.
+
+Author: Daniel Nagel
+        Georg Diez
+
+TODO:
+    - create todo
+
+&#34;&#34;&#34;
+# ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+import numpy as np
+import pyemma.msm
+
+from msmhelper import tools
+
+
+# ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+def build_MSM(*args, **kwargs):
+    &#34;&#34;&#34;
+    Wrapps pyemma.msm.estimate_markov_model.
+
+    Based on the choice of reversibility it either calls pyemma for a
+    reversible matrix or it creates a transition count matrix.
+
+    Parameters
+    ----------
+    reversible : bool
+        If `True` it will uses pyemma.msm.estimate_markov_model which does not
+        guarantee that the matrix is of full dimension. In case of `False` or
+        if not statedm the local function based on a simple transitition count
+        matrix will be used instead.
+
+    See args and kwargs of both function.
+
+    Returns
+    -------
+    T : ndarray
+        Transition rate matrix.
+
+    &#34;&#34;&#34;
+    if &#39;reversible&#39; in kwargs and kwargs[&#39;reversible&#39;]:
+        MSM = pyemma.msm.estimate_markov_model(*args, **kwargs)
+        T = MSM.transition_matrix
+    else:
+        if &#39;reversible&#39; in kwargs:
+            del kwargs[&#39;reversible&#39;]
+        T = estimate_markov_model(*args, **kwargs)
+
+    return T
+
+
+def estimate_markov_model(trajs, lag_time):
+    &#34;&#34;&#34;
+    Estimates Markov State Model.
+
+    This method estimates the MSM based on the transition count matrix.
+
+    Parameters
+    ----------
+    trajs : list or ndarray or list of ndarray
+        State trajectory/trajectories. The states should start from zero and
+        need to be integers.
+
+    lag_time : int
+        Lag time for estimating the markov model given in [frames].
+
+    Returns
+    -------
+    T : ndarray
+        Transition rate matrix.
+
+    &#34;&#34;&#34;
+    # format input
+    trajs = tools._format_state_trajectory(trajs)
+
+    T_count = _generate_transition_count_matrix(trajs, lag_time)
+    T_count_norm = _row_normalize_2d_matrix(T_count)
+    return T_count_norm
+
+
+def _generate_transition_count_matrix(trajs, lag_time: int):
+    &#34;&#34;&#34;Generate a simple transition count matrix from multiple trajectories.&#34;&#34;&#34;
+    # get number of states
+    n_states = np.unique(np.concatenate(trajs)).shape[0]
+    # initialize matrix
+    T_count = np.zeros((n_states, n_states), dtype=int)
+
+    for traj in trajs:
+        for i in range(len(traj) - lag_time):  # due to sliding window
+            T_count[traj[i], traj[i + lag_time]] += 1
+
+    return T_count
+
+
+def _row_normalize_2d_matrix(matrix):
+    &#34;&#34;&#34;Row normalize the given 2d matrix.&#34;&#34;&#34;
+    matrix_norm = np.copy(matrix).astype(dtype=np.float64)
+    for i, row in enumerate(matrix):
+        row_sum = np.sum(row)
+        if not row_sum:
+            raise ValueError(&#39;Row sum of 0 can not be normalized.&#39;)
+        matrix_norm[i] = matrix_norm[i] / row_sum
+    return matrix_norm</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="msmhelper.msm.build_MSM"><code class="name flex">
+<span>def <span class="ident">build_MSM</span></span>(<span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Wrapps pyemma.msm.estimate_markov_model.</p>
+<p>Based on the choice of reversibility it either calls pyemma for a
+reversible matrix or it creates a transition count matrix.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>reversible</code></strong> :&ensp;<code>bool</code></dt>
+<dd>If <code>True</code> it will uses pyemma.msm.estimate_markov_model which does not
+guarantee that the matrix is of full dimension. In case of <code>False</code> or
+if not statedm the local function based on a simple transitition count
+matrix will be used instead.</dd>
+</dl>
+<p>See args and kwargs of both function.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>T</code></strong> :&ensp;<code>ndarray</code></dt>
+<dd>Transition rate matrix.</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def build_MSM(*args, **kwargs):
+    &#34;&#34;&#34;
+    Wrapps pyemma.msm.estimate_markov_model.
+
+    Based on the choice of reversibility it either calls pyemma for a
+    reversible matrix or it creates a transition count matrix.
+
+    Parameters
+    ----------
+    reversible : bool
+        If `True` it will uses pyemma.msm.estimate_markov_model which does not
+        guarantee that the matrix is of full dimension. In case of `False` or
+        if not statedm the local function based on a simple transitition count
+        matrix will be used instead.
+
+    See args and kwargs of both function.
+
+    Returns
+    -------
+    T : ndarray
+        Transition rate matrix.
+
+    &#34;&#34;&#34;
+    if &#39;reversible&#39; in kwargs and kwargs[&#39;reversible&#39;]:
+        MSM = pyemma.msm.estimate_markov_model(*args, **kwargs)
+        T = MSM.transition_matrix
+    else:
+        if &#39;reversible&#39; in kwargs:
+            del kwargs[&#39;reversible&#39;]
+        T = estimate_markov_model(*args, **kwargs)
+
+    return T</code></pre>
+</details>
+</dd>
+<dt id="msmhelper.msm.estimate_markov_model"><code class="name flex">
+<span>def <span class="ident">estimate_markov_model</span></span>(<span>trajs, lag_time)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Estimates Markov State Model.</p>
+<p>This method estimates the MSM based on the transition count matrix.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>trajs</code></strong> :&ensp;<code>list</code> or <code>ndarray</code> or <code>list</code> of <code>ndarray</code></dt>
+<dd>State trajectory/trajectories. The states should start from zero and
+need to be integers.</dd>
+<dt><strong><code>lag_time</code></strong> :&ensp;<code>int</code></dt>
+<dd>Lag time for estimating the markov model given in [frames].</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>T</code></strong> :&ensp;<code>ndarray</code></dt>
+<dd>Transition rate matrix.</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def estimate_markov_model(trajs, lag_time):
+    &#34;&#34;&#34;
+    Estimates Markov State Model.
+
+    This method estimates the MSM based on the transition count matrix.
+
+    Parameters
+    ----------
+    trajs : list or ndarray or list of ndarray
+        State trajectory/trajectories. The states should start from zero and
+        need to be integers.
+
+    lag_time : int
+        Lag time for estimating the markov model given in [frames].
+
+    Returns
+    -------
+    T : ndarray
+        Transition rate matrix.
+
+    &#34;&#34;&#34;
+    # format input
+    trajs = tools._format_state_trajectory(trajs)
+
+    T_count = _generate_transition_count_matrix(trajs, lag_time)
+    T_count_norm = _row_normalize_2d_matrix(T_count)
+    return T_count_norm</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="msmhelper" href="index.html">msmhelper</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="msmhelper.msm.build_MSM" href="#msmhelper.msm.build_MSM">build_MSM</a></code></li>
+<li><code><a title="msmhelper.msm.estimate_markov_model" href="#msmhelper.msm.estimate_markov_model">estimate_markov_model</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
