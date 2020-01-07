@@ -16,9 +16,10 @@ TODO:
 import numpy as np
 import pyemma.msm
 
+from msmhelper import tools
+
+
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
 def build_MSM(*args, **kwargs):
     """
     Wrapps pyemma.msm.estimate_markov_model.
@@ -28,6 +29,12 @@ def build_MSM(*args, **kwargs):
 
     Parameters
     ----------
+    reversible : bool
+        If `True` it will uses pyemma.msm.estimate_markov_model which does not
+        guarantee that the matrix is of full dimension. In case of `False` or
+        if not statedm the local function based on a simple transitition count
+        matrix will be used instead.
+
     See args and kwargs of both function.
 
     Returns
@@ -37,14 +44,14 @@ def build_MSM(*args, **kwargs):
 
     """
     if 'reversible' in kwargs and kwargs['reversible']:
-        MSMrev = pyemma.msm.estimate_markov_model(*args, **kwargs)
-        MSM = MSMrev.transition_matrix
+        MSM = pyemma.msm.estimate_markov_model(*args, **kwargs)
+        T = MSM.transition_matrix
     else:
         if 'reversible' in kwargs:
             del kwargs['reversible']
-        MSM = estimate_markov_model(*args, **kwargs)
+        T = estimate_markov_model(*args, **kwargs)
 
-    return MSM
+    return T
 
 
 def estimate_markov_model(trajs, lag_time):
