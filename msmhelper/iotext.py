@@ -33,6 +33,11 @@ except AttributeError:
     SCRIPT_DIR, SCRIPT_NAME = None, 'console'
 
 
+# ~~~ ERROR CLASS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+class FileError(Exception):
+    """An exception for wrongly formated input files."""
+
+
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def opentxt(file_name, comment='#', nrows=None, **kwargs):
     """
