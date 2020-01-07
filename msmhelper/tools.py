@@ -106,3 +106,73 @@ def _format_state_trajectory(trajs):
 
     return trajs
 
+
+def _flatten_data(data):
+    """
+    Flatten data to 1D ndarray.
+
+    This method flattens ndarrays, list of ndarrays to a 1D ndarray. This can
+    be undone with _unflatten_data().
+
+    Parameters
+    ----------
+    data : ndarray, list, list of ndarrays
+        1D data or a list of data.
+
+    Returns
+    -------
+    data : ndarray
+        Flattened data.
+
+    kwargs : dict
+        Dictionary with information to restore shape.
+
+    """
+    kwargs = {}
+
+    # flatten data
+    if isinstance(data, list):
+        # list of ndarrays
+        if all((isinstance(row, np.ndarray) for row in data)):
+            # get shape and flatten
+            kwargs['limits'] = np.cumsum([len(row) for row in data])
+            data = np.concatenate(data)
+        # list of numbers
+        else:
+            data = np.asarray(data)
+    elif isinstance(data, np.ndarray):
+        # get shape and flatten
+        kwargs['data_shape'] = data.shape
+        data = data.flatten()
+
+    return data, kwargs
+
+
+def _unflatten_data(data, kwargs):
+    """
+    Unflatten data to original structure.
+
+    This method undoes _flatten_data().
+
+    Parameters
+    ----------
+    data : ndarray
+        Flattened data.
+
+    kwargs : dict
+        Dictionary with information to restore shape. Provided by
+        _flatten_data().
+
+    Returns
+    -------
+    data : ndarray, list, list of ndarrays
+        Data with restored shape.
+
+    """
+    # reshape
+    if 'data_shape' in kwargs:
+        data = data.reshape(kwargs['data_shape'])
+    elif 'limits' in kwargs:
+        data = np.split(data, kwargs['limits'])[:-1]
+
+    return data
