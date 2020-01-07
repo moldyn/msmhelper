@@ -12,15 +12,16 @@ TODO:
 
 """
 # ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-import os
-import sys
 import datetime
-import __main__ as main
 import getpass  # get username with getpass.getuser()
+import os
 import platform  # get pc name with platform.node()
+import sys
+
 import numpy as np
 import pandas as pd
 
+import __main__ as main
 
 # ~~~ RUNTIME INFORMATION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 USERNAME = getpass.getuser()
