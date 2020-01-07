@@ -16,68 +16,101 @@ import numpy as np
 
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def shift_data(data, val_old, val_new):
+def shift_data(data, val_old, val_new, dtype=np.uint16):
     """
     Shift data from old to new values.
 
-    The basic function is taken from Ashwini_Chaudhary:
+    > **CAUTION:**
+    > The values of `val_old`, `val_new` and `data` needs to be integers.
+
+    The basic function is based on Ashwini_Chaudhary solution:
     https://stackoverflow.com/a/29408060
 
     Parameters
     ----------
-    data : ndarray or list
-        Multi dimensional numpy array.
+    data : ndarray, list, list of ndarrays
+        1D data or a list of data.
 
     val_old : ndarray or list
-        Values in data which should be replaced
+        Values in data which should be replaced. All values needs to be within
+        the range of `[data.min(), data.max()]`
 
     val_new : ndarray or list
         Values which will be used instead of old ones.
 
+    dtype : data-type, optional
+        The desired data-type. Needs to be of type unsigned integer.
+
     Returns
     -------
-    data
+    data : ndarray
         Shifted data in same shape as input.
 
     """
+    # check data-type
+    if not np.issubdtype(dtype, np.integer):
+        raise TypeError('An unsigned integer type is needed.')
+
+    # offset data and val_old to allow negative values
+    offset = np.min(data)
+
     # convert to np.array
-    data = np.asarray(data)
-    val_old = np.asarray(val_old)
-    val_new = np.asarray(val_new)
+    val_old = (np.asarray(val_old) - offset).astype(dtype)
+    val_new = (np.asarray(val_new) - offset).astype(dtype)
 
     # flatten data
-    data_shape = data.shape
-    data = data.flatten()
+    data, shape_kwargs = _flatten_data(data)
+
+    # convert data and shift
+    data = (data - offset).astype(dtype)
 
     # shift data
-    conv = np.empty(data.max() + 1, dtype=val_new.dtype)
+    conv = np.arange(data.max() + 1, dtype=dtype)
     conv[val_old] = val_new
     data_shifted = conv[data]
 
-    return data_shifted.reshape(data_shape)
+    # shift data back
+    data_shifted = data_shifted.astype(np.integer) + offset
+
+    # reshape
+    data_shifted = _unflatten_data(data_shifted, shape_kwargs)
+    return data_shifted
 
 
 def runningmean(data, window):
-    """
-    Computes the running average with window size.
+    r"""
+    Compute centered running average with given window size.
+
+    This function returns the centered based running average of the given
+    data. The output of this function is of the same length as the input,
+    by assuming that the given data is zero before and after the given
+    series. Hence, there are border affects which are not corrected.
+
+    > **CAUTION:**
+    > If the given window is even (not symmetric) it will be shifted towards
+    > the beginning of the current value. So for `window=4`, it will consider
+    > the current position \(i\), the two to the left \(i-2\) and \(i-1\) and
+    > one to the right \(i+1\).
 
     Function is taken from lapis:
     https://stackoverflow.com/questions/13728392/moving-average-or-running-mean
 
     Parameters
     ----------
-    data : One dimensional numpy array.
+    data : ndarray
+        One dimensional numpy array.
 
-    window : Integer which specifies window-width.
+    window : int
+        Integer which specifies window-width.
 
     Returns
     -------
-    data_rmean
+    data_rmean : ndarray
         Data which is time-averaged over the specified window.
 
     """
     # Calculate running mean
-    data_runningmean = np.convolve(data, np.ones(window)/window, mode='same')
+    data_runningmean = np.convolve(data, np.ones(window) / window, mode='same')
 
     return data_runningmean
 
