@@ -101,6 +101,8 @@ def _row_normalize_2d_matrix(matrix):
     """Row normalize the given 2d matrix."""
     matrix_norm = np.copy(matrix).astype(dtype=np.float64)
     for i, row in enumerate(matrix):
-        sum = np.sum(row)
-        matrix_norm[i] = matrix_norm[i] / sum
+        row_sum = np.sum(row)
+        if not row_sum:
+            raise ValueError('Row sum of 0 can not be normalized.')
+        matrix_norm[i] = matrix_norm[i] / row_sum
     return matrix_norm
