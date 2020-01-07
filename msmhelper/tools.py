@@ -77,6 +77,45 @@ def shift_data(data, val_old, val_new, dtype=np.uint16):
     return data_shifted
 
 
+def rename_by_population(traj, return_permutation=False):
+    r"""
+    Rename states sorted by their population starting from 1.
+
+    Parameters
+    ----------
+    traj : ndarray, list of ndarrays
+        State trajectory or list of state trajectories.
+
+    return_permutation : bool
+        Return additionaly the permutation to achieve performed renaming.
+        Default is False.
+
+    Returns
+    -------
+    traj : ndarray
+        Renamed data.
+
+    permutation : ndarray
+        Permutation going from old to new state nameing. So the `i`th state
+        of the new naming corresponds to the old state `permutation[i-1]`.
+
+    """
+    # get unique states with population
+    states, pop = np.unique(traj, return_counts=True)
+
+    # get decreasing order
+    idx_sort = np.argsort(pop)[::-1]
+
+    # rename states
+    traj_renamed = shift_data(traj,
+                              val_old=states[idx_sort],
+                              val_new=np.arange(len(states)) + 1)
+    if return_permutation:
+        return traj_renamed, states[idx_sort]
+    else:
+        return traj_renamed
+
+
 def runningmean(data, window):
     r"""
     Compute centered running average with given window size.
