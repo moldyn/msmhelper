@@ -28,6 +28,11 @@ import msmhelper
 # Roadmap:
 - write roadmap
 
+# Requirements:
+- Python 3.6+
+- Numpy 1.16.2+
+- Pyemma 2.5.7+
+
 # Credits:
 - [numpy](https://docs.scipy.org/doc/numpy)
 - [realpython](https://realpython.com/)
