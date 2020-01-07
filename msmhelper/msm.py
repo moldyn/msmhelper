@@ -62,8 +62,9 @@ def estimate_markov_model(trajs, lag_time):
 
     Parameters
     ----------
-    trajs : ndarray or list of ndarray
-        State trajectory/trajectories. The states should start from zero.
+    trajs : list or ndarray or list of ndarray
+        State trajectory/trajectories. The states should start from zero and
+        need to be integers.
 
     lag_time : int
         Lag time for estimating the markov model given in [frames].
@@ -74,6 +75,9 @@ def estimate_markov_model(trajs, lag_time):
         Transition rate matrix.
 
     """
+    # format input
+    trajs = tools._format_state_trajectory(trajs)
+
     T_count = _generate_transition_count_matrix(trajs, lag_time)
     T_count_norm = _row_normalize_2d_matrix(T_count)
     return T_count_norm

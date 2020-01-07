@@ -80,3 +80,29 @@ def runningmean(data, window):
     data_runningmean = np.convolve(data, np.ones(window)/window, mode='same')
 
     return data_runningmean
+
+
+def _format_state_trajectory(trajs):
+    """Convert state trajectory to list of ndarrays."""
+    # 1d ndarray
+    if isinstance(trajs, np.ndarray):
+        if len(trajs.shape) == 1:
+            trajs = [trajs]
+    # list
+    elif isinstance(trajs, list):
+        # list of integers
+        if all((np.issubdtype(type(traj), np.integer) for traj in trajs)):
+            trajs = [np.array(trajs)]
+        # list of lists
+        elif all((isinstance(traj, list) for traj in trajs)):
+            trajs = [np.asarray(traj) for traj in trajs]
+        # not list of ndarrays
+        elif not all((isinstance(traj, np.ndarray) for traj in trajs)):
+            raise TypeError('Wrong data type of trajs.')
+
+    # check for integers
+    if not all((np.issubdtype(traj.dtype, np.integer) for traj in trajs)):
+        raise TypeError('States needs to be integers.')
+
+    return trajs
+
