@@ -128,7 +128,7 @@ def savetxt(file_name, data, header=None, fmt='%.5f'):
     np.savetxt(file_name, data, fmt=fmt, header=header_comment)
 
 
-def opentxt_limits(*args, limits_file=None, **kwargs):
+def opentxt_limits(file_name, limits_file=None, **kwargs):
     """
     Load file and split according to limit file.
 
@@ -138,11 +138,14 @@ def opentxt_limits(*args, limits_file=None, **kwargs):
 
     Parameters
     ----------
+    file_name : string
+        Name of file to be opened.
+
     limits_file : str, optional
         File name of limit file. Should be single column ascii file.
 
-    *args and **kwargs
-        The Parameters defines in opentxt.
+    kwargs
+        The Parameters defined in opentxt.
 
     Returns
     -------
@@ -151,14 +154,14 @@ def opentxt_limits(*args, limits_file=None, **kwargs):
 
     """
     # open trajectory
-    if 'dtype' in kwargs:
-        assert np.issubdtype(kwargs['dtype'], np.integer), \
-            'dtype should be integer'
+    if 'dtype' in kwargs and not np.issubdtype(kwargs['dtype'], np.integer):
+        raise TypeError('dtype should be integer')
     else:
         kwargs['dtype'] = np.int16
 
-    traj = opentxt(*args, **kwargs)
-    assert len(traj.shape) == 1, 'Should be single column file.'
+    traj = opentxt(file_name, **kwargs)
+    if len(traj.shape) != 1:
+        raise FileError('Shoud be single column file.')
 
     # open limits
     limits = open_limits(limits_file=limits_file, data_length=len(traj))
@@ -188,10 +191,12 @@ def open_limits(data_length, limits_file=None):
     else:
         # open limits file
         limits = opentxt(limits_file)
-        assert len(limits.shape) == 1, 'Should be single column file.'
+        if len(limits.shape) != 1:
+            raise FileError('Shoud be single column file.')
 
         # convert to cumulative sum
         limits = np.cumsum(limits)
-        assert data_length == limits[-1], 'Limits are inconsistent to data.'
+        if data_length != limits[-1]:
+            raise ValueError('Limits are inconsistent to data.')
 
         return limits
