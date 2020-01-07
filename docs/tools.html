@@ -113,6 +113,45 @@ def shift_data(data, val_old, val_new, dtype=np.uint16):
     return data_shifted
 
 
+def rename_by_population(traj, return_permutation=False):
+    r&#34;&#34;&#34;
+    Rename states sorted by their population starting from 1.
+
+    Parameters
+    ----------
+    traj : ndarray, list of ndarrays
+        State trajectory or list of state trajectories.
+
+    return_permutation : bool
+        Return additionaly the permutation to achieve performed renaming.
+        Default is False.
+
+    Returns
+    -------
+    traj : ndarray
+        Renamed data.
+
+    permutation : ndarray
+        Permutation going from old to new state nameing. So the `i`th state
+        of the new naming corresponds to the old state `permutation[i-1]`.
+
+    &#34;&#34;&#34;
+    # get unique states with population
+    states, pop = np.unique(traj, return_counts=True)
+
+    # get decreasing order
+    idx_sort = np.argsort(pop)[::-1]
+
+    # rename states
+    traj_renamed = shift_data(traj,
+                              val_old=states[idx_sort],
+                              val_new=np.arange(len(states)) + 1)
+    if return_permutation:
+        return traj_renamed, states[idx_sort]
+    else:
+        return traj_renamed
+
+
 def runningmean(data, window):
     r&#34;&#34;&#34;
     Compute centered running average with given window size.
@@ -254,6 +293,70 @@ def _unflatten_data(data, kwargs):
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="msmhelper.tools.rename_by_population"><code class="name flex">
+<span>def <span class="ident">rename_by_population</span></span>(<span>traj, return_permutation=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Rename states sorted by their population starting from 1.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>traj</code></strong> :&ensp;<code>ndarray</code>, <code>list</code> of <code>ndarrays</code></dt>
+<dd>State trajectory or list of state trajectories.</dd>
+<dt><strong><code>return_permutation</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Return additionaly the permutation to achieve performed renaming.
+Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>traj</code></strong> :&ensp;<code>ndarray</code></dt>
+<dd>Renamed data.</dd>
+<dt><strong><code>permutation</code></strong> :&ensp;<code>ndarray</code></dt>
+<dd>Permutation going from old to new state nameing. So the <code>i</code>th state
+of the new naming corresponds to the old state <code>permutation[i-1]</code>.</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def rename_by_population(traj, return_permutation=False):
+    r&#34;&#34;&#34;
+    Rename states sorted by their population starting from 1.
+
+    Parameters
+    ----------
+    traj : ndarray, list of ndarrays
+        State trajectory or list of state trajectories.
+
+    return_permutation : bool
+        Return additionaly the permutation to achieve performed renaming.
+        Default is False.
+
+    Returns
+    -------
+    traj : ndarray
+        Renamed data.
+
+    permutation : ndarray
+        Permutation going from old to new state nameing. So the `i`th state
+        of the new naming corresponds to the old state `permutation[i-1]`.
+
+    &#34;&#34;&#34;
+    # get unique states with population
+    states, pop = np.unique(traj, return_counts=True)
+
+    # get decreasing order
+    idx_sort = np.argsort(pop)[::-1]
+
+    # rename states
+    traj_renamed = shift_data(traj,
+                              val_old=states[idx_sort],
+                              val_new=np.arange(len(states)) + 1)
+    if return_permutation:
+        return traj_renamed, states[idx_sort]
+    else:
+        return traj_renamed</code></pre>
+</details>
+</dd>
 <dt id="msmhelper.tools.runningmean"><code class="name flex">
 <span>def <span class="ident">runningmean</span></span>(<span>data, window)</span>
 </code></dt>
@@ -437,6 +540,7 @@ the range of <code>[data.min(), data.max()]</code></dd>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="msmhelper.tools.rename_by_population" href="#msmhelper.tools.rename_by_population">rename_by_population</a></code></li>
 <li><code><a title="msmhelper.tools.runningmean" href="#msmhelper.tools.runningmean">runningmean</a></code></li>
 <li><code><a title="msmhelper.tools.shift_data" href="#msmhelper.tools.shift_data">shift_data</a></code></li>
 </ul>
