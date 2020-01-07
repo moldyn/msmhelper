@@ -2,13 +2,13 @@
 Set of helpful functions.
 
 BSD 3-Clause License
-Copyright (c) 2019, Daniel Nagel
+Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
 
 Author: Daniel Nagel
 
 TODO:
-    - create todo
+    - Correct border effects of running mean
 
 """
 # ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

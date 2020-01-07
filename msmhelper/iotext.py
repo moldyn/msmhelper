@@ -2,7 +2,7 @@
 Input and output text files.
 
 BSD 3-Clause License
-Copyright (c) 2019, Daniel Nagel
+Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
 
 Author: Daniel Nagel
