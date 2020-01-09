@@ -21,7 +21,7 @@ import msmhelper
 
 # Changelog:
 - tba:
-  - 
+  -
 - v0.1:
   - intial release
 
@@ -29,7 +29,7 @@ import msmhelper
 - write roadmap
 
 # Requirements:
-- Python 3.6+
+- Python 3.5+
 - Numpy 1.16.2+
 - Pyemma 2.5.7+
 

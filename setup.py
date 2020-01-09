@@ -1,5 +1,10 @@
 import pathlib
 import setuptools
+import sys
+
+# check for python 3.5+
+if sys.version_info < (3, 5):
+    raise SystemExit('Python 3.5+ is required!')
 
 # The directory containing this file
 HERE = pathlib.Path(__file__).parent
