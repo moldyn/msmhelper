@@ -1,6 +1,7 @@
 import pathlib
-import setuptools
 import sys
+
+import setuptools
 
 # check for python 3.5+
 if sys.version_info < (3, 5):
