@@ -20,7 +20,7 @@ from msmhelper import tools
 
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def build_MSM(*args, **kwargs):
+def build_MSM(trajs, lag_time, **kwargs):
     """
     Wrapps pyemma.msm.estimate_markov_model.
 
@@ -29,13 +29,20 @@ def build_MSM(*args, **kwargs):
 
     Parameters
     ----------
+    trajs : list or ndarray or list of ndarray
+        State trajectory/trajectories. The states should start from zero and
+        need to be integers.
+
+    lag_time : int
+        Lag time for estimating the markov model given in [frames].
+
     reversible : bool
         If `True` it will uses pyemma.msm.estimate_markov_model which does not
         guarantee that the matrix is of full dimension. In case of `False` or
         if not statedm the local function based on a simple transitition count
         matrix will be used instead.
 
-    See args and kwargs of both function.
+    See kwargs of both function.
 
     Returns
     -------
@@ -44,12 +51,12 @@ def build_MSM(*args, **kwargs):
 
     """
     if 'reversible' in kwargs and kwargs['reversible']:
-        MSM = pyemma.msm.estimate_markov_model(*args, **kwargs)
+        MSM = pyemma.msm.estimate_markov_model(trajs, lag_time, **kwargs)
         T = MSM.transition_matrix
     else:
         if 'reversible' in kwargs:
             del kwargs['reversible']
-        T = estimate_markov_model(*args, **kwargs)
+        T = estimate_markov_model(trajs, lag_time, **kwargs)
 
     return T
 
