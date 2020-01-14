@@ -6,6 +6,7 @@ Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
 
 Author: Daniel Nagel
+        Georg Diez
 
 """
 # ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -65,3 +66,17 @@ def test__generate_transition_count_matrix(traj, lag_time, Tref):
     T = msm._generate_transition_count_matrix(traj, lag_time)
     for i, row in enumerate(T):
         assert (row == Tref[i]).all()
+
+
+@pytest.mark.parametrize('matrix, eigenvaluesref, eigenvectorsref', [
+    (np.matrix([[1, 6, -1], [2, -1, -2], [1, 0, -1]]), np.array([3, 0, -4]),
+     [np.array([-2, -3, 2]) / np.sqrt(17),
+      np.array([-1, -6, 13]) / np.sqrt(206),
+      np.array([-1, 2, 1]) / np.sqrt(6)])])
+def test_left_eigenvectors(matrix, eigenvaluesref, eigenvectorsref):
+    """Test left eigenvectors estimate."""
+    eigenvalues, eigenvectors = msmhelper.left_eigenvectors(matrix)
+    assert (eigenvalues - eigenvaluesref < 1e-9).all()
+    for i, row in enumerate(eigenvectors):
+        assert (np.absolute(row) - np.absolute(eigenvectorsref[i]) < 1e-9).all(
+        )
