@@ -117,7 +117,7 @@ def _row_normalize_2d_matrix(matrix):
 
 def left_eigenvectors(matrix):
     """
-    Estimates left eigenvectors.
+    Estimate left eigenvectors.
 
     Estimates the left eigenvectors and corresponding eigenvalues of a
     quadratic matrix.
@@ -128,9 +128,11 @@ def left_eigenvectors(matrix):
 
     Returns
     -------
-    Array of n eigenvalues sorted by their value (descending).
+    eigenvalues: ndarray
+        N eigenvalues sorted by their value (descending).
 
-    Array of n eigenvectors sorted by descending eigenvalues.
+    eigenvectors: ndarray
+        N eigenvectors sorted by descending eigenvalues.
 
     """
     # Check whether matrix is quadratic.
@@ -150,3 +152,29 @@ def left_eigenvectors(matrix):
     eigenvectors_sorted = eigenvectors[idx_eigenvalues]
 
     return eigenvalues_sorted, eigenvectors_sorted
+
+
+def implied_timescales(matrix, lagtime):
+    """
+    Calculate implied timescales.
+
+    Parameters
+    ----------
+    matrix : n x n matrix
+        Transition matrix
+
+    lagtime: int
+        lagtime specified in the desired unit
+
+
+    Returns
+    -------
+    timescales: ndarray
+        N implied timescales in [unit]. The first entry corresponds to the
+        stationary distribution.
+
+    """
+    eigenvalues, eigenvectors = left_eigenvectors(matrix)
+    timescales = - (lagtime / np.log(eigenvalues))
+
+    return timescales
