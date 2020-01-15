@@ -51,15 +51,15 @@ def shift_data(data, val_old, val_new, dtype=np.uint16):
     if not np.issubdtype(dtype, np.integer):
         raise TypeError('An unsigned integer type is needed.')
 
+    # flatten data
+    data, shape_kwargs = _flatten_data(data)
+
     # offset data and val_old to allow negative values
     offset = np.min(data)
 
     # convert to np.array
     val_old = (np.asarray(val_old) - offset).astype(dtype)
     val_new = (np.asarray(val_new) - offset).astype(dtype)
-
-    # flatten data
-    data, shape_kwargs = _flatten_data(data)
 
     # convert data and shift
     data = (data - offset).astype(dtype)
