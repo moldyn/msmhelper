@@ -154,6 +154,51 @@ def runningmean(data, window):
     return data_runningmean
 
 
+def swapcols(data, indicesold, indicesnew):
+    r"""Interchange cols of an ndarray.
+
+    This method swaps the specified columns.
+    .. todo:: Optimize memory usage
+
+    Parameters
+    ----------
+    data : ndarray
+        2D numpy array.
+    indicesold : integer or ndarray
+        1D array of indices.
+    indicesnew : integer or ndarray
+        1D array of new indices
+
+    Returns
+    -------
+    data_swapped : ndarray
+        2D numpy array with swappend columns.
+
+    """
+    # cast to 1d arrays
+    for idx in [indicesnew, indicesold]:
+        idx = np.asarray(idx).astype(np.integer)
+        if not len(idx.shape):
+            idx = np.asarray([idx])
+        elif len(idx.shape) > 1:
+            raise ValueError('Wrong dimensionality of indices.')
+
+    if len(indicesnew) - len(indicesold):
+        raise ValueError('Indices needs to be of same shape.')
+
+    # cast data
+    data = np.asarray(data)
+
+    if np.all(indicesnew == indicesold):
+        return data
+
+    # data.T[indicesold] = data.T[indicesnew] fails for large datasets
+    data_swapped = np.copy(data)
+    data_swapped.T[indicesold] = data.T[indicesnew]
+
+    return data_swapped
+
+
 def _format_state_trajectory(trajs):
     """Convert state trajectory to list of ndarrays."""
     # 1d ndarray

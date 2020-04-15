@@ -22,6 +22,7 @@ import numpy as np
 import pandas as pd
 
 import __main__ as main
+from msmhelper import tools
 
 # ~~~ RUNTIME USER INFORMATION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 try:
@@ -43,12 +44,16 @@ class FileError(Exception):
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def opentxt(file_name, comment='#', nrows=None, **kwargs):
-    """
+    r"""
     Open a text file.
 
     This method can load an nxm array of floats from an ascii file. It uses
     either pandas read_csv for a single comment or as fallback the slower numpy
     laodtxt for multiple comments.
+
+    .. warning:: In contrast to pandas the order of usecols will be used. So if
+        using ´data = opentxt(..., uscols=[1, 0])´ you acces the first column
+        by `data[:, 0]` and the second one by `data[:, 1]`.
 
     Parameters
     ----------
@@ -80,15 +85,26 @@ def opentxt(file_name, comment='#', nrows=None, **kwargs):
         # pandas does not support array of single char
         if not isinstance(comment, str):
             comment = comment[0]
+
+        # force pandas to load in stated order without sorting
+        cols = kwargs.pop('usecols', None)
+        if cols is not None:
+            idx = np.argsort(cols)
+            cols = np.asarray(cols).astype(np.integer)[idx]
+
         data = pd.read_csv(file_name,
                            sep=r'\s+',
                            header=None,
                            comment=comment,
                            nrows=nrows,
+                           usecols=cols,
                            **kwargs).values
         if data.shape[-1] == 1:
             return data.flatten()
         else:
+            # swap columns back to ensure correct order
+            if cols is not None:
+                data = tools.swapcols(data, idx, np.arange(len(idx)))
             return data
     else:
         return np.loadtxt(file_name,
