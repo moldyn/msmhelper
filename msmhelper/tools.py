@@ -56,10 +56,11 @@ def shift_data(data, val_old, val_new, dtype=np.uint16):
 
     # offset data and val_old to allow negative values
     offset = np.min(data)
+    offset_new = np.min(val_new)
 
     # convert to np.array
     val_old = (np.asarray(val_old) - offset).astype(dtype)
-    val_new = (np.asarray(val_new) - offset).astype(dtype)
+    val_new = (np.asarray(val_new) - offset_new).astype(dtype)
 
     # convert data and shift
     data = (data - offset).astype(dtype)
@@ -70,7 +71,7 @@ def shift_data(data, val_old, val_new, dtype=np.uint16):
     data_shifted = conv[data]
 
     # shift data back
-    data_shifted = data_shifted.astype(np.integer) + offset
+    data_shifted = data_shifted.astype(np.integer) + offset_new
 
     # reshape
     data_shifted = _unflatten_data(data_shifted, shape_kwargs)

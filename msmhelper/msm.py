@@ -5,8 +5,8 @@ BSD 3-Clause License
 Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
 
-Author: Daniel Nagel
-        Georg Diez
+Authors: Daniel Nagel
+         Georg Diez
 
 TODO:
     - create todo
@@ -113,3 +113,68 @@ def _row_normalize_2d_matrix(matrix):
             raise ValueError('Row sum of 0 can not be normalized.')
         matrix_norm[i] = matrix_norm[i] / row_sum
     return matrix_norm
+
+
+def left_eigenvectors(matrix):
+    """
+    Estimate left eigenvectors.
+
+    Estimates the left eigenvectors and corresponding eigenvalues of a
+    quadratic matrix.
+
+    Parameters
+    ----------
+    matrix : n x n matrix
+
+    Returns
+    -------
+    eigenvalues: ndarray
+        N eigenvalues sorted by their value (descending).
+
+    eigenvectors: ndarray
+        N eigenvectors sorted by descending eigenvalues.
+
+    """
+    # Check whether matrix is quadratic.
+    if np.shape(matrix)[0] != np.shape(matrix)[1]:
+        raise ValueError('Matrix is not quadratic.')
+    # Transpose matrix and therefore determine eigenvalues and left
+    # eigenvectors
+    matrix_T = np.matrix.transpose(matrix)
+    eigenvalues, eigenvectors = np.linalg.eig(matrix_T)
+
+    # Transpose eigenvectors, since v[:,i] is eigenvector
+    eigenvectors = eigenvectors.T
+
+    # Sort them by descending eigenvalues
+    idx_eigenvalues = eigenvalues.argsort()[::-1]
+    eigenvalues_sorted = eigenvalues[idx_eigenvalues]
+    eigenvectors_sorted = eigenvectors[idx_eigenvalues]
+
+    return eigenvalues_sorted, eigenvectors_sorted
+
+
+def implied_timescales(matrix, lagtime):
+    """
+    Calculate implied timescales.
+
+    Parameters
+    ----------
+    matrix : n x n matrix
+        Transition matrix
+
+    lagtime: int
+        lagtime specified in the desired unit
+
+
+    Returns
+    -------
+    timescales: ndarray
+        N implied timescales in [unit]. The first entry corresponds to the
+        stationary distribution.
+
+    """
+    eigenvalues, eigenvectors = left_eigenvectors(matrix)
+    timescales = - (lagtime / np.log(eigenvalues))
+
+    return timescales
