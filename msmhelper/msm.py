@@ -135,9 +135,9 @@ def left_eigenvectors(matrix):
         N eigenvectors sorted by descending eigenvalues.
 
     """
-    # Check whether matrix is quadratic.
-    if np.shape(matrix)[0] != np.shape(matrix)[1]:
-        raise ValueError('Matrix is not quadratic.')
+    # try to cast to quadratic matrix
+    matrix = tools._asquadratic(matrix)
+
     # Transpose matrix and therefore determine eigenvalues and left
     # eigenvectors
     matrix_T = np.matrix.transpose(matrix)
@@ -158,6 +158,9 @@ def implied_timescales(matrix, lagtime):
     """
     Calculate implied timescales.
 
+    ..todo: Clearify usage. Better passing trajs to calculate matrix?
+            Check if lagtime is valid parameter. Filter 0th EV.
+
     Parameters
     ----------
     matrix : n x n matrix
@@ -174,6 +177,9 @@ def implied_timescales(matrix, lagtime):
         stationary distribution.
 
     """
+    # try to cast to quadratic matrix
+    matrix = tools._asquadratic(matrix)
+
     eigenvalues, eigenvectors = left_eigenvectors(matrix)
     timescales = - (lagtime / np.log(eigenvalues))
 

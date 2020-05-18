@@ -78,5 +78,4 @@ def test_left_eigenvectors(matrix, eigenvaluesref, eigenvectorsref):
     eigenvalues, eigenvectors = msmhelper.left_eigenvectors(matrix)
     assert (eigenvalues - eigenvaluesref < 1e-9).all()
     for i, row in enumerate(eigenvectors):
-        assert (np.absolute(row) - np.absolute(eigenvectorsref[i]) < 1e-9).all(
-        )
+        assert (np.abs(row) - np.abs(eigenvectorsref[i]) < 1e-9).all()
