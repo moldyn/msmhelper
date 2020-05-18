@@ -77,3 +77,55 @@ def test__format_state_trajectory(traj):
 
     # as list of ndarrays
     assert (tools._format_state_trajectory([traj])[0] == traj).all()
+
+
+@pytest.mark.parametrize('data', [
+    ([[1, 1], [1, 2], [2, 1], [2, 3], [3, 3]])])
+def test_swapcols(data):
+    """Test swapcols."""
+    # for same idxs
+    data_swap = tools.swapcols(data, (0, 1), (0, 1))
+    for row in range(len(data)):
+        assert(data[row] == data_swap[row]).all()
+
+    data_swap = tools.swapcols(data, (0, 1), (1, 0))
+    for row in range(len(data)):
+        assert(data[row][0] == data_swap[row][1]).all()
+        assert(data[row][1] == data_swap[row][0]).all()
+
+    # wrong shape
+    with pytest.raises(ValueError):
+        tools.swapcols(data, (0, 1), (1))
+
+
+def test__asindex():
+    """Test asindex."""
+    idx = np.arange(5)
+    assert (idx == tools._asindex(idx)).all()
+
+    # check if integer is casted to array
+    assert (np.array(5) == tools._asindex(5)).all()
+
+    # wrong dimensionality
+    with pytest.raises(ValueError):
+        tools._asindex([idx])
+
+
+def test__asquadratic():
+    """Test _asquadratic."""
+    mat = np.arange(9).reshape(3, 3)
+
+    for i in range(len(mat)):
+        assert (mat[i] == tools._asquadratic(mat)[i]).all()
+
+    # check for non quadratic matrices
+    with pytest.raises(ValueError):
+        tools._asquadratic([2, 1])
+
+    # check for scalar
+    with pytest.raises(ValueError):
+        tools._asquadratic(1)
+
+    # check for 3d matrices
+    with pytest.raises(ValueError):
+        tools._asquadratic(np.arange(8).reshape(2, 2, 2))
