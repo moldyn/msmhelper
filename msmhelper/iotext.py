@@ -152,6 +152,39 @@ def opentxt_limits(file_name, limits_file=None, **kwargs):
     """
     Load file and split according to limit file.
 
+    If limits_file is not provided it will return [traj].
+
+    Parameters
+    ----------
+    file_name : string
+        Name of file to be opened.
+
+    limits_file : str, optional
+        File name of limit file. Should be single column ascii file.
+
+    kwargs
+        The Parameters defined in opentxt.
+
+    Returns
+    -------
+    traj : ndarray
+        Return array of subtrajectories.
+
+    """
+    # open trajectory
+    traj = opentxt(file_name, **kwargs)
+
+    # open limits
+    limits = open_limits(limits_file=limits_file, data_length=len(traj))
+
+    # split trajectory
+    return np.split(traj, limits)[:-1]
+
+
+def openmicrostates(file_name, limits_file=None, **kwargs):
+    """
+    Load 1d file and split according to limit file.
+
     Both, the limit file and the trajectory file needs to be a single column
     file. If limits_file is not provided it will return [traj]. The trajectory
     will of dtype np.int16, so the states needs to be smaller than 32767.
@@ -179,15 +212,13 @@ def opentxt_limits(file_name, limits_file=None, **kwargs):
     else:
         kwargs['dtype'] = np.int16
 
-    traj = opentxt(file_name, **kwargs)
-    if len(traj.shape) != 1:
-        raise FileError('Shoud be single column file.')
+    # load split trajectory
+    traj = opentxt_limits(file_name, limits_file, **kwargs)
 
-    # open limits
-    limits = open_limits(limits_file=limits_file, data_length=len(traj))
+    if len(traj[0].shape) != 1:
+        raise FileError('Microstate trjectory shoud be single column file.')
 
-    # split trajectory
-    return np.split(traj, limits)[:-1]
+    return traj
 
 
 def open_limits(data_length, limits_file=None):
