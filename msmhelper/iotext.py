@@ -26,7 +26,7 @@ from msmhelper import tools
 
 # ~~~ RUNTIME USER INFORMATION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 try:
-    SCRIPT_DIR, SCRIPT_NAME = os.path.split(main.__file__)
+    SCRIPT_DIR, SCRIPT_NAME = os.path.split(os.path.abspath(main.__file__))
 except AttributeError:
     SCRIPT_DIR, SCRIPT_NAME = None, 'console'
 
