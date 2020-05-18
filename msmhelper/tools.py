@@ -16,9 +16,9 @@ import numpy as np
 
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def shift_data(data, val_old, val_new, dtype=np.uint16):
+def shift_data(data, val_old, val_new, dtype=np.integer):
     """
-    Shift data from old to new values.
+    Shift integer array (data) from old to new values.
 
     > **CAUTION:**
     > The values of `val_old`, `val_new` and `data` needs to be integers.
@@ -55,12 +55,11 @@ def shift_data(data, val_old, val_new, dtype=np.uint16):
     data, shape_kwargs = _flatten_data(data)
 
     # offset data and val_old to allow negative values
-    offset = np.min(data)
-    offset_new = np.min(val_new)
+    offset = np.min([np.min(data), np.min(val_new)])
 
     # convert to np.array
     val_old = (np.asarray(val_old) - offset).astype(dtype)
-    val_new = (np.asarray(val_new) - offset_new).astype(dtype)
+    val_new = (np.asarray(val_new) - offset).astype(dtype)
 
     # convert data and shift
     data = (data - offset).astype(dtype)
@@ -71,7 +70,7 @@ def shift_data(data, val_old, val_new, dtype=np.uint16):
     data_shifted = conv[data]
 
     # shift data back
-    data_shifted = data_shifted.astype(np.integer) + offset_new
+    data_shifted = data_shifted.astype(np.integer) + offset
 
     # reshape
     data_shifted = _unflatten_data(data_shifted, shape_kwargs)
@@ -177,12 +176,8 @@ def swapcols(data, indicesold, indicesnew):
 
     """
     # cast to 1d arrays
-    for idx in [indicesnew, indicesold]:
-        idx = np.asarray(idx).astype(np.integer)
-        if not len(idx.shape):
-            idx = np.asarray([idx])
-        elif len(idx.shape) > 1:
-            raise ValueError('Wrong dimensionality of indices.')
+    indicesnew = _asindex(indicesnew)
+    indicesold = _asindex(indicesold)
 
     if len(indicesnew) - len(indicesold):
         raise ValueError('Indices needs to be of same shape.')
@@ -198,6 +193,29 @@ def swapcols(data, indicesold, indicesnew):
     data_swapped.T[indicesold] = data.T[indicesnew]
 
     return data_swapped
+
+
+def _asindex(idx):
+    """Cast to 1d integer ndarray."""
+    idx = np.atleast_1d(idx).astype(np.integer)
+    if len(idx.shape) > 1:
+        raise ValueError('Wrong dimensionality of indices.')
+    return idx
+
+
+def _asquadratic(matrix):
+    # cast to 2d for easier error checking
+    matrix = np.atleast_2d(matrix)
+
+    # Check whether matrix is quadratic.
+    if np.shape(matrix)[0] != np.shape(matrix)[1]:
+        raise ValueError('Matrix is not quadratic.')
+
+    # check if scalar or tensor higher than 2d
+    if matrix.shape[0] == 1 or matrix.ndim > 2:
+        raise ValueError('Only EVs of 2d matrices can be calculated.')
+
+    return matrix
 
 
 def _format_state_trajectory(trajs):
