@@ -12,7 +12,15 @@ TODO:
 
 """
 # ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+import datetime
+import getpass  # get username with getpass.getuser()
+import os
+import platform  # get pc name with platform.node()
+import sys
+
 import numpy as np
+
+import __main__ as main
 
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -193,6 +201,35 @@ def swapcols(data, indicesold, indicesnew):
     data_swapped.T[indicesold] = data.T[indicesnew]
 
     return data_swapped
+
+
+def get_runtime_user_information():
+    """Get user runtime information.
+
+    Returns
+    -------
+    RUI : dict
+        Holding username in 'user', pc name in 'pc', date of execution 'date',
+        path of execution 'script_dir' and name of execution main file
+        'script_name'. In case of interactive usage, script_name is 'console'.
+
+    """
+    try:
+        script_dir, script_name = os.path.split(os.path.abspath(main.__file__))
+    except AttributeError:
+        script_dir, script_name = '', 'console'
+
+    # get time without microseconds
+    date = datetime.datetime.now()
+    if sys.version_info >= (3, 6):
+        date = date.isoformat(sep=' ', timespec='seconds')
+
+    RUI = {'user': getpass.getuser(),
+           'pc': platform.node(),
+           'date': date,
+           'script_dir': script_dir,
+           'script_name': script_name}
+    return RUI
 
 
 def _asindex(idx):

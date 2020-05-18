@@ -15,6 +15,24 @@ import pytest
 import msmhelper
 from msmhelper import tools
 
+from importlib import reload
+import __main__ as main
+
+
+class change_main__file__:
+    """Emulate an ipython usage."""
+
+    def __enter__(self):
+        """Delete file name and reload module."""
+        self.filename = main.__file__
+        del main.__file__
+        main.msmhelper = reload(msmhelper)
+
+    def __exit__(self, typ, val, traceback):
+        """Reset file name and reload module."""
+        main.__file__ = self.filename
+        main.msmhelper = reload(msmhelper)
+
 
 # ~~~ TESTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @pytest.mark.parametrize('data, expected, val_old, val_new', [
@@ -129,3 +147,10 @@ def test__asquadratic():
     # check for 3d matrices
     with pytest.raises(ValueError):
         tools._asquadratic(np.arange(8).reshape(2, 2, 2))
+
+
+def test_get_runtime_user_information():
+    """Check for console usage."""
+    assert tools.get_runtime_user_information()['script_name'] != 'console'
+    with change_main__file__():
+        assert tools.get_runtime_user_information()['script_name'] == 'console'
