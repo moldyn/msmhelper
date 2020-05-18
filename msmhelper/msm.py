@@ -8,9 +8,6 @@ All rights reserved.
 Authors: Daniel Nagel
          Georg Diez
 
-TODO:
-    - create todo
-
 """
 # ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import numpy as np
@@ -158,8 +155,10 @@ def implied_timescales(matrix, lagtime):
     """
     Calculate implied timescales.
 
-    ..todo: Clearify usage. Better passing trajs to calculate matrix?
-            Check if lagtime is valid parameter. Filter 0th EV.
+    .. todo::
+        - Clearify usage. Better passing trajs to calculate matrix?
+        - Check if lagtime is valid parameter.
+        - Filter 0th EV.
 
     Parameters
     ----------

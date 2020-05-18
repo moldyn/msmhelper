@@ -7,9 +7,6 @@ All rights reserved.
 
 Author: Daniel Nagel
 
-TODO:
-    - create todo
-
 """
 # ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import datetime

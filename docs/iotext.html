@@ -3,15 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.2" />
+<meta name="generator" content="pdoc 0.8.1" />
 <title>msmhelper.iotext API documentation</title>
 <meta name="description" content="Input and output text files …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
-<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
-<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script async src="https://cse.google.com/cse.js?cx=017837193012385208679:pey8ky8gdqw"></script>
+<style>.gsc-control-cse {padding:0 !important;margin-top:1em}</style>
 <script async src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS_CHTML'></script>
 </head>
 <body>
@@ -26,10 +28,6 @@
 Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.</p>
 <p>Author: Daniel Nagel</p>
-<h2 id="todo">TODO</h2>
-<ul>
-<li>create todo</li>
-</ul>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -43,9 +41,6 @@ All rights reserved.
 
 Author: Daniel Nagel
 
-TODO:
-    - create todo
-
 &#34;&#34;&#34;
 # ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import datetime
@@ -58,15 +53,19 @@ import numpy as np
 import pandas as pd
 
 import __main__ as main
+from msmhelper import tools
 
-# ~~~ RUNTIME INFORMATION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-USERNAME = getpass.getuser()
-PLATFORM = platform.node()
-EXEC_DATE = datetime.datetime.now()
+# ~~~ RUNTIME USER INFORMATION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 try:
-    SCRIPT_DIR, SCRIPT_NAME = os.path.split(main.__file__)
+    SCRIPT_DIR, SCRIPT_NAME = os.path.split(os.path.abspath(main.__file__))
 except AttributeError:
     SCRIPT_DIR, SCRIPT_NAME = None, &#39;console&#39;
+
+RUI = {&#39;user&#39;: getpass.getuser(),
+       &#39;platform&#39;: platform.node(),
+       &#39;date&#39;: datetime.datetime.now(),
+       &#39;script_dir&#39;: SCRIPT_DIR,
+       &#39;script_name&#39;: SCRIPT_NAME}
 
 
 # ~~~ ERROR CLASS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -76,12 +75,16 @@ class FileError(Exception):
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def opentxt(file_name, comment=&#39;#&#39;, nrows=None, **kwargs):
-    &#34;&#34;&#34;
+    r&#34;&#34;&#34;
     Open a text file.
 
     This method can load an nxm array of floats from an ascii file. It uses
     either pandas read_csv for a single comment or as fallback the slower numpy
     laodtxt for multiple comments.
+
+    .. warning:: In contrast to pandas the order of usecols will be used. So if
+        using ´data = opentxt(..., uscols=[1, 0])´ you acces the first column
+        by `data[:, 0]` and the second one by `data[:, 1]`.
 
     Parameters
     ----------
@@ -113,15 +116,26 @@ def opentxt(file_name, comment=&#39;#&#39;, nrows=None, **kwargs):
         # pandas does not support array of single char
         if not isinstance(comment, str):
             comment = comment[0]
+
+        # force pandas to load in stated order without sorting
+        cols = kwargs.pop(&#39;usecols&#39;, None)
+        if cols is not None:
+            idx = np.argsort(cols)
+            cols = np.asarray(cols).astype(np.integer)[idx]
+
         data = pd.read_csv(file_name,
                            sep=r&#39;\s+&#39;,
                            header=None,
                            comment=comment,
                            nrows=nrows,
+                           usecols=cols,
                            **kwargs).values
         if data.shape[-1] == 1:
             return data.flatten()
         else:
+            # swap columns back to ensure correct order
+            if cols is not None:
+                data = tools.swapcols(data, idx, np.arange(len(idx)))
             return data
     else:
         return np.loadtxt(file_name,
@@ -153,10 +167,11 @@ def savetxt(file_name, data, header=None, fmt=&#39;%.5f&#39;):
 
     &#34;&#34;&#34;
     # prepare header comments
-    header_comment = f&#39;This file was generated by {SCRIPT_NAME} with :\n&#39;
+    header_comment = (&#39;This file was generated with {script_name}:\n&#39;
+                      .format(**RUI))
     for arg in sys.argv:  # loop over the given arguments
-        header_comment += f&#39;{arg} &#39;
-    header_comment += f&#39;\n\n{EXEC_DATE}, {USERNAME}@{PLATFORM}&#39;
+        header_comment += &#39;{arg} &#39;.format(arg=arg)
+    header_comment += &#39;\n\n{date}, {user}@{platform}&#39;.format(**RUI)
     if header:  # print column title if given
         header_comment += &#39;\n&#39; + header
 
@@ -167,6 +182,39 @@ def savetxt(file_name, data, header=None, fmt=&#39;%.5f&#39;):
 def opentxt_limits(file_name, limits_file=None, **kwargs):
     &#34;&#34;&#34;
     Load file and split according to limit file.
+
+    If limits_file is not provided it will return [traj].
+
+    Parameters
+    ----------
+    file_name : string
+        Name of file to be opened.
+
+    limits_file : str, optional
+        File name of limit file. Should be single column ascii file.
+
+    kwargs
+        The Parameters defined in opentxt.
+
+    Returns
+    -------
+    traj : ndarray
+        Return array of subtrajectories.
+
+    &#34;&#34;&#34;
+    # open trajectory
+    traj = opentxt(file_name, **kwargs)
+
+    # open limits
+    limits = open_limits(limits_file=limits_file, data_length=len(traj))
+
+    # split trajectory
+    return np.split(traj, limits)[:-1]
+
+
+def openmicrostates(file_name, limits_file=None, **kwargs):
+    &#34;&#34;&#34;
+    Load 1d file and split according to limit file.
 
     Both, the limit file and the trajectory file needs to be a single column
     file. If limits_file is not provided it will return [traj]. The trajectory
@@ -195,15 +243,13 @@ def opentxt_limits(file_name, limits_file=None, **kwargs):
     else:
         kwargs[&#39;dtype&#39;] = np.int16
 
-    traj = opentxt(file_name, **kwargs)
-    if len(traj.shape) != 1:
-        raise FileError(&#39;Shoud be single column file.&#39;)
+    # load split trajectory
+    traj = opentxt_limits(file_name, limits_file, **kwargs)
 
-    # open limits
-    limits = open_limits(limits_file=limits_file, data_length=len(traj))
+    if len(traj[0].shape) != 1:
+        raise FileError(&#39;Microstate trjectory shoud be single column file.&#39;)
 
-    # split trajectory
-    return np.split(traj, limits)[:-1]
+    return traj
 
 
 def open_limits(data_length, limits_file=None):
@@ -249,7 +295,7 @@ def open_limits(data_length, limits_file=None):
 <span>def <span class="ident">open_limits</span></span>(<span>data_length, limits_file=None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Load and check limit file.</p>
+<div class="desc"><p>Load and check limit file.</p>
 <p>The limits give the length of each single trajectory. So e.g.
 [5, 5, 5] for 3 equally-sized subtrajectories of length 5.</p>
 <h2 id="parameters">Parameters</h2>
@@ -258,7 +304,7 @@ def open_limits(data_length, limits_file=None):
 <dd>Length of data read.</dd>
 <dt><strong><code>limits_file</code></strong> :&ensp;<code>str</code>, optional</dt>
 <dd>File name of limit file. Should be single column ascii file.</dd>
-</dl></section>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -295,14 +341,85 @@ def open_limits(data_length, limits_file=None):
         return limits</code></pre>
 </details>
 </dd>
+<dt id="msmhelper.iotext.openmicrostates"><code class="name flex">
+<span>def <span class="ident">openmicrostates</span></span>(<span>file_name, limits_file=None, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Load 1d file and split according to limit file.</p>
+<p>Both, the limit file and the trajectory file needs to be a single column
+file. If limits_file is not provided it will return [traj]. The trajectory
+will of dtype np.int16, so the states needs to be smaller than 32767.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>file_name</code></strong> :&ensp;<code>string</code></dt>
+<dd>Name of file to be opened.</dd>
+<dt><strong><code>limits_file</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>File name of limit file. Should be single column ascii file.</dd>
+<dt><strong><code>kwargs</code></strong></dt>
+<dd>The Parameters defined in opentxt.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>traj</code></strong> :&ensp;<code>ndarray</code></dt>
+<dd>Return array of subtrajectories.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def openmicrostates(file_name, limits_file=None, **kwargs):
+    &#34;&#34;&#34;
+    Load 1d file and split according to limit file.
+
+    Both, the limit file and the trajectory file needs to be a single column
+    file. If limits_file is not provided it will return [traj]. The trajectory
+    will of dtype np.int16, so the states needs to be smaller than 32767.
+
+    Parameters
+    ----------
+    file_name : string
+        Name of file to be opened.
+
+    limits_file : str, optional
+        File name of limit file. Should be single column ascii file.
+
+    kwargs
+        The Parameters defined in opentxt.
+
+    Returns
+    -------
+    traj : ndarray
+        Return array of subtrajectories.
+
+    &#34;&#34;&#34;
+    # open trajectory
+    if &#39;dtype&#39; in kwargs and not np.issubdtype(kwargs[&#39;dtype&#39;], np.integer):
+        raise TypeError(&#39;dtype should be integer&#39;)
+    else:
+        kwargs[&#39;dtype&#39;] = np.int16
+
+    # load split trajectory
+    traj = opentxt_limits(file_name, limits_file, **kwargs)
+
+    if len(traj[0].shape) != 1:
+        raise FileError(&#39;Microstate trjectory shoud be single column file.&#39;)
+
+    return traj</code></pre>
+</details>
+</dd>
 <dt id="msmhelper.iotext.opentxt"><code class="name flex">
 <span>def <span class="ident">opentxt</span></span>(<span>file_name, comment='#', nrows=None, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Open a text file.</p>
+<div class="desc"><p>Open a text file.</p>
 <p>This method can load an nxm array of floats from an ascii file. It uses
 either pandas read_csv for a single comment or as fallback the slower numpy
 laodtxt for multiple comments.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning:&ensp;In contrast to pandas the order of usecols will be used. So if</p>
+<p>using ´data = opentxt(&hellip;, uscols=[1, 0])´ you acces the first column
+by <code>data[:, 0]</code> and the second one by <code>data[:, 1]</code>.</p>
+</div>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>file_name</code></strong> :&ensp;<code>string</code></dt>
@@ -311,29 +428,33 @@ laodtxt for multiple comments.</p>
 <dd>Characters with which a comment starts.</dd>
 <dt><strong><code>nrows</code></strong> :&ensp;<code>int</code>, optional</dt>
 <dd>The maximum number of lines to be read</dd>
-<dt><strong><code>usecols</code></strong> :&ensp;<code>int</code>-<code>array</code>, optional</dt>
+<dt><strong><code>usecols</code></strong> :&ensp;<code>int-array</code>, optional</dt>
 <dd>Columns to be read from the file (zero indexed).</dd>
 <dt><strong><code>skiprows</code></strong> :&ensp;<code>int</code>, optional</dt>
 <dd>The number of leading rows which will be skipped.</dd>
-<dt><strong><code>dtype</code></strong> :&ensp;<code>data</code>-<code>type</code>, optional</dt>
+<dt><strong><code>dtype</code></strong> :&ensp;<code>data-type</code>, optional</dt>
 <dd>Data-type of the resulting array. Default: float.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <dl>
 <dt><strong><code>data</code></strong> :&ensp;<code>ndarray</code></dt>
 <dd>Data read from the text file.</dd>
-</dl></section>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def opentxt(file_name, comment=&#39;#&#39;, nrows=None, **kwargs):
-    &#34;&#34;&#34;
+    r&#34;&#34;&#34;
     Open a text file.
 
     This method can load an nxm array of floats from an ascii file. It uses
     either pandas read_csv for a single comment or as fallback the slower numpy
     laodtxt for multiple comments.
+
+    .. warning:: In contrast to pandas the order of usecols will be used. So if
+        using ´data = opentxt(..., uscols=[1, 0])´ you acces the first column
+        by `data[:, 0]` and the second one by `data[:, 1]`.
 
     Parameters
     ----------
@@ -365,15 +486,26 @@ laodtxt for multiple comments.</p>
         # pandas does not support array of single char
         if not isinstance(comment, str):
             comment = comment[0]
+
+        # force pandas to load in stated order without sorting
+        cols = kwargs.pop(&#39;usecols&#39;, None)
+        if cols is not None:
+            idx = np.argsort(cols)
+            cols = np.asarray(cols).astype(np.integer)[idx]
+
         data = pd.read_csv(file_name,
                            sep=r&#39;\s+&#39;,
                            header=None,
                            comment=comment,
                            nrows=nrows,
+                           usecols=cols,
                            **kwargs).values
         if data.shape[-1] == 1:
             return data.flatten()
         else:
+            # swap columns back to ensure correct order
+            if cols is not None:
+                data = tools.swapcols(data, idx, np.arange(len(idx)))
             return data
     else:
         return np.loadtxt(file_name,
@@ -386,10 +518,8 @@ laodtxt for multiple comments.</p>
 <span>def <span class="ident">opentxt_limits</span></span>(<span>file_name, limits_file=None, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Load file and split according to limit file.</p>
-<p>Both, the limit file and the trajectory file needs to be a single column
-file. If limits_file is not provided it will return [traj]. The trajectory
-will of dtype np.int16, so the states needs to be smaller than 32767.</p>
+<div class="desc"><p>Load file and split according to limit file.</p>
+<p>If limits_file is not provided it will return [traj].</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>file_name</code></strong> :&ensp;<code>string</code></dt>
@@ -403,7 +533,7 @@ will of dtype np.int16, so the states needs to be smaller than 32767.</p>
 <dl>
 <dt><strong><code>traj</code></strong> :&ensp;<code>ndarray</code></dt>
 <dd>Return array of subtrajectories.</dd>
-</dl></section>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -412,9 +542,7 @@ will of dtype np.int16, so the states needs to be smaller than 32767.</p>
     &#34;&#34;&#34;
     Load file and split according to limit file.
 
-    Both, the limit file and the trajectory file needs to be a single column
-    file. If limits_file is not provided it will return [traj]. The trajectory
-    will of dtype np.int16, so the states needs to be smaller than 32767.
+    If limits_file is not provided it will return [traj].
 
     Parameters
     ----------
@@ -434,14 +562,7 @@ will of dtype np.int16, so the states needs to be smaller than 32767.</p>
 
     &#34;&#34;&#34;
     # open trajectory
-    if &#39;dtype&#39; in kwargs and not np.issubdtype(kwargs[&#39;dtype&#39;], np.integer):
-        raise TypeError(&#39;dtype should be integer&#39;)
-    else:
-        kwargs[&#39;dtype&#39;] = np.int16
-
     traj = opentxt(file_name, **kwargs)
-    if len(traj.shape) != 1:
-        raise FileError(&#39;Shoud be single column file.&#39;)
 
     # open limits
     limits = open_limits(limits_file=limits_file, data_length=len(traj))
@@ -454,7 +575,7 @@ will of dtype np.int16, so the states needs to be smaller than 32767.</p>
 <span>def <span class="ident">savetxt</span></span>(<span>file_name, data, header=None, fmt='%.5f')</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Save nxm array of floats to a text file.</p>
+<div class="desc"><p>Save nxm array of floats to a text file.</p>
 <p>It uses numpys savetxt method and extends the header with information
 of execution.</p>
 <h2 id="parameters">Parameters</h2>
@@ -467,7 +588,7 @@ of execution.</p>
 <dd>Comment written into the header of the output file.</dd>
 <dt><strong><code>fmt</code></strong> :&ensp;<code>str</code> or <code>sequence</code> of <code>strs</code>, optional</dt>
 <dd>See numpy.savetxt fmt.</dd>
-</dl></section>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -495,10 +616,11 @@ of execution.</p>
 
     &#34;&#34;&#34;
     # prepare header comments
-    header_comment = f&#39;This file was generated by {SCRIPT_NAME} with :\n&#39;
+    header_comment = (&#39;This file was generated with {script_name}:\n&#39;
+                      .format(**RUI))
     for arg in sys.argv:  # loop over the given arguments
-        header_comment += f&#39;{arg} &#39;
-    header_comment += f&#39;\n\n{EXEC_DATE}, {USERNAME}@{PLATFORM}&#39;
+        header_comment += &#39;{arg} &#39;.format(arg=arg)
+    header_comment += &#39;\n\n{date}, {user}@{platform}&#39;.format(**RUI)
     if header:  # print column title if given
         header_comment += &#39;\n&#39; + header
 
@@ -513,10 +635,10 @@ of execution.</p>
 <dl>
 <dt id="msmhelper.iotext.FileError"><code class="flex name class">
 <span>class <span class="ident">FileError</span></span>
-<span>(</span><span>*args, **kwargs)</span>
+<span>(</span><span>...)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>An exception for wrongly formated input files.</p></section>
+<div class="desc"><p>An exception for wrongly formated input files.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -534,6 +656,10 @@ of execution.</p>
 </section>
 </article>
 <nav id="sidebar">
+<div class="gcse-search" style="height: 70px"
+data-as_oq="inurl:github.com/moldyn/msmhelper site:moldyn.github.io/msmhelper"
+data-gaCategoryParameter="msmhelper.iotext">
+</div>
 <h1>Index</h1>
 <div class="toc">
 <ul></ul>
@@ -547,6 +673,7 @@ of execution.</p>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
 <li><code><a title="msmhelper.iotext.open_limits" href="#msmhelper.iotext.open_limits">open_limits</a></code></li>
+<li><code><a title="msmhelper.iotext.openmicrostates" href="#msmhelper.iotext.openmicrostates">openmicrostates</a></code></li>
 <li><code><a title="msmhelper.iotext.opentxt" href="#msmhelper.iotext.opentxt">opentxt</a></code></li>
 <li><code><a title="msmhelper.iotext.opentxt_limits" href="#msmhelper.iotext.opentxt_limits">opentxt_limits</a></code></li>
 <li><code><a title="msmhelper.iotext.savetxt" href="#msmhelper.iotext.savetxt">savetxt</a></code></li>
@@ -563,7 +690,7 @@ of execution.</p>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.2</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.8.1</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>

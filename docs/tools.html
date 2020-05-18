@@ -3,15 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.2" />
+<meta name="generator" content="pdoc 0.8.1" />
 <title>msmhelper.tools API documentation</title>
 <meta name="description" content="Set of helpful functions …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
-<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
-<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script async src="https://cse.google.com/cse.js?cx=017837193012385208679:pey8ky8gdqw"></script>
+<style>.gsc-control-cse {padding:0 !important;margin-top:1em}</style>
 <script async src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS_CHTML'></script>
 </head>
 <body>
@@ -26,7 +28,7 @@
 Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.</p>
 <p>Author: Daniel Nagel</p>
-<h2 id="todo">TODO</h2>
+<h2 id="todo">Todo</h2>
 <ul>
 <li>Correct border effects of running mean</li>
 </ul>
@@ -52,9 +54,9 @@ import numpy as np
 
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def shift_data(data, val_old, val_new, dtype=np.uint16):
+def shift_data(data, val_old, val_new, dtype=np.integer):
     &#34;&#34;&#34;
-    Shift data from old to new values.
+    Shift integer array (data) from old to new values.
 
     &gt; **CAUTION:**
     &gt; The values of `val_old`, `val_new` and `data` needs to be integers.
@@ -87,15 +89,15 @@ def shift_data(data, val_old, val_new, dtype=np.uint16):
     if not np.issubdtype(dtype, np.integer):
         raise TypeError(&#39;An unsigned integer type is needed.&#39;)
 
+    # flatten data
+    data, shape_kwargs = _flatten_data(data)
+
     # offset data and val_old to allow negative values
-    offset = np.min(data)
+    offset = np.min([np.min(data), np.min(val_new)])
 
     # convert to np.array
     val_old = (np.asarray(val_old) - offset).astype(dtype)
     val_new = (np.asarray(val_new) - offset).astype(dtype)
-
-    # flatten data
-    data, shape_kwargs = _flatten_data(data)
 
     # convert data and shift
     data = (data - offset).astype(dtype)
@@ -188,6 +190,70 @@ def runningmean(data, window):
     data_runningmean = np.convolve(data, np.ones(window) / window, mode=&#39;same&#39;)
 
     return data_runningmean
+
+
+def swapcols(data, indicesold, indicesnew):
+    r&#34;&#34;&#34;Interchange cols of an ndarray.
+
+    This method swaps the specified columns.
+    .. todo:: Optimize memory usage
+
+    Parameters
+    ----------
+    data : ndarray
+        2D numpy array.
+    indicesold : integer or ndarray
+        1D array of indices.
+    indicesnew : integer or ndarray
+        1D array of new indices
+
+    Returns
+    -------
+    data_swapped : ndarray
+        2D numpy array with swappend columns.
+
+    &#34;&#34;&#34;
+    # cast to 1d arrays
+    indicesnew = _asindex(indicesnew)
+    indicesold = _asindex(indicesold)
+
+    if len(indicesnew) - len(indicesold):
+        raise ValueError(&#39;Indices needs to be of same shape.&#39;)
+
+    # cast data
+    data = np.asarray(data)
+
+    if np.all(indicesnew == indicesold):
+        return data
+
+    # data.T[indicesold] = data.T[indicesnew] fails for large datasets
+    data_swapped = np.copy(data)
+    data_swapped.T[indicesold] = data.T[indicesnew]
+
+    return data_swapped
+
+
+def _asindex(idx):
+    &#34;&#34;&#34;Cast to 1d integer ndarray.&#34;&#34;&#34;
+    idx = np.atleast_1d(idx).astype(np.integer)
+    if len(idx.shape) &gt; 1:
+        raise ValueError(&#39;Wrong dimensionality of indices.&#39;)
+    return idx
+
+
+def _asquadratic(matrix):
+    # cast to 2d for easier error checking
+    matrix = np.atleast_2d(matrix)
+
+    # Check whether matrix is quadratic.
+    if np.shape(matrix)[0] != np.shape(matrix)[1]:
+        raise ValueError(&#39;Matrix is not quadratic.&#39;)
+
+    # check if scalar or tensor higher than 2d
+    if matrix.shape[0] == 1 or matrix.ndim &gt; 2:
+        raise ValueError(&#39;Only EVs of 2d matrices can be calculated.&#39;)
+
+    return matrix
 
 
 def _format_state_trajectory(trajs):
@@ -297,10 +363,10 @@ def _unflatten_data(data, kwargs):
 <span>def <span class="ident">rename_by_population</span></span>(<span>traj, return_permutation=False)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Rename states sorted by their population starting from 1.</p>
+<div class="desc"><p>Rename states sorted by their population starting from 1.</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
-<dt><strong><code>traj</code></strong> :&ensp;<code>ndarray</code>, <code>list</code> of <code>ndarrays</code></dt>
+<dt><strong><code>traj</code></strong> :&ensp;<code>ndarray, list</code> of <code>ndarrays</code></dt>
 <dd>State trajectory or list of state trajectories.</dd>
 <dt><strong><code>return_permutation</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Return additionaly the permutation to achieve performed renaming.
@@ -313,7 +379,7 @@ Default is False.</dd>
 <dt><strong><code>permutation</code></strong> :&ensp;<code>ndarray</code></dt>
 <dd>Permutation going from old to new state nameing. So the <code>i</code>th state
 of the new naming corresponds to the old state <code>permutation[i-1]</code>.</dd>
-</dl></section>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -361,7 +427,7 @@ of the new naming corresponds to the old state <code>permutation[i-1]</code>.</d
 <span>def <span class="ident">runningmean</span></span>(<span>data, window)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Compute centered running average with given window size.</p>
+<div class="desc"><p>Compute centered running average with given window size.</p>
 <p>This function returns the centered based running average of the given
 data. The output of this function is of the same length as the input,
 by assuming that the given data is zero before and after the given
@@ -386,7 +452,7 @@ one to the right <span><span class="MathJax_Preview">i+1</span><script type="mat
 <dl>
 <dt><strong><code>data_rmean</code></strong> :&ensp;<code>ndarray</code></dt>
 <dd>Data which is time-averaged over the specified window.</dd>
-</dl></section>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -430,10 +496,10 @@ one to the right <span><span class="MathJax_Preview">i+1</span><script type="mat
 </details>
 </dd>
 <dt id="msmhelper.tools.shift_data"><code class="name flex">
-<span>def <span class="ident">shift_data</span></span>(<span>data, val_old, val_new, dtype=numpy.uint16)</span>
+<span>def <span class="ident">shift_data</span></span>(<span>data, val_old, val_new, dtype=numpy.integer)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Shift data from old to new values.</p>
+<div class="desc"><p>Shift integer array (data) from old to new values.</p>
 <blockquote>
 <p><strong>CAUTION:</strong>
 The values of <code>val_old</code>, <code>val_new</code> and <code>data</code> needs to be integers.</p>
@@ -442,28 +508,28 @@ The values of <code>val_old</code>, <code>val_new</code> and <code>data</code> n
 <a href="https://stackoverflow.com/a/29408060">https://stackoverflow.com/a/29408060</a></p>
 <h2 id="parameters">Parameters</h2>
 <dl>
-<dt><strong><code>data</code></strong> :&ensp;<code>ndarray</code>, <code>list</code>, <code>list</code> of <code>ndarrays</code></dt>
+<dt><strong><code>data</code></strong> :&ensp;<code>ndarray, list, list</code> of <code>ndarrays</code></dt>
 <dd>1D data or a list of data.</dd>
 <dt><strong><code>val_old</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
 <dd>Values in data which should be replaced. All values needs to be within
 the range of <code>[data.min(), data.max()]</code></dd>
 <dt><strong><code>val_new</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
 <dd>Values which will be used instead of old ones.</dd>
-<dt><strong><code>dtype</code></strong> :&ensp;<code>data</code>-<code>type</code>, optional</dt>
+<dt><strong><code>dtype</code></strong> :&ensp;<code>data-type</code>, optional</dt>
 <dd>The desired data-type. Needs to be of type unsigned integer.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <dl>
 <dt><strong><code>data</code></strong> :&ensp;<code>ndarray</code></dt>
 <dd>Shifted data in same shape as input.</dd>
-</dl></section>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def shift_data(data, val_old, val_new, dtype=np.uint16):
+<pre><code class="python">def shift_data(data, val_old, val_new, dtype=np.integer):
     &#34;&#34;&#34;
-    Shift data from old to new values.
+    Shift integer array (data) from old to new values.
 
     &gt; **CAUTION:**
     &gt; The values of `val_old`, `val_new` and `data` needs to be integers.
@@ -496,15 +562,15 @@ the range of <code>[data.min(), data.max()]</code></dd>
     if not np.issubdtype(dtype, np.integer):
         raise TypeError(&#39;An unsigned integer type is needed.&#39;)
 
+    # flatten data
+    data, shape_kwargs = _flatten_data(data)
+
     # offset data and val_old to allow negative values
-    offset = np.min(data)
+    offset = np.min([np.min(data), np.min(val_new)])
 
     # convert to np.array
     val_old = (np.asarray(val_old) - offset).astype(dtype)
     val_new = (np.asarray(val_new) - offset).astype(dtype)
-
-    # flatten data
-    data, shape_kwargs = _flatten_data(data)
 
     # convert data and shift
     data = (data - offset).astype(dtype)
@@ -522,12 +588,84 @@ the range of <code>[data.min(), data.max()]</code></dd>
     return data_shifted</code></pre>
 </details>
 </dd>
+<dt id="msmhelper.tools.swapcols"><code class="name flex">
+<span>def <span class="ident">swapcols</span></span>(<span>data, indicesold, indicesnew)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Interchange cols of an ndarray.</p>
+<div class="admonition todo">
+<p class="admonition-title">TODO</p>
+<p>Optimize memory usage</p>
+</div>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>data</code></strong> :&ensp;<code>ndarray</code></dt>
+<dd>2D numpy array.</dd>
+<dt><strong><code>indicesold</code></strong> :&ensp;<code>integer</code> or <code>ndarray</code></dt>
+<dd>1D array of indices.</dd>
+<dt><strong><code>indicesnew</code></strong> :&ensp;<code>integer</code> or <code>ndarray</code></dt>
+<dd>1D array of new indices</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>data_swapped</code></strong> :&ensp;<code>ndarray</code></dt>
+<dd>2D numpy array with swappend columns.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def swapcols(data, indicesold, indicesnew):
+    r&#34;&#34;&#34;Interchange cols of an ndarray.
+
+    This method swaps the specified columns.
+    .. todo:: Optimize memory usage
+
+    Parameters
+    ----------
+    data : ndarray
+        2D numpy array.
+    indicesold : integer or ndarray
+        1D array of indices.
+    indicesnew : integer or ndarray
+        1D array of new indices
+
+    Returns
+    -------
+    data_swapped : ndarray
+        2D numpy array with swappend columns.
+
+    &#34;&#34;&#34;
+    # cast to 1d arrays
+    indicesnew = _asindex(indicesnew)
+    indicesold = _asindex(indicesold)
+
+    if len(indicesnew) - len(indicesold):
+        raise ValueError(&#39;Indices needs to be of same shape.&#39;)
+
+    # cast data
+    data = np.asarray(data)
+
+    if np.all(indicesnew == indicesold):
+        return data
+
+    # data.T[indicesold] = data.T[indicesnew] fails for large datasets
+    data_swapped = np.copy(data)
+    data_swapped.T[indicesold] = data.T[indicesnew]
+
+    return data_swapped</code></pre>
+</details>
+</dd>
 </dl>
 </section>
 <section>
 </section>
 </article>
 <nav id="sidebar">
+<div class="gcse-search" style="height: 70px"
+data-as_oq="inurl:github.com/moldyn/msmhelper site:moldyn.github.io/msmhelper"
+data-gaCategoryParameter="msmhelper.tools">
+</div>
 <h1>Index</h1>
 <div class="toc">
 <ul></ul>
@@ -543,13 +681,14 @@ the range of <code>[data.min(), data.max()]</code></dd>
 <li><code><a title="msmhelper.tools.rename_by_population" href="#msmhelper.tools.rename_by_population">rename_by_population</a></code></li>
 <li><code><a title="msmhelper.tools.runningmean" href="#msmhelper.tools.runningmean">runningmean</a></code></li>
 <li><code><a title="msmhelper.tools.shift_data" href="#msmhelper.tools.shift_data">shift_data</a></code></li>
+<li><code><a title="msmhelper.tools.swapcols" href="#msmhelper.tools.swapcols">swapcols</a></code></li>
 </ul>
 </li>
 </ul>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.2</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.8.1</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>
