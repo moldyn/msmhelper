@@ -70,7 +70,7 @@ def opentxt(file_name, comment='#', nrows=None, **kwargs):
         cols = kwargs.pop('usecols', None)
         if cols is not None:
             idx = np.argsort(cols)
-            cols = np.asarray(cols).astype(np.integer)[idx]
+            cols = np.atleast_1d(cols).astype(np.integer)[idx]
 
         data = pd.read_csv(file_name,
                            sep=r'\s+',
