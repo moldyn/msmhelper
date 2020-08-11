@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Set of helpful functions.
 
@@ -187,7 +188,7 @@ def swapcols(data, indicesold, indicesnew):
     indicesnew = _asindex(indicesnew)
     indicesold = _asindex(indicesold)
 
-    if len(indicesnew) - len(indicesold):
+    if len(indicesnew) != len(indicesold):
         raise ValueError('Indices needs to be of same shape.')
 
     # cast data
@@ -204,7 +205,11 @@ def swapcols(data, indicesold, indicesnew):
 
 
 def get_runtime_user_information():
-    """Get user runtime information.
+    r"""Get user runtime information.
+
+    > **CAUTION:**
+    > For python 3.5 or lower the date is not formatted and contains
+    > microscends.
 
     Returns
     -------
