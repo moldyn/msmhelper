@@ -24,6 +24,7 @@ jobs:
         pip install -q numpy
         pip install -q pandas
         pip install -q pyemma
+        pip install -q numba
         pip install -q -e .
     - name: Lint with flake8
       run: |
