@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Tests for the iotext module.
 
@@ -75,7 +76,7 @@ def test_open_limits(limits_file, wrong_limit):
 
 @pytest.mark.parametrize('traj_file, kwargs', [
     (os.path.join(HERE, 'traj1.dat'), {}),
-    (os.path.join(HERE, 'traj1.dat'), {'dtype': np.integer}),
+    (os.path.join(HERE, 'traj1.dat'), {'dtype': np.int32}),
     (os.path.join(HERE, 'traj1.dat'), {'dtype': np.float}),
     (os.path.join(HERE, 'data.dat'), {'no_traj': True})])
 def test_openmicrostates(limits_file, traj_file, kwargs):
