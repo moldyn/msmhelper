@@ -12,6 +12,7 @@ Authors: Daniel Nagel
 """
 # ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import numpy as np
+import numba
 import pyemma.msm
 
 from msmhelper import tools
@@ -83,17 +84,23 @@ def estimate_markov_model(trajs, lag_time):
     # format input
     trajs = tools._format_state_trajectory(trajs)
 
-    T_count = _generate_transition_count_matrix(trajs, lag_time)
+    # get number of states
+    nstates = np.unique(np.concatenate(trajs)).shape[0]
+
+    # convert trajs to numba list
+    if not numba.config.DISABLE_JIT:
+        trajs = numba.typed.List(trajs)
+
+    T_count = _generate_transition_count_matrix(trajs, lag_time, nstates)
     T_count_norm = _row_normalize_2d_matrix(T_count)
     return T_count_norm
 
 
-def _generate_transition_count_matrix(trajs, lag_time: int):
+@numba.njit
+def _generate_transition_count_matrix(trajs, lag_time: int, nstates: int):
     """Generate a simple transition count matrix from multiple trajectories."""
-    # get number of states
-    n_states = np.unique(np.concatenate(trajs)).shape[0]
     # initialize matrix
-    T_count = np.zeros((n_states, n_states), dtype=int)
+    T_count = np.zeros((nstates, nstates), dtype=np.int64)
 
     for traj in trajs:
         for i in range(len(traj) - lag_time):  # due to sliding window
@@ -102,15 +109,14 @@ def _generate_transition_count_matrix(trajs, lag_time: int):
     return T_count
 
 
+@numba.njit
 def _row_normalize_2d_matrix(matrix):
     """Row normalize the given 2d matrix."""
-    matrix_norm = np.copy(matrix).astype(dtype=np.float64)
-    for i, row in enumerate(matrix):
-        row_sum = np.sum(row)
-        if not row_sum:
-            raise ValueError('Row sum of 0 can not be normalized.')
-        matrix_norm[i] = matrix_norm[i] / row_sum
-    return matrix_norm
+    row_sum = np.sum(matrix, axis=1)
+    if not row_sum.all():
+        raise ValueError('Row sum of 0 can not be normalized.')
+    # due to missing np.newaxis row_sum[:, np.newaxis] becomes
+    return matrix / row_sum.reshape(matrix.shape[0], 1)
 
 
 def left_eigenvectors(matrix):
@@ -134,7 +140,7 @@ def left_eigenvectors(matrix):
 
     """
     # try to cast to quadratic matrix
-    matrix = tools._asquadratic(matrix)
+    matrix = tools._isquadratic(matrix)
 
     # Transpose matrix and therefore determine eigenvalues and left
     # eigenvectors

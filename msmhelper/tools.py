@@ -25,7 +25,7 @@ import __main__ as main
 
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def shift_data(array, val_old, val_new, dtype=np.integer):
+def shift_data(array, val_old, val_new, dtype=np.int32):
     """
     Shift integer array (data) from old to new values.
 
