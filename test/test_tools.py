@@ -10,14 +10,14 @@ Author: Daniel Nagel
 
 """
 # ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+from importlib import reload
+
 import numpy as np
 import pytest
 
+import __main__ as main
 import msmhelper
 from msmhelper import tools
-
-from importlib import reload
-import __main__ as main
 
 
 class change_main__file__:
@@ -130,24 +130,24 @@ def test__asindex():
         tools._asindex([idx])
 
 
-def test__asquadratic():
-    """Test _asquadratic."""
+def test__isquadratic():
+    """Test _isquadratic."""
     mat = np.arange(9).reshape(3, 3)
 
     for i in range(len(mat)):
-        assert (mat[i] == tools._asquadratic(mat)[i]).all()
+        assert (mat[i] == tools._isquadratic(mat)[i]).all()
 
     # check for non quadratic matrices
     with pytest.raises(ValueError):
-        tools._asquadratic([2, 1])
+        tools._isquadratic([2, 1])
 
     # check for scalar
     with pytest.raises(ValueError):
-        tools._asquadratic(1)
+        tools._isquadratic(1)
 
     # check for 3d matrices
     with pytest.raises(ValueError):
-        tools._asquadratic(np.arange(8).reshape(2, 2, 2))
+        tools._isquadratic(np.arange(8).reshape(2, 2, 2))
 
 
 def test_get_runtime_user_information():

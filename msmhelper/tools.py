@@ -14,7 +14,7 @@ TODO:
 """
 # ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import datetime
-import getpass  # get username with getpass.getuser()
+import getpass  # get user name with getpass.getuser()
 import os
 import platform  # get pc name with platform.node()
 import sys
@@ -25,7 +25,7 @@ import __main__ as main
 
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def shift_data(data, val_old, val_new, dtype=np.integer):
+def shift_data(array, val_old, val_new, dtype=np.integer):
     """
     Shift integer array (data) from old to new values.
 
@@ -37,7 +37,7 @@ def shift_data(data, val_old, val_new, dtype=np.integer):
 
     Parameters
     ----------
-    data : ndarray, list, list of ndarrays
+    array : ndarray, list, list of ndarrays
         1D data or a list of data.
 
     val_old : ndarray or list
@@ -52,7 +52,7 @@ def shift_data(data, val_old, val_new, dtype=np.integer):
 
     Returns
     -------
-    data : ndarray
+    array : ndarray
         Shifted data in same shape as input.
 
     """
@@ -61,29 +61,28 @@ def shift_data(data, val_old, val_new, dtype=np.integer):
         raise TypeError('An unsigned integer type is needed.')
 
     # flatten data
-    data, shape_kwargs = _flatten_data(data)
+    array, shape_kwargs = _flatten_data(array)
 
     # offset data and val_old to allow negative values
-    offset = np.min([np.min(data), np.min(val_new)])
+    offset = np.min([np.min(array), np.min(val_new)])
 
     # convert to np.array
     val_old = (np.asarray(val_old) - offset).astype(dtype)
     val_new = (np.asarray(val_new) - offset).astype(dtype)
 
     # convert data and shift
-    data = (data - offset).astype(dtype)
+    array = (array - offset).astype(dtype)
 
     # shift data
-    conv = np.arange(data.max() + 1, dtype=dtype)
+    conv = np.arange(array.max() + 1, dtype=dtype)
     conv[val_old] = val_new
-    data_shifted = conv[data]
+    array = conv[array]
 
     # shift data back
-    data_shifted = data_shifted.astype(np.integer) + offset
+    array = array.astype(np.int32) + offset
 
-    # reshape
-    data_shifted = _unflatten_data(data_shifted, shape_kwargs)
-    return data_shifted
+    # reshape and return
+    return _unflatten_data(array, shape_kwargs)
 
 
 def rename_by_population(traj, return_permutation=False):
@@ -116,16 +115,17 @@ def rename_by_population(traj, return_permutation=False):
     idx_sort = np.argsort(pop)[::-1]
 
     # rename states
-    traj_renamed = shift_data(traj,
-                              val_old=states[idx_sort],
-                              val_new=np.arange(len(states)) + 1)
+    traj_renamed = shift_data(
+        traj,
+        val_old=states[idx_sort],
+        val_new=np.arange(len(states)) + 1,
+    )
     if return_permutation:
         return traj_renamed, states[idx_sort]
-    else:
-        return traj_renamed
+    return traj_renamed
 
 
-def runningmean(data, window):
+def runningmean(array, window):
     r"""
     Compute centered running average with given window size.
 
@@ -145,7 +145,7 @@ def runningmean(data, window):
 
     Parameters
     ----------
-    data : ndarray
+    array : ndarray
         One dimensional numpy array.
 
     window : int
@@ -153,17 +153,19 @@ def runningmean(data, window):
 
     Returns
     -------
-    data_rmean : ndarray
+    array_rmean : ndarray
         Data which is time-averaged over the specified window.
 
     """
     # Calculate running mean
-    data_runningmean = np.convolve(data, np.ones(window) / window, mode='same')
+    return np.convolve(
+        array,
+        np.ones(window) / window,
+        mode='same',
+    )
 
-    return data_runningmean
 
-
-def swapcols(data, indicesold, indicesnew):
+def swapcols(array, indicesold, indicesnew):
     r"""Interchange cols of an ndarray.
 
     This method swaps the specified columns.
@@ -171,7 +173,7 @@ def swapcols(data, indicesold, indicesnew):
 
     Parameters
     ----------
-    data : ndarray
+    array : ndarray
         2D numpy array.
     indicesold : integer or ndarray
         1D array of indices.
@@ -180,7 +182,7 @@ def swapcols(data, indicesold, indicesnew):
 
     Returns
     -------
-    data_swapped : ndarray
+    array_swapped : ndarray
         2D numpy array with swappend columns.
 
     """
@@ -192,16 +194,16 @@ def swapcols(data, indicesold, indicesnew):
         raise ValueError('Indices needs to be of same shape.')
 
     # cast data
-    data = np.asarray(data)
+    array = np.asarray(array)
 
     if np.all(indicesnew == indicesold):
-        return data
+        return array
 
-    # data.T[indicesold] = data.T[indicesnew] fails for large datasets
-    data_swapped = np.copy(data)
-    data_swapped.T[indicesold] = data.T[indicesnew]
+    # array.T[indicesold] = array.T[indicesnew] fails for large datasets
+    array_swapped = np.copy(array)
+    array_swapped.T[indicesold] = array.T[indicesnew]
 
-    return data_swapped
+    return array_swapped
 
 
 def get_runtime_user_information():
@@ -229,33 +231,35 @@ def get_runtime_user_information():
     if sys.version_info >= (3, 6):
         date = date.isoformat(sep=' ', timespec='seconds')
 
-    RUI = {'user': getpass.getuser(),
-           'pc': platform.node(),
-           'date': date,
-           'script_dir': script_dir,
-           'script_name': script_name}
-    return RUI
+    return {
+        'user': getpass.getuser(),
+        'pc': platform.node(),
+        'date': date,
+        'script_dir': script_dir,
+        'script_name': script_name,
+    }
 
 
 def _asindex(idx):
     """Cast to 1d integer ndarray."""
-    idx = np.atleast_1d(idx).astype(np.integer)
+    idx = np.atleast_1d(idx).astype(np.int32)
     if len(idx.shape) > 1:
         raise ValueError('Wrong dimensionality of indices.')
     return idx
 
 
-def _asquadratic(matrix):
+def _isquadratic(matrix):
+    """Check if matrix is quadratic."""
     # cast to 2d for easier error checking
     matrix = np.atleast_2d(matrix)
 
     # Check whether matrix is quadratic.
     if np.shape(matrix)[0] != np.shape(matrix)[1]:
-        raise ValueError('Matrix is not quadratic.')
+        raise ValueError('Matrix is not quadratic: {0}'.format(matrix))
 
     # check if scalar or tensor higher than 2d
     if matrix.shape[0] == 1 or matrix.ndim > 2:
-        raise ValueError('Only EVs of 2d matrices can be calculated.')
+        raise ValueError('Matrix is not 2d: {0}'.format(matrix))
 
     return matrix
 
@@ -285,7 +289,7 @@ def _format_state_trajectory(trajs):
     return trajs
 
 
-def _flatten_data(data):
+def _flatten_data(array):
     """
     Flatten data to 1D ndarray.
 
@@ -294,7 +298,7 @@ def _flatten_data(data):
 
     Parameters
     ----------
-    data : ndarray, list, list of ndarrays
+    array : ndarray, list, list of ndarrays
         1D data or a list of data.
 
     Returns
@@ -309,24 +313,24 @@ def _flatten_data(data):
     kwargs = {}
 
     # flatten data
-    if isinstance(data, list):
+    if isinstance(array, list):
         # list of ndarrays
-        if all((isinstance(row, np.ndarray) for row in data)):
+        if all((isinstance(row, np.ndarray) for row in array)):
             # get shape and flatten
-            kwargs['limits'] = np.cumsum([len(row) for row in data])
-            data = np.concatenate(data)
+            kwargs['limits'] = np.cumsum([len(row) for row in array])
+            array = np.concatenate(array)
         # list of numbers
         else:
-            data = np.asarray(data)
-    elif isinstance(data, np.ndarray):
+            array = np.asarray(array)
+    elif isinstance(array, np.ndarray):
         # get shape and flatten
-        kwargs['data_shape'] = data.shape
-        data = data.flatten()
+        kwargs['data_shape'] = array.shape
+        array = array.flatten()
 
-    return data, kwargs
+    return array, kwargs
 
 
-def _unflatten_data(data, kwargs):
+def _unflatten_data(array, kwargs):
     """
     Unflatten data to original structure.
 
@@ -334,7 +338,7 @@ def _unflatten_data(data, kwargs):
 
     Parameters
     ----------
-    data : ndarray
+    array : ndarray
         Flattened data.
 
     kwargs : dict
@@ -343,14 +347,18 @@ def _unflatten_data(data, kwargs):
 
     Returns
     -------
-    data : ndarray, list, list of ndarrays
+    array : ndarray, list, list of ndarrays
         Data with restored shape.
 
     """
-    # reshape
-    if 'data_shape' in kwargs:
-        data = data.reshape(kwargs['data_shape'])
-    elif 'limits' in kwargs:
-        data = np.split(data, kwargs['limits'])[:-1]
+    # parse kwargs
+    data_shape = kwargs.get('data_shape')
+    limits = kwargs.get('limits')
 
-    return data
+    # reshape
+    if data_shape is not None:
+        array = array.reshape(data_shape)
+    elif limits is not None:
+        array = np.split(array, limits)[:-1]
+
+    return array
