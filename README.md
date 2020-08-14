@@ -41,6 +41,12 @@ import msmhelper
 - wemake-python-styleguide
 - flake8-spellcheck
 
+## Pytest
+Running pytest with numba needs an additional flag
+```
+export NUMBA_DISABLE_JIT=1 && pytest
+```
+
 # Credits:
 - [numpy](https://docs.scipy.org/doc/numpy)
 - [realpython](https://realpython.com/)
