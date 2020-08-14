@@ -62,6 +62,9 @@ def estimate_markov_model(trajs, lag_time):
     """Estimates Markov State Model.
 
     This method estimates the MSM based on the transition count matrix.
+    .. todo::
+        - allow states to be unequal to indices
+        - return active set
 
     Parameters
     ----------
