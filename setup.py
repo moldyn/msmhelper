@@ -4,9 +4,9 @@ import sys
 
 import setuptools
 
-# check for python 3.5+
-if sys.version_info < (3, 5):
-    raise SystemExit('Python 3.5+ is required!')
+# check for python version
+if sys.version_info < (3, 6):
+    raise SystemExit('Python 3.6+ is required!')
 
 # The directory containing this file
 HERE = pathlib.Path(__file__).parent
@@ -17,7 +17,7 @@ README = (HERE / 'README.md').read_text()
 # This call to setup() does all the work
 setuptools.setup(
     name='msmhelper',
-    version='0.1.0',
+    version='0.2.0',
     description='Helper functions for Markov State Models.',
     long_description=README,
     long_description_content_type='text/markdown',
@@ -28,7 +28,6 @@ setuptools.setup(
     classifiers=[
         'License :: OSI Approved :: BSD License',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
