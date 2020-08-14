@@ -154,35 +154,78 @@ def left_eigenvectors(matrix):
     return eigenvalues_sorted, eigenvectors_sorted
 
 
-def implied_timescales(matrix, lagtime):
+def _implied_timescales(transmat, lagtime):
     """
     Calculate implied timescales.
 
     .. todo::
         - Clearify usage. Better passing trajs to calculate matrix?
-        - Check if lagtime is valid parameter.
-        - Filter 0th EV.
 
     Parameters
     ----------
-    matrix : n x n matrix
-        Transition matrix
+    transmat : ndarray
+        Quadratic transition matrix.
 
     lagtime: int
-        lagtime specified in the desired unit
-
+        Lagtime for estimating the markov model given in [frames].
 
     Returns
     -------
     timescales: ndarray
-        N implied timescales in [unit]. The first entry corresponds to the
-        stationary distribution.
+        Implied timescale given in frames.
 
     """
-    # try to cast to quadratic matrix
-    matrix = tools._asquadratic(matrix)
+    transmat = np.asarray(transmat)
+    tools._check_quadratic(transmat)
 
-    eigenvalues, eigenvectors = left_eigenvectors(matrix)
-    timescales = - (lagtime / np.log(eigenvalues))
+    eigenvalues, eigenvectors = left_eigenvectors(transmat)
+    eigenvalues = np.abs(eigenvalues)  # avoid numerical errors
+    return - lagtime / np.log(eigenvalues[1:])
 
-    return timescales
+
+def implied_timescales(trajs, lagtimes, reversible=False):
+    """Calculate the implied timescales.
+
+    Calculate the implied timescales for the given values.
+    .. todo::
+        - catch if for higher lagtimes the dimensionality changes
+
+    Parameters
+    ----------
+    trajs : list or ndarray or list of ndarray
+        State trajectory/trajectories. The states should start from zero and
+        need to be integers.
+
+    lagtimes : list or ndarray int
+        Lagtimes for estimating the markov model given in [frames].
+
+    reversible : bool
+        If reversibility should be enforced for the markov state model.
+
+    Returns
+    -------
+    T : ndarray
+        Transition rate matrix.
+
+    """
+    # format input
+    trajs = tools.format_state_traj(trajs)
+    lagtimes = np.atleast_1d(lagtimes)
+
+    # check that lagtimes are array of integers
+    if not np.issubdtype(lagtimes.dtype, np.integer):
+        raise TypeError(
+            'Lagtimes needs to be integers but are {0}'.format(lagtimes.dtype),
+        )
+    if not (lagtimes > 0).all():
+        raise TypeError('Lagtimes needs to be positive integers')
+
+    # initialize result
+    nstates = len(np.unique(np.concatenate(trajs)))
+    impl_timescales = np.zeros((len(lagtimes), nstates - 1))
+
+    for idx, lagtime in enumerate(lagtimes):
+        transmat = build_MSM(trajs, lagtime, reversible=reversible)
+        impl_timescales[idx] = _implied_timescales(transmat, lagtime)
+
+    return impl_timescales

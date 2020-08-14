@@ -89,3 +89,27 @@ def test_left_eigenvectors(matrix, eigenvaluesref, eigenvectorsref):
     assert (eigenvalues - eigenvaluesref < 1e-9).all()
     for i, row in enumerate(eigenvectors):
         assert (np.abs(row) - np.abs(eigenvectorsref[i]) < 1e-9).all()
+
+
+@pytest.mark.parametrize('transmat, lagtime, result', [
+    ([[0.8, 0.2, 0.0], [0.2, 0.78, 0.02], [0.0, 0.2, 0.8]], 2,
+     -2 / np.log([4 / 5, 29 / 50]))])
+def test__implied_timescales(transmat, lagtime, result):
+    """Test implied timescale."""
+    impl = msm._implied_timescales(transmat, lagtime)
+    np.testing.assert_array_almost_equal(impl, result)
+
+
+@pytest.mark.parametrize('trajs, lagtimes, result', [
+    ([1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1], [1, 2],
+     [-1 / np.log([2 / 3]), -2 / np.log([7 / 15])])])
+def test_implied_timescales(trajs, lagtimes, result):
+    """Test estimate markov model."""
+    impl = msmhelper.implied_timescales(trajs, lagtimes)
+    np.testing.assert_array_almost_equal(impl, result)
+
+    with pytest.raises(TypeError):
+        impl = msmhelper.implied_timescales(trajs, [-1, 2])
+
+    with pytest.raises(TypeError):
+        impl = msmhelper.implied_timescales(trajs, [1, 2.3])
