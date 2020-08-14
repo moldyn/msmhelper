@@ -74,35 +74,39 @@ def test_runningmean(data, expected, window):
 
 
 @pytest.mark.parametrize('traj', [([1, 1, 1, 1, 1, 2, 2, 1, 2, 0, 2, 2, 0])])
-def test__format_state_trajectory(traj):
+def test_format_state_traj(traj):
     """Test formating state trajectory."""
     # as list of floats
     with pytest.raises(TypeError):
-        tools._format_state_trajectory([float(s) for s in traj])
+        tools.format_state_traj([float(s) for s in traj])
 
     # as list of integers
-    assert (tools._format_state_trajectory(traj)[0] == traj).all()
+    assert (tools.format_state_traj(traj)[0] == traj).all()
 
     # as list of lists
-    assert (tools._format_state_trajectory([traj])[0] == traj).all()
+    assert (tools.format_state_traj([traj])[0] == traj).all()
 
     # as ndarray
     traj = np.array(traj)
-    assert (tools._format_state_trajectory(traj)[0] == traj).all()
+    assert (tools.format_state_traj(traj)[0] == traj).all()
 
-    # as ndarry of floats
+    # as 2d ndarray
+    traj = np.atleast_2d(traj)
+    assert (tools.format_state_traj(traj)[0] == traj).all()
+
+    # as ndarray of floats
     with pytest.raises(TypeError):
-        tools._format_state_trajectory(traj.astype(np.float))
+        tools.format_state_traj(traj.astype(np.float))
 
     # as list of ndarrays
-    assert (tools._format_state_trajectory([traj])[0] == traj).all()
+    assert (tools.format_state_traj([traj])[0] == traj).all()
 
 
 @pytest.mark.parametrize('data', [
     ([[1, 1], [1, 2], [2, 1], [2, 3], [3, 3]])])
 def test_swapcols(data):
     """Test swapcols."""
-    # for same idxs
+    # for same indices
     data_swap = tools.swapcols(data, (0, 1), (0, 1))
     for row in range(len(data)):
         assert(data[row] == data_swap[row]).all()
@@ -130,24 +134,24 @@ def test__asindex():
         tools._asindex([idx])
 
 
-def test__isquadratic():
-    """Test _isquadratic."""
+def test__check_quadratic():
+    """Test _check_quadratic."""
     mat = np.arange(9).reshape(3, 3)
 
-    for i in range(len(mat)):
-        assert (mat[i] == tools._isquadratic(mat)[i]).all()
+    # check if no error is raised
+    tools._check_quadratic(mat)
 
     # check for non quadratic matrices
     with pytest.raises(ValueError):
-        tools._isquadratic([2, 1])
+        tools._check_quadratic([2, 1])
 
     # check for scalar
     with pytest.raises(ValueError):
-        tools._isquadratic(1)
+        tools._check_quadratic(1)
 
     # check for 3d matrices
     with pytest.raises(ValueError):
-        tools._isquadratic(np.arange(8).reshape(2, 2, 2))
+        tools._check_quadratic(np.arange(8).reshape(2, 2, 2))
 
 
 def test_get_runtime_user_information():

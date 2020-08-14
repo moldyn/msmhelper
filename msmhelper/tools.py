@@ -242,13 +242,13 @@ def get_runtime_user_information():
 
 def _asindex(idx):
     """Cast to 1d integer ndarray."""
-    idx = np.atleast_1d(idx).astype(np.int32)
+    idx = np.atleast_1d(idx).astype(np.int64)
     if len(idx.shape) > 1:
         raise ValueError('Wrong dimensionality of indices.')
     return idx
 
 
-def _isquadratic(matrix):
+def _check_quadratic(matrix):
     """Check if matrix is quadratic."""
     # cast to 2d for easier error checking
     matrix = np.atleast_2d(matrix)
@@ -261,32 +261,56 @@ def _isquadratic(matrix):
     if matrix.shape[0] == 1 or matrix.ndim > 2:
         raise ValueError('Matrix is not 2d: {0}'.format(matrix))
 
-    return matrix
 
+def format_state_traj(trajs):
+    """Convert state trajectory to list of ndarrays.
 
-def _format_state_trajectory(trajs):
-    """Convert state trajectory to list of ndarrays."""
-    # 1d ndarray
-    if isinstance(trajs, np.ndarray):
-        if len(trajs.shape) == 1:
-            trajs = [trajs]
-    # list
-    elif isinstance(trajs, list):
+    Parameters
+    ----------
+    trajs : list or ndarray or list of ndarray
+        State trajectory/trajectories. The states should start from zero and
+        need to be integers.
+
+    Returns
+    -------
+    trajs : list of ndarray
+        Return list of ndarrays of integers.
+
+    """
+    # list or tuple
+    if isinstance(trajs, (tuple, list)):
         # list of integers
-        if all((np.issubdtype(type(traj), np.integer) for traj in trajs)):
+        if all((np.issubdtype(type(state), np.integer) for state in trajs)):
             trajs = [np.array(trajs)]
         # list of lists
         elif all((isinstance(traj, list) for traj in trajs)):
-            trajs = [np.asarray(traj) for traj in trajs]
-        # not list of ndarrays
-        elif not all((isinstance(traj, np.ndarray) for traj in trajs)):
-            raise TypeError('Wrong data type of trajs.')
+            trajs = [np.array(traj) for traj in trajs]
+    # ndarray
+    if isinstance(trajs, np.ndarray):
+        if len(trajs.shape) == 1:
+            trajs = [trajs]
+        elif len(trajs.shape) == 2:
+            trajs = list(trajs)
 
     # check for integers
-    if not all((np.issubdtype(traj.dtype, np.integer) for traj in trajs)):
-        raise TypeError('States needs to be integers.')
+    _check_state_traj_type(trajs)
 
     return trajs
+
+
+def _check_state_traj_type(trajs):
+    """Check if state trajectory is correct formatted."""
+    # check for integers
+    for traj in trajs:
+        if not isinstance(traj, np.ndarray):
+            raise TypeError(
+                'Trajs need to be np.ndarray but are {0}'.format(type(traj)),
+            )
+        if not np.issubdtype(traj.dtype, np.integer):
+            raise TypeError(
+                'States needs to be integers but are {0}'.format(traj.dtype),
+            )
+    return True
 
 
 def _flatten_data(array):

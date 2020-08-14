@@ -11,17 +11,16 @@ Authors: Daniel Nagel
 
 """
 # ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-import numpy as np
 import numba
-import pyemma.msm
+import numpy as np
+from pyemma import msm as emsm
 
 from msmhelper import tools
 
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def build_MSM(trajs, lag_time, **kwargs):
-    """
-    Wrapps pyemma.msm.estimate_markov_model.
+def build_MSM(trajs, lag_time, reversible=False, **kwargs):
+    """Wrapps pyemma.msm.estimate_markov_model.
 
     Based on the choice of reversibility it either calls pyemma for a
     reversible matrix or it creates a transition count matrix.
@@ -35,34 +34,32 @@ def build_MSM(trajs, lag_time, **kwargs):
     lag_time : int
         Lag time for estimating the markov model given in [frames].
 
-    reversible : bool
+    reversible : bool, optional
         If `True` it will uses pyemma.msm.estimate_markov_model which does not
         guarantee that the matrix is of full dimension. In case of `False` or
         if not statedm the local function based on a simple transitition count
         matrix will be used instead.
 
-    See kwargs of both function.
+    kwargs
+        For passing values to `pyemma.msm.estimate_markov_model`.
 
     Returns
     -------
-    T : ndarray
+    transmat : ndarray
         Transition rate matrix.
 
     """
-    if 'reversible' in kwargs and kwargs['reversible']:
-        MSM = pyemma.msm.estimate_markov_model(trajs, lag_time, **kwargs)
-        T = MSM.transition_matrix
+    if reversible:
+        MSM = emsm.estimate_markov_model(trajs, lag_time, **kwargs)
+        transmat = MSM.transition_matrix
     else:
-        if 'reversible' in kwargs:
-            del kwargs['reversible']
-        T = estimate_markov_model(trajs, lag_time, **kwargs)
+        transmat = estimate_markov_model(trajs, lag_time)
 
-    return T
+    return transmat
 
 
 def estimate_markov_model(trajs, lag_time):
-    """
-    Estimates Markov State Model.
+    """Estimates Markov State Model.
 
     This method estimates the MSM based on the transition count matrix.
 
@@ -82,7 +79,7 @@ def estimate_markov_model(trajs, lag_time):
 
     """
     # format input
-    trajs = tools._format_state_trajectory(trajs)
+    trajs = tools.format_state_traj(trajs)
 
     # get number of states
     nstates = np.unique(np.concatenate(trajs)).shape[0]
@@ -92,25 +89,24 @@ def estimate_markov_model(trajs, lag_time):
         trajs = numba.typed.List(trajs)
 
     T_count = _generate_transition_count_matrix(trajs, lag_time, nstates)
-    T_count_norm = _row_normalize_2d_matrix(T_count)
-    return T_count_norm
+    return _row_normalize_matrix(T_count)
 
 
 @numba.njit
-def _generate_transition_count_matrix(trajs, lag_time: int, nstates: int):
+def _generate_transition_count_matrix(trajs, lag_time, nstates):
     """Generate a simple transition count matrix from multiple trajectories."""
     # initialize matrix
     T_count = np.zeros((nstates, nstates), dtype=np.int64)
 
     for traj in trajs:
-        for i in range(len(traj) - lag_time):  # due to sliding window
-            T_count[traj[i], traj[i + lag_time]] += 1
+        for idx in range(len(traj) - lag_time):  # due to sliding window
+            T_count[traj[idx], traj[idx + lag_time]] += 1
 
     return T_count
 
 
 @numba.njit
-def _row_normalize_2d_matrix(matrix):
+def _row_normalize_matrix(matrix):
     """Row normalize the given 2d matrix."""
     row_sum = np.sum(matrix, axis=1)
     if not row_sum.all():
@@ -120,27 +116,27 @@ def _row_normalize_2d_matrix(matrix):
 
 
 def left_eigenvectors(matrix):
-    """
-    Estimate left eigenvectors.
+    """Estimate left eigenvectors.
 
     Estimates the left eigenvectors and corresponding eigenvalues of a
     quadratic matrix.
 
     Parameters
     ----------
-    matrix : n x n matrix
+    matrix : ndarray
+        Quadratic 2d matrix eigenvectors and eigenvalues or determined of.
 
     Returns
     -------
-    eigenvalues: ndarray
+    eigenvalues : ndarray
         N eigenvalues sorted by their value (descending).
 
-    eigenvectors: ndarray
+    eigenvectors : ndarray
         N eigenvectors sorted by descending eigenvalues.
 
     """
-    # try to cast to quadratic matrix
-    matrix = tools._isquadratic(matrix)
+    matrix = np.asarray(matrix)
+    tools._check_quadratic(matrix)
 
     # Transpose matrix and therefore determine eigenvalues and left
     # eigenvectors

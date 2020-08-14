@@ -22,11 +22,11 @@ from msmhelper import msm
 # ~~~ TESTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @pytest.mark.parametrize('mat, matref', [
     ([[1, 1], [3, 1]], [[0.5, 0.5], [0.75, 0.25]])])
-def test__row_normalize_2d_matrix(mat, matref):
+def test__row_normalize_matrix(mat, matref):
     """Test row normalization."""
     # cast mat to ndarray
     mat = np.array(mat)
-    mat = msm._row_normalize_2d_matrix(mat)
+    mat = msm._row_normalize_matrix(mat)
     for i, row in enumerate(mat):
         assert (row == matref[i]).all()
 
@@ -34,7 +34,7 @@ def test__row_normalize_2d_matrix(mat, matref):
         # set first row to 0
         mat = np.array(mat)
         mat[0] = 0
-        msm._row_normalize_2d_matrix(mat)
+        msm._row_normalize_matrix(mat)
 
 
 @pytest.mark.parametrize('traj, lag_time, Tref, nstates', [
