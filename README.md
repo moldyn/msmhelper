@@ -3,7 +3,7 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/moldyn/msmhelper)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/moldyn/msmhelper)
 ![LGTM Grade](https://img.shields.io/lgtm/grade/python/github/moldyn/msmhelper?label=code%20quality&logo=lgtm)
-![wemake-python-styleguide](https://img.shields.io/badge/style-wemake-000000.svg)](https://github.com/wemake-services/wemake-python-styleguide)
+![wemake-python-styleguide](https://img.shields.io/badge/style-wemake-000000.svg)
 
 # msmhelper
 
