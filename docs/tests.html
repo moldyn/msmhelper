@@ -4,9 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.8.4" />
-<title>msmhelper API documentation</title>
-<meta name="description" content="![GitHub Workflow Status](https://img.shields.io/github/workflow/status/moldyn/msmhelper/Python%20package)
-![GitHub All …" />
+<title>msmhelper.tests API documentation</title>
+<meta name="description" content="Set of helpful test functions …" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/atom-one-dark.min.css" crossorigin>
@@ -21,105 +20,176 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Package <code>msmhelper</code></h1>
+<h1 class="title">Module <code>msmhelper.tests</code></h1>
 </header>
 <section id="section-intro">
-<p><img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/moldyn/msmhelper/Python%20package">
-<img alt="GitHub All Releases" src="https://img.shields.io/github/downloads/moldyn/msmhelper/total">
-<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/moldyn/msmhelper">
-<img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/moldyn/msmhelper">
-<img alt="LGTM Grade" src="https://img.shields.io/lgtm/grade/python/github/moldyn/msmhelper?label=code%20quality&amp;logo=lgtm">
-<img alt="wemake-python-styleguide" src="https://img.shields.io/badge/style-wemake-000000.svg"></p>
-<h1 id="msmhelper">msmhelper</h1>
-<p>This is a package with helper functions to work with state trajectories. Hence, it is mainly used for Markov State Models.</p>
-<h1 id="usage">Usage</h1>
-<p>This package is mainly based on numpy and numba.</p>
-<h2 id="usage_1">Usage</h2>
-<pre><code class="python">import msmhelper
-...
-</code></pre>
-<h2 id="known-bugs">Known Bugs</h2>
-<ul>
-<li>not known</li>
-</ul>
-<h2 id="requirements">Requirements:</h2>
-<ul>
-<li>Python 3.6+</li>
-<li>Numba 0.49.0+</li>
-<li>Numpy 1.16.2+</li>
-<li>Pyemma 2.5.7+</li>
-</ul>
-<h1 id="changelog">Changelog:</h1>
-<ul>
-<li>tba:
--</li>
-<li>v0.2:</li>
-<li>parts of msm module are rewritten in numba</li>
-<li>v0.1:</li>
-<li>initial release</li>
-</ul>
-<h1 id="roadmap">Roadmap:</h1>
-<ul>
-<li>write roadmap</li>
-</ul>
-<h1 id="development">Development</h1>
-<h2 id="additional-requirements">Additional Requirements:</h2>
-<ul>
-<li>wemake-python-styleguide</li>
-<li>flake8-spellcheck</li>
-</ul>
-<h2 id="pytest">Pytest</h2>
-<p>Running pytest with numba needs an additional flag</p>
-<pre><code>export NUMBA_DISABLE_JIT=1 &amp;&amp; pytest
-</code></pre>
-<h1 id="credits">Credits:</h1>
-<ul>
-<li><a href="https://docs.scipy.org/doc/numpy">numpy</a></li>
-<li><a href="https://realpython.com/">realpython</a></li>
-</ul>
+<p>Set of helpful test functions.</p>
+<p>BSD 3-Clause License
+Copyright (c) 2019-2020, Daniel Nagel
+All rights reserved.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python"># -*- coding: utf-8 -*-
-&#34;&#34;&#34;.. include:: ../README.md&#34;&#34;&#34;
+&#34;&#34;&#34;Set of helpful test functions.
 
-from .iotext import *
-from .msm import *
-from .tools import *
+BSD 3-Clause License
+Copyright (c) 2019-2020, Daniel Nagel
+All rights reserved.
+
+&#34;&#34;&#34;
+# ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+import numpy as np
+
+from msmhelper import tools
 
 
-__version__ = &#39;0.2.0&#39;</code></pre>
+# ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+def is_quadratic(matrix):
+    &#34;&#34;&#34;Check if matrix is quadratic.
+
+    Parameters
+    ----------
+    matrix : ndarray, list of lists
+        Matrix which is checked if is 2d array.
+
+    Returns
+    -------
+    is_quadratic : bool
+
+    &#34;&#34;&#34;
+    # cast to 2d for easier error checking
+
+    matrix = np.atleast_2d(matrix)
+    shape = np.shape(matrix)
+
+    # Check whether matrix is quadratic.
+    if shape[0] != shape[1]:
+        return False
+    # check if scalar or tensor higher than 2d
+    if shape[0] == 1 or matrix.ndim &gt; 2:
+        return False
+
+    return True
+
+
+def is_state_traj(trajs):
+    &#34;&#34;&#34;Check if state trajectory is correct formatted.
+
+    Parameters
+    ----------
+    trajs : list of ndarray
+        State trajectory/trajectories need to be lists of ndarrays of integers.
+
+    Returns
+    -------
+    is_state_traj : bool
+
+    &#34;&#34;&#34;
+    try:
+        tools._check_state_traj(trajs)
+    except TypeError:
+        return False
+    else:
+        return True</code></pre>
 </details>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt><code class="name"><a title="msmhelper.decorators" href="decorators.html">msmhelper.decorators</a></code></dt>
+<dt id="msmhelper.tests.is_quadratic"><code class="name flex">
+<span>def <span class="ident">is_quadratic</span></span>(<span>matrix)</span>
+</code></dt>
 <dd>
-<div class="desc"><p>Decorators …</p></div>
+<div class="desc"><p>Check if matrix is quadratic.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>matrix</code></strong> :&ensp;<code>ndarray, list</code> of <code>lists</code></dt>
+<dd>Matrix which is checked if is 2d array.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>is_quadratic</code></strong> :&ensp;<code>bool</code></dt>
+<dd>&nbsp;</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_quadratic(matrix):
+    &#34;&#34;&#34;Check if matrix is quadratic.
+
+    Parameters
+    ----------
+    matrix : ndarray, list of lists
+        Matrix which is checked if is 2d array.
+
+    Returns
+    -------
+    is_quadratic : bool
+
+    &#34;&#34;&#34;
+    # cast to 2d for easier error checking
+
+    matrix = np.atleast_2d(matrix)
+    shape = np.shape(matrix)
+
+    # Check whether matrix is quadratic.
+    if shape[0] != shape[1]:
+        return False
+    # check if scalar or tensor higher than 2d
+    if shape[0] == 1 or matrix.ndim &gt; 2:
+        return False
+
+    return True</code></pre>
+</details>
 </dd>
-<dt><code class="name"><a title="msmhelper.iotext" href="iotext.html">msmhelper.iotext</a></code></dt>
+<dt id="msmhelper.tests.is_state_traj"><code class="name flex">
+<span>def <span class="ident">is_state_traj</span></span>(<span>trajs)</span>
+</code></dt>
 <dd>
-<div class="desc"><p>Input and output text files …</p></div>
-</dd>
-<dt><code class="name"><a title="msmhelper.msm" href="msm.html">msmhelper.msm</a></code></dt>
-<dd>
-<div class="desc"><p>Create Markov State Model …</p></div>
-</dd>
-<dt><code class="name"><a title="msmhelper.tests" href="tests.html">msmhelper.tests</a></code></dt>
-<dd>
-<div class="desc"><p>Set of helpful test functions …</p></div>
-</dd>
-<dt><code class="name"><a title="msmhelper.tools" href="tools.html">msmhelper.tools</a></code></dt>
-<dd>
-<div class="desc"><p>Set of helpful functions …</p></div>
+<div class="desc"><p>Check if state trajectory is correct formatted.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>trajs</code></strong> :&ensp;<code>list</code> of <code>ndarray</code></dt>
+<dd>State trajectory/trajectories need to be lists of ndarrays of integers.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>is_state_traj</code></strong> :&ensp;<code>bool</code></dt>
+<dd>&nbsp;</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_state_traj(trajs):
+    &#34;&#34;&#34;Check if state trajectory is correct formatted.
+
+    Parameters
+    ----------
+    trajs : list of ndarray
+        State trajectory/trajectories need to be lists of ndarrays of integers.
+
+    Returns
+    -------
+    is_state_traj : bool
+
+    &#34;&#34;&#34;
+    try:
+        tools._check_state_traj(trajs)
+    except TypeError:
+        return False
+    else:
+        return True</code></pre>
+</details>
 </dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
 </section>
 <section>
 </section>
@@ -127,32 +197,18 @@ __version__ = &#39;0.2.0&#39;</code></pre>
 <nav id="sidebar">
 <h1>Index</h1>
 <div class="toc">
-<ul>
-<li><a href="#msmhelper">msmhelper</a></li>
-<li><a href="#usage">Usage</a><ul>
-<li><a href="#usage_1">Usage</a></li>
-<li><a href="#known-bugs">Known Bugs</a></li>
-<li><a href="#requirements">Requirements:</a></li>
-</ul>
-</li>
-<li><a href="#changelog">Changelog:</a></li>
-<li><a href="#roadmap">Roadmap:</a></li>
-<li><a href="#development">Development</a><ul>
-<li><a href="#additional-requirements">Additional Requirements:</a></li>
-<li><a href="#pytest">Pytest</a></li>
-</ul>
-</li>
-<li><a href="#credits">Credits:</a></li>
-</ul>
+<ul></ul>
 </div>
 <ul id="index">
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<li><h3>Super-module</h3>
 <ul>
-<li><code><a title="msmhelper.decorators" href="decorators.html">msmhelper.decorators</a></code></li>
-<li><code><a title="msmhelper.iotext" href="iotext.html">msmhelper.iotext</a></code></li>
-<li><code><a title="msmhelper.msm" href="msm.html">msmhelper.msm</a></code></li>
-<li><code><a title="msmhelper.tests" href="tests.html">msmhelper.tests</a></code></li>
-<li><code><a title="msmhelper.tools" href="tools.html">msmhelper.tools</a></code></li>
+<li><code><a title="msmhelper" href="index.html">msmhelper</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="msmhelper.tests.is_quadratic" href="#msmhelper.tests.is_quadratic">is_quadratic</a></code></li>
+<li><code><a title="msmhelper.tests.is_state_traj" href="#msmhelper.tests.is_state_traj">is_state_traj</a></code></li>
 </ul>
 </li>
 </ul>

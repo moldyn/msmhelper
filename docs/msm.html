@@ -8,16 +8,10 @@
 <meta name="description" content="Create Markov State Model …" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
-<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/atom-one-dark.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#282c34;-webkit-border-radius:6px;-moz-border-radius:6px;border-radius:6px;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
 <style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
-<link rel="preconnect" href="https://www.google.com">
-<script async src="https://cse.google.com/cse.js?cx=017837193012385208679:pey8ky8gdqw"></script>
-<style>
-.gsc-control-cse {padding:0 !important;margin-top:1em}
-body.gsc-overflow-hidden #sidebar {overflow: visible;}
-</style>
 <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS_CHTML" integrity="sha256-kZafAc6mZvK3W3v1pHOcUix30OHQN6pU/NO2oFkqZVw=" crossorigin></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js" integrity="sha256-eOgo0OtLL4cdq7RdwRUiGKLX9XsIJ7nGhWEKbohmVAQ=" crossorigin></script>
 <script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
@@ -39,8 +33,8 @@ Georg Diez</p>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">&#34;&#34;&#34;
-Create Markov State Model.
+<pre><code class="python"># -*- coding: utf-8 -*-
+&#34;&#34;&#34;Create Markov State Model.
 
 BSD 3-Clause License
 Copyright (c) 2019-2020, Daniel Nagel
@@ -51,16 +45,16 @@ Authors: Daniel Nagel
 
 &#34;&#34;&#34;
 # ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+import numba
 import numpy as np
-import pyemma.msm
+from pyemma import msm as emsm
 
-from msmhelper import tools
+from msmhelper import tests, tools
 
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def build_MSM(trajs, lag_time, **kwargs):
-    &#34;&#34;&#34;
-    Wrapps pyemma.msm.estimate_markov_model.
+def build_MSM(trajs, lag_time, reversible=False, **kwargs):
+    &#34;&#34;&#34;Wrapps pyemma.msm.estimate_markov_model.
 
     Based on the choice of reversibility it either calls pyemma for a
     reversible matrix or it creates a transition count matrix.
@@ -74,36 +68,37 @@ def build_MSM(trajs, lag_time, **kwargs):
     lag_time : int
         Lag time for estimating the markov model given in [frames].
 
-    reversible : bool
+    reversible : bool, optional
         If `True` it will uses pyemma.msm.estimate_markov_model which does not
         guarantee that the matrix is of full dimension. In case of `False` or
         if not statedm the local function based on a simple transitition count
         matrix will be used instead.
 
-    See kwargs of both function.
+    kwargs
+        For passing values to `pyemma.msm.estimate_markov_model`.
 
     Returns
     -------
-    T : ndarray
+    transmat : ndarray
         Transition rate matrix.
 
     &#34;&#34;&#34;
-    if &#39;reversible&#39; in kwargs and kwargs[&#39;reversible&#39;]:
-        MSM = pyemma.msm.estimate_markov_model(trajs, lag_time, **kwargs)
-        T = MSM.transition_matrix
+    if reversible:
+        MSM = emsm.estimate_markov_model(trajs, lag_time, **kwargs)
+        transmat = MSM.transition_matrix
     else:
-        if &#39;reversible&#39; in kwargs:
-            del kwargs[&#39;reversible&#39;]
-        T = estimate_markov_model(trajs, lag_time, **kwargs)
+        transmat = estimate_markov_model(trajs, lag_time)
 
-    return T
+    return transmat
 
 
 def estimate_markov_model(trajs, lag_time):
-    &#34;&#34;&#34;
-    Estimates Markov State Model.
+    &#34;&#34;&#34;Estimates Markov State Model.
 
     This method estimates the MSM based on the transition count matrix.
+    .. todo::
+        - allow states to be unequal to indices
+        - return active set
 
     Parameters
     ----------
@@ -121,60 +116,67 @@ def estimate_markov_model(trajs, lag_time):
 
     &#34;&#34;&#34;
     # format input
-    trajs = tools._format_state_trajectory(trajs)
+    trajs = tools.format_state_traj(trajs)
 
-    T_count = _generate_transition_count_matrix(trajs, lag_time)
-    T_count_norm = _row_normalize_2d_matrix(T_count)
-    return T_count_norm
-
-
-def _generate_transition_count_matrix(trajs, lag_time: int):
-    &#34;&#34;&#34;Generate a simple transition count matrix from multiple trajectories.&#34;&#34;&#34;
     # get number of states
-    n_states = np.unique(np.concatenate(trajs)).shape[0]
+    nstates = np.unique(np.concatenate(trajs)).shape[0]
+
+    # convert trajs to numba list
+    if not numba.config.DISABLE_JIT:
+        trajs = numba.typed.List(trajs)
+
+    T_count = _generate_transition_count_matrix(trajs, lag_time, nstates)
+    return _row_normalize_matrix(T_count)
+
+
+@numba.njit
+def _generate_transition_count_matrix(trajs, lag_time, nstates):
+    &#34;&#34;&#34;Generate a simple transition count matrix from multiple trajectories.&#34;&#34;&#34;
     # initialize matrix
-    T_count = np.zeros((n_states, n_states), dtype=int)
+    T_count = np.zeros((nstates, nstates), dtype=np.int64)
 
     for traj in trajs:
-        for i in range(len(traj) - lag_time):  # due to sliding window
-            T_count[traj[i], traj[i + lag_time]] += 1
+        for stateFrom, stateTo in zip(traj[:-lag_time], traj[lag_time:]):
+            T_count[stateFrom, stateTo] += 1
+
 
     return T_count
 
 
-def _row_normalize_2d_matrix(matrix):
+@numba.njit
+def _row_normalize_matrix(matrix):
     &#34;&#34;&#34;Row normalize the given 2d matrix.&#34;&#34;&#34;
-    matrix_norm = np.copy(matrix).astype(dtype=np.float64)
-    for i, row in enumerate(matrix):
-        row_sum = np.sum(row)
-        if not row_sum:
-            raise ValueError(&#39;Row sum of 0 can not be normalized.&#39;)
-        matrix_norm[i] = matrix_norm[i] / row_sum
-    return matrix_norm
+    row_sum = np.sum(matrix, axis=1)
+    if not row_sum.all():
+        raise ValueError(&#39;Row sum of 0 can not be normalized.&#39;)
+
+    # due to missing np.newaxis row_sum[:, np.newaxis] becomes
+    return matrix / row_sum.reshape(matrix.shape[0], 1)
 
 
 def left_eigenvectors(matrix):
-    &#34;&#34;&#34;
-    Estimate left eigenvectors.
+    &#34;&#34;&#34;Estimate left eigenvectors.
 
     Estimates the left eigenvectors and corresponding eigenvalues of a
     quadratic matrix.
 
     Parameters
     ----------
-    matrix : n x n matrix
+    matrix : ndarray
+        Quadratic 2d matrix eigenvectors and eigenvalues or determined of.
 
     Returns
     -------
-    eigenvalues: ndarray
+    eigenvalues : ndarray
         N eigenvalues sorted by their value (descending).
 
-    eigenvectors: ndarray
+    eigenvectors : ndarray
         N eigenvectors sorted by descending eigenvalues.
 
     &#34;&#34;&#34;
-    # try to cast to quadratic matrix
-    matrix = tools._asquadratic(matrix)
+    matrix = np.asarray(matrix)
+    if not tests.is_quadratic(matrix):
+        raise TypeError(&#39;Matrix needs to be quadratic {0}&#39;.format(matrix))
 
     # Transpose matrix and therefore determine eigenvalues and left
     # eigenvectors
@@ -192,38 +194,80 @@ def left_eigenvectors(matrix):
     return eigenvalues_sorted, eigenvectors_sorted
 
 
-def implied_timescales(matrix, lagtime):
+def _implied_timescales(transmat, lagtime):
     &#34;&#34;&#34;
     Calculate implied timescales.
 
     .. todo::
         - Clearify usage. Better passing trajs to calculate matrix?
-        - Check if lagtime is valid parameter.
-        - Filter 0th EV.
 
     Parameters
     ----------
-    matrix : n x n matrix
-        Transition matrix
+    transmat : ndarray
+        Quadratic transition matrix.
 
     lagtime: int
-        lagtime specified in the desired unit
-
+        Lagtime for estimating the markov model given in [frames].
 
     Returns
     -------
     timescales: ndarray
-        N implied timescales in [unit]. The first entry corresponds to the
-        stationary distribution.
+        Implied timescale given in frames.
 
     &#34;&#34;&#34;
-    # try to cast to quadratic matrix
-    matrix = tools._asquadratic(matrix)
+    transmat = np.asarray(transmat)
 
-    eigenvalues, eigenvectors = left_eigenvectors(matrix)
-    timescales = - (lagtime / np.log(eigenvalues))
+    eigenvalues, eigenvectors = left_eigenvectors(transmat)
+    eigenvalues = np.abs(eigenvalues)  # avoid numerical errors
+    return - lagtime / np.log(eigenvalues[1:])
 
-    return timescales</code></pre>
+
+def implied_timescales(trajs, lagtimes, reversible=False):
+    &#34;&#34;&#34;Calculate the implied timescales.
+
+    Calculate the implied timescales for the given values.
+    .. todo::
+        - catch if for higher lagtimes the dimensionality changes
+
+    Parameters
+    ----------
+    trajs : list or ndarray or list of ndarray
+        State trajectory/trajectories. The states should start from zero and
+        need to be integers.
+
+    lagtimes : list or ndarray int
+        Lagtimes for estimating the markov model given in [frames].
+
+    reversible : bool
+        If reversibility should be enforced for the markov state model.
+
+    Returns
+    -------
+    T : ndarray
+        Transition rate matrix.
+
+    &#34;&#34;&#34;
+    # format input
+    trajs = tools.format_state_traj(trajs)
+    lagtimes = np.atleast_1d(lagtimes)
+
+    # check that lagtimes are array of integers
+    if not np.issubdtype(lagtimes.dtype, np.integer):
+        raise TypeError(
+            &#39;Lagtimes needs to be integers but are {0}&#39;.format(lagtimes.dtype),
+        )
+    if not (lagtimes &gt; 0).all():
+        raise TypeError(&#39;Lagtimes needs to be positive integers&#39;)
+
+    # initialize result
+    nstates = len(np.unique(np.concatenate(trajs)))
+    impl_timescales = np.zeros((len(lagtimes), nstates - 1))
+
+    for idx, lagtime in enumerate(lagtimes):
+        transmat = build_MSM(trajs, lagtime, reversible=reversible)
+        impl_timescales[idx] = _implied_timescales(transmat, lagtime)
+
+    return impl_timescales</code></pre>
 </details>
 </section>
 <section>
@@ -234,7 +278,7 @@ def implied_timescales(matrix, lagtime):
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="msmhelper.msm.build_MSM"><code class="name flex">
-<span>def <span class="ident">build_MSM</span></span>(<span>trajs, lag_time, **kwargs)</span>
+<span>def <span class="ident">build_MSM</span></span>(<span>trajs, lag_time, reversible=False, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Wrapps pyemma.msm.estimate_markov_model.</p>
@@ -247,25 +291,25 @@ reversible matrix or it creates a transition count matrix.</p>
 need to be integers.</dd>
 <dt><strong><code>lag_time</code></strong> :&ensp;<code>int</code></dt>
 <dd>Lag time for estimating the markov model given in [frames].</dd>
-<dt><strong><code>reversible</code></strong> :&ensp;<code>bool</code></dt>
+<dt><strong><code>reversible</code></strong> :&ensp;<code>bool</code>, optional</dt>
 <dd>If <code>True</code> it will uses pyemma.msm.estimate_markov_model which does not
 guarantee that the matrix is of full dimension. In case of <code>False</code> or
 if not statedm the local function based on a simple transitition count
 matrix will be used instead.</dd>
+<dt><strong><code>kwargs</code></strong></dt>
+<dd>For passing values to <code>pyemma.msm.estimate_markov_model</code>.</dd>
 </dl>
-<p>See kwargs of both function.</p>
 <h2 id="returns">Returns</h2>
 <dl>
-<dt><strong><code>T</code></strong> :&ensp;<code>ndarray</code></dt>
+<dt><strong><code>transmat</code></strong> :&ensp;<code>ndarray</code></dt>
 <dd>Transition rate matrix.</dd>
 </dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def build_MSM(trajs, lag_time, **kwargs):
-    &#34;&#34;&#34;
-    Wrapps pyemma.msm.estimate_markov_model.
+<pre><code class="python">def build_MSM(trajs, lag_time, reversible=False, **kwargs):
+    &#34;&#34;&#34;Wrapps pyemma.msm.estimate_markov_model.
 
     Based on the choice of reversibility it either calls pyemma for a
     reversible matrix or it creates a transition count matrix.
@@ -279,29 +323,28 @@ matrix will be used instead.</dd>
     lag_time : int
         Lag time for estimating the markov model given in [frames].
 
-    reversible : bool
+    reversible : bool, optional
         If `True` it will uses pyemma.msm.estimate_markov_model which does not
         guarantee that the matrix is of full dimension. In case of `False` or
         if not statedm the local function based on a simple transitition count
         matrix will be used instead.
 
-    See kwargs of both function.
+    kwargs
+        For passing values to `pyemma.msm.estimate_markov_model`.
 
     Returns
     -------
-    T : ndarray
+    transmat : ndarray
         Transition rate matrix.
 
     &#34;&#34;&#34;
-    if &#39;reversible&#39; in kwargs and kwargs[&#39;reversible&#39;]:
-        MSM = pyemma.msm.estimate_markov_model(trajs, lag_time, **kwargs)
-        T = MSM.transition_matrix
+    if reversible:
+        MSM = emsm.estimate_markov_model(trajs, lag_time, **kwargs)
+        transmat = MSM.transition_matrix
     else:
-        if &#39;reversible&#39; in kwargs:
-            del kwargs[&#39;reversible&#39;]
-        T = estimate_markov_model(trajs, lag_time, **kwargs)
+        transmat = estimate_markov_model(trajs, lag_time)
 
-    return T</code></pre>
+    return transmat</code></pre>
 </details>
 </dd>
 <dt id="msmhelper.msm.estimate_markov_model"><code class="name flex">
@@ -309,7 +352,13 @@ matrix will be used instead.</dd>
 </code></dt>
 <dd>
 <div class="desc"><p>Estimates Markov State Model.</p>
-<p>This method estimates the MSM based on the transition count matrix.</p>
+<div class="admonition todo">
+<p class="admonition-title">TODO</p>
+<ul>
+<li>allow states to be unequal to indices</li>
+<li>return active set</li>
+</ul>
+</div>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>trajs</code></strong> :&ensp;<code>list</code> or <code>ndarray</code> or <code>list</code> of <code>ndarray</code></dt>
@@ -328,10 +377,12 @@ need to be integers.</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def estimate_markov_model(trajs, lag_time):
-    &#34;&#34;&#34;
-    Estimates Markov State Model.
+    &#34;&#34;&#34;Estimates Markov State Model.
 
     This method estimates the MSM based on the transition count matrix.
+    .. todo::
+        - allow states to be unequal to indices
+        - return active set
 
     Parameters
     ----------
@@ -349,75 +400,95 @@ need to be integers.</dd>
 
     &#34;&#34;&#34;
     # format input
-    trajs = tools._format_state_trajectory(trajs)
+    trajs = tools.format_state_traj(trajs)
 
-    T_count = _generate_transition_count_matrix(trajs, lag_time)
-    T_count_norm = _row_normalize_2d_matrix(T_count)
-    return T_count_norm</code></pre>
+    # get number of states
+    nstates = np.unique(np.concatenate(trajs)).shape[0]
+
+    # convert trajs to numba list
+    if not numba.config.DISABLE_JIT:
+        trajs = numba.typed.List(trajs)
+
+    T_count = _generate_transition_count_matrix(trajs, lag_time, nstates)
+    return _row_normalize_matrix(T_count)</code></pre>
 </details>
 </dd>
 <dt id="msmhelper.msm.implied_timescales"><code class="name flex">
-<span>def <span class="ident">implied_timescales</span></span>(<span>matrix, lagtime)</span>
+<span>def <span class="ident">implied_timescales</span></span>(<span>trajs, lagtimes, reversible=False)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Calculate implied timescales.</p>
+<div class="desc"><p>Calculate the implied timescales.</p>
 <div class="admonition todo">
 <p class="admonition-title">TODO</p>
 <ul>
-<li>Clearify usage. Better passing trajs to calculate matrix?</li>
-<li>Check if lagtime is valid parameter.</li>
-<li>Filter 0th EV.</li>
+<li>catch if for higher lagtimes the dimensionality changes</li>
 </ul>
 </div>
 <h2 id="parameters">Parameters</h2>
 <dl>
-<dt><strong><code>matrix</code></strong> :&ensp;<code>n x n matrix</code></dt>
-<dd>Transition matrix</dd>
-<dt><strong><code>lagtime</code></strong> :&ensp;<code>int</code></dt>
-<dd>lagtime specified in the desired unit</dd>
+<dt><strong><code>trajs</code></strong> :&ensp;<code>list</code> or <code>ndarray</code> or <code>list</code> of <code>ndarray</code></dt>
+<dd>State trajectory/trajectories. The states should start from zero and
+need to be integers.</dd>
+<dt><strong><code>lagtimes</code></strong> :&ensp;<code>list</code> or <code>ndarray int</code></dt>
+<dd>Lagtimes for estimating the markov model given in [frames].</dd>
+<dt><strong><code>reversible</code></strong> :&ensp;<code>bool</code></dt>
+<dd>If reversibility should be enforced for the markov state model.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <dl>
-<dt><strong><code>timescales</code></strong> :&ensp;<code>ndarray</code></dt>
-<dd>N implied timescales in [unit]. The first entry corresponds to the
-stationary distribution.</dd>
+<dt><strong><code>T</code></strong> :&ensp;<code>ndarray</code></dt>
+<dd>Transition rate matrix.</dd>
 </dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def implied_timescales(matrix, lagtime):
-    &#34;&#34;&#34;
-    Calculate implied timescales.
+<pre><code class="python">def implied_timescales(trajs, lagtimes, reversible=False):
+    &#34;&#34;&#34;Calculate the implied timescales.
 
+    Calculate the implied timescales for the given values.
     .. todo::
-        - Clearify usage. Better passing trajs to calculate matrix?
-        - Check if lagtime is valid parameter.
-        - Filter 0th EV.
+        - catch if for higher lagtimes the dimensionality changes
 
     Parameters
     ----------
-    matrix : n x n matrix
-        Transition matrix
+    trajs : list or ndarray or list of ndarray
+        State trajectory/trajectories. The states should start from zero and
+        need to be integers.
 
-    lagtime: int
-        lagtime specified in the desired unit
+    lagtimes : list or ndarray int
+        Lagtimes for estimating the markov model given in [frames].
 
+    reversible : bool
+        If reversibility should be enforced for the markov state model.
 
     Returns
     -------
-    timescales: ndarray
-        N implied timescales in [unit]. The first entry corresponds to the
-        stationary distribution.
+    T : ndarray
+        Transition rate matrix.
 
     &#34;&#34;&#34;
-    # try to cast to quadratic matrix
-    matrix = tools._asquadratic(matrix)
+    # format input
+    trajs = tools.format_state_traj(trajs)
+    lagtimes = np.atleast_1d(lagtimes)
 
-    eigenvalues, eigenvectors = left_eigenvectors(matrix)
-    timescales = - (lagtime / np.log(eigenvalues))
+    # check that lagtimes are array of integers
+    if not np.issubdtype(lagtimes.dtype, np.integer):
+        raise TypeError(
+            &#39;Lagtimes needs to be integers but are {0}&#39;.format(lagtimes.dtype),
+        )
+    if not (lagtimes &gt; 0).all():
+        raise TypeError(&#39;Lagtimes needs to be positive integers&#39;)
 
-    return timescales</code></pre>
+    # initialize result
+    nstates = len(np.unique(np.concatenate(trajs)))
+    impl_timescales = np.zeros((len(lagtimes), nstates - 1))
+
+    for idx, lagtime in enumerate(lagtimes):
+        transmat = build_MSM(trajs, lagtime, reversible=reversible)
+        impl_timescales[idx] = _implied_timescales(transmat, lagtime)
+
+    return impl_timescales</code></pre>
 </details>
 </dd>
 <dt id="msmhelper.msm.left_eigenvectors"><code class="name flex">
@@ -429,8 +500,8 @@ stationary distribution.</dd>
 quadratic matrix.</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
-<dt><strong><code>matrix</code></strong> :&ensp;<code>n x n matrix</code></dt>
-<dd>&nbsp;</dd>
+<dt><strong><code>matrix</code></strong> :&ensp;<code>ndarray</code></dt>
+<dd>Quadratic 2d matrix eigenvectors and eigenvalues or determined of.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <dl>
@@ -444,27 +515,28 @@ quadratic matrix.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def left_eigenvectors(matrix):
-    &#34;&#34;&#34;
-    Estimate left eigenvectors.
+    &#34;&#34;&#34;Estimate left eigenvectors.
 
     Estimates the left eigenvectors and corresponding eigenvalues of a
     quadratic matrix.
 
     Parameters
     ----------
-    matrix : n x n matrix
+    matrix : ndarray
+        Quadratic 2d matrix eigenvectors and eigenvalues or determined of.
 
     Returns
     -------
-    eigenvalues: ndarray
+    eigenvalues : ndarray
         N eigenvalues sorted by their value (descending).
 
-    eigenvectors: ndarray
+    eigenvectors : ndarray
         N eigenvectors sorted by descending eigenvalues.
 
     &#34;&#34;&#34;
-    # try to cast to quadratic matrix
-    matrix = tools._asquadratic(matrix)
+    matrix = np.asarray(matrix)
+    if not tests.is_quadratic(matrix):
+        raise TypeError(&#39;Matrix needs to be quadratic {0}&#39;.format(matrix))
 
     # Transpose matrix and therefore determine eigenvalues and left
     # eigenvectors
@@ -488,10 +560,6 @@ quadratic matrix.</p>
 </section>
 </article>
 <nav id="sidebar">
-<div class="gcse-search" style="height: 70px"
-data-as_oq="inurl:github.com/moldyn/msmhelper site:moldyn.github.io/msmhelper"
-data-gaCategoryParameter="msmhelper.msm">
-</div>
 <h1>Index</h1>
 <div class="toc">
 <ul></ul>
