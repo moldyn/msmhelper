@@ -108,15 +108,52 @@ def rename_by_population(traj, return_permutation=False):
 
     # get decreasing order
     idx_sort = np.argsort(pop)[::-1]
+    states = states[idx_sort]
 
     # rename states
     traj_renamed = shift_data(
         traj,
-        val_old=states[idx_sort],
+        val_old=states,
         val_new=np.arange(len(states)) + 1,
     )
     if return_permutation:
-        return traj_renamed, states[idx_sort]
+        return traj_renamed, states
+    return traj_renamed
+
+
+def rename_by_index(traj, return_permutation=False):
+    r"""Rename states sorted by their numerical values starting from 0.
+
+    Parameters
+    ----------
+    traj : ndarray, list of ndarrays
+        State trajectory or list of state trajectories.
+
+    return_permutation : bool
+        Return additionaly the permutation to achieve performed renaming.
+        Default is False.
+
+    Returns
+    -------
+    traj : ndarray
+        Renamed data.
+
+    permutation : ndarray
+        Permutation going from old to new state nameing. So the `i`th state
+        of the new naming corresponds to the old state `permutation[i-1]`.
+
+    """
+    # get unique states
+    states = np.unique(traj)
+
+    # rename states
+    traj_renamed = shift_data(
+        traj,
+        val_old=states,
+        val_new=np.arange(len(states)),
+    )
+    if return_permutation:
+        return traj_renamed, states
     return traj_renamed
 
 

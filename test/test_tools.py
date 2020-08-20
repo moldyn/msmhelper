@@ -59,8 +59,22 @@ def test_shift_data(data, expected, val_old, val_new):
 def test_rename_by_population(data, expected, perm_expected):
     """Test rename_by_population."""
     assert (msmhelper.rename_by_population(data) == expected).all()
-    result, perm = msmhelper.rename_by_population(data,
-                                                  return_permutation=True)
+    result, perm = msmhelper.rename_by_population(
+        data, return_permutation=True,
+    )
+    assert (result == expected).all()
+    assert (perm == perm_expected).all()
+
+
+@pytest.mark.parametrize('data, expected, perm_expected', [
+    ([1, 3, 3, 3, 2, 2], [0, 2, 2, 2, 1, 1], [1, 2, 3]),
+    ([1, -5, -5, 7, 7, 7], [1, 0, 0, 2, 2, 2], [-5, 1, 7])])
+def test_rename_by_index(data, expected, perm_expected):
+    """Test rename_by_index."""
+    assert (msmhelper.rename_by_index(data) == expected).all()
+    result, perm = msmhelper.rename_by_index(
+        data, return_permutation=True,
+    )
     assert (result == expected).all()
     assert (perm == perm_expected).all()
 
