@@ -31,5 +31,5 @@ jobs:
         pip install -q flake8 wemake-python-styleguide
     - name: Test with pytest
       run: |
-        pip install -q pytest pytest-cov pytest-rerunfailures
+        pip install -q pytest pytest-cov pytest-rerunfailures pytest-benchmark
         export NUMBA_DISABLE_JIT=1 && pytest
