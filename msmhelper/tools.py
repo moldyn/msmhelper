@@ -222,7 +222,9 @@ def get_runtime_user_information():
 
     """
     try:
-        script_dir, script_name = os.path.split(os.path.abspath(main.__file__))
+        script_dir, script_name = os.path.split(
+            os.path.abspath(main.__file__),  # noqa: WPS609
+        )
     except AttributeError:
         script_dir, script_name = '', 'console'
 

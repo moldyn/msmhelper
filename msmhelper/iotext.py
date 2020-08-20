@@ -98,7 +98,7 @@ def opentxt(file_name, comment='#', nrows=None, **kwargs):
     )
 
 
-def savetxt(file_name, array, header=None, fmt='%.5f'):
+def savetxt(file_name, array, header=None, fmt='%.5f'):  # noqa: WPS323
     """Save nxm array of floats to a text file.
 
     It uses numpys savetxt method and extends the header with information
