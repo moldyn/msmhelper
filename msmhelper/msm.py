@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Create Markov State Model.
+"""Create Markov State Model.
 
 BSD 3-Clause License
 Copyright (c) 2019-2020, Daniel Nagel
@@ -102,8 +101,9 @@ def _generate_transition_count_matrix(trajs, lag_time, nstates):
     T_count = np.zeros((nstates, nstates), dtype=np.int64)
 
     for traj in trajs:
-        for idx in range(len(traj) - lag_time):  # due to sliding window
-            T_count[traj[idx], traj[idx + lag_time]] += 1
+        for stateFrom, stateTo in zip(traj[:-lag_time], traj[lag_time:]):
+            T_count[stateFrom, stateTo] += 1
+
 
     return T_count
 
@@ -114,6 +114,7 @@ def _row_normalize_matrix(matrix):
     row_sum = np.sum(matrix, axis=1)
     if not row_sum.all():
         raise ValueError('Row sum of 0 can not be normalized.')
+
     # due to missing np.newaxis row_sum[:, np.newaxis] becomes
     return matrix / row_sum.reshape(matrix.shape[0], 1)
 
@@ -139,7 +140,7 @@ def left_eigenvectors(matrix):
 
     """
     matrix = np.asarray(matrix)
-    tools._check_quadratic(matrix)
+    tools._check_quadratic(matrix)  # noqa: WPS437
 
     # Transpose matrix and therefore determine eigenvalues and left
     # eigenvectors
@@ -179,7 +180,7 @@ def _implied_timescales(transmat, lagtime):
 
     """
     transmat = np.asarray(transmat)
-    tools._check_quadratic(transmat)
+    tools._check_quadratic(transmat)  # noqa: WPS437
 
     eigenvalues, eigenvectors = left_eigenvectors(transmat)
     eigenvalues = np.abs(eigenvalues)  # avoid numerical errors
