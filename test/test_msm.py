@@ -90,6 +90,9 @@ def test_left_eigenvectors(matrix, eigenvaluesref, eigenvectorsref):
     for i, row in enumerate(eigenvectors):
         assert (np.abs(row) - np.abs(eigenvectorsref[i]) < 1e-9).all()
 
+    with pytest.raises(TypeError):
+        msmhelper.left_eigenvectors(matrix[ 0])
+
 
 @pytest.mark.parametrize('transmat, lagtime, result', [
     ([[0.8, 0.2, 0.0], [0.2, 0.78, 0.02], [0.0, 0.2, 0.8]], 2,

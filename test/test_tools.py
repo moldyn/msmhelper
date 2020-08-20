@@ -6,8 +6,6 @@ BSD 3-Clause License
 Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
 
-Author: Daniel Nagel
-
 """
 # ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 from importlib import reload
@@ -146,26 +144,6 @@ def test__asindex():
     # wrong dimensionality
     with pytest.raises(ValueError):
         tools._asindex([idx])
-
-
-def test__check_quadratic():
-    """Test _check_quadratic."""
-    mat = np.arange(9).reshape(3, 3)
-
-    # check if no error is raised
-    tools._check_quadratic(mat)
-
-    # check for non quadratic matrices
-    with pytest.raises(ValueError):
-        tools._check_quadratic([2, 1])
-
-    # check for scalar
-    with pytest.raises(ValueError):
-        tools._check_quadratic(1)
-
-    # check for 3d matrices
-    with pytest.raises(ValueError):
-        tools._check_quadratic(np.arange(8).reshape(2, 2, 2))
 
 
 def test_get_runtime_user_information():

@@ -9,8 +9,6 @@ All rights reserved.
 # ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import warnings
 
-import pytest
-
 from msmhelper import decorators
 
 

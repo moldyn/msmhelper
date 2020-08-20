@@ -14,7 +14,7 @@ import numba
 import numpy as np
 from pyemma import msm as emsm
 
-from msmhelper import tools
+from msmhelper import tests, tools
 
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -140,7 +140,8 @@ def left_eigenvectors(matrix):
 
     """
     matrix = np.asarray(matrix)
-    tools._check_quadratic(matrix)  # noqa: WPS437
+    if not tests.is_quadratic(matrix):
+        raise TypeError('Matrix needs to be quadratic {0}'.format(matrix))
 
     # Transpose matrix and therefore determine eigenvalues and left
     # eigenvectors
@@ -180,7 +181,6 @@ def _implied_timescales(transmat, lagtime):
 
     """
     transmat = np.asarray(transmat)
-    tools._check_quadratic(transmat)  # noqa: WPS437
 
     eigenvalues, eigenvectors = left_eigenvectors(transmat)
     eigenvalues = np.abs(eigenvalues)  # avoid numerical errors

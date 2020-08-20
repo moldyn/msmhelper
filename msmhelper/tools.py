@@ -281,20 +281,6 @@ def _asindex(idx):
     return idx
 
 
-def _check_quadratic(matrix):
-    """Check if matrix is quadratic."""
-    # cast to 2d for easier error checking
-    matrix = np.atleast_2d(matrix)
-
-    # Check whether matrix is quadratic.
-    if np.shape(matrix)[0] != np.shape(matrix)[1]:
-        raise ValueError('Matrix is not quadratic: {0}'.format(matrix))
-
-    # check if scalar or tensor higher than 2d
-    if matrix.shape[0] == 1 or matrix.ndim > 2:
-        raise ValueError('Matrix is not 2d: {0}'.format(matrix))
-
-
 def format_state_traj(trajs):
     """Convert state trajectory to list of ndarrays.
 
@@ -326,12 +312,12 @@ def format_state_traj(trajs):
             trajs = list(trajs)
 
     # check for integers
-    _check_state_traj_type(trajs)
+    _check_state_traj(trajs)
 
     return trajs
 
 
-def _check_state_traj_type(trajs):
+def _check_state_traj(trajs):
     """Check if state trajectory is correct formatted."""
     # check for integers
     for traj in trajs:
