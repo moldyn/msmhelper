@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Tests for the decorators module.
+"""Tests for the decorators module.
 
 BSD 3-Clause License
 Copyright (c) 2019-2020, Daniel Nagel

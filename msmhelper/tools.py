@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
-"""
-Set of helpful functions.
+"""Set of helpful functions.
 
 BSD 3-Clause License
 Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
-
-Author: Daniel Nagel
 
 TODO:
     - Correct border effects of running mean
@@ -26,8 +23,7 @@ import __main__ as main
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def shift_data(array, val_old, val_new, dtype=np.int32):
-    """
-    Shift integer array (data) from old to new values.
+    """Shift integer array (data) from old to new values.
 
     > **CAUTION:**
     > The values of `val_old`, `val_new` and `data` needs to be integers.
@@ -86,8 +82,7 @@ def shift_data(array, val_old, val_new, dtype=np.int32):
 
 
 def rename_by_population(traj, return_permutation=False):
-    r"""
-    Rename states sorted by their population starting from 1.
+    r"""Rename states sorted by their population starting from 1.
 
     Parameters
     ----------
@@ -126,8 +121,7 @@ def rename_by_population(traj, return_permutation=False):
 
 
 def runningmean(array, window):
-    r"""
-    Compute centered running average with given window size.
+    r"""Compute centered running average with given window size.
 
     This function returns the centered based running average of the given
     data. The output of this function is of the same length as the input,
@@ -316,8 +310,7 @@ def _check_state_traj_type(trajs):
 
 
 def _flatten_data(array):
-    """
-    Flatten data to 1D ndarray.
+    """Flatten data to 1D ndarray.
 
     This method flattens ndarrays, list of ndarrays to a 1D ndarray. This can
     be undone with _unflatten_data().
@@ -357,8 +350,7 @@ def _flatten_data(array):
 
 
 def _unflatten_data(array, kwargs):
-    """
-    Unflatten data to original structure.
+    """Unflatten data to original structure.
 
     This method undoes _flatten_data().
 
