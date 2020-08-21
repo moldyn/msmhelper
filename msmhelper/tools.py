@@ -379,12 +379,9 @@ def _flatten_data(array):
     kwargs = {}
 
     # flatten data
-    if isinstance(array, list):
-        # list of lists
-        if all((isinstance(row, list) for row in array)):
-            array = [np.array(row) for row in array]
-        # list of ndarrays
-        if all((isinstance(row, np.ndarray) for row in array)):
+    if isinstance(array, (tuple, list)):
+        # list of ndarrays, lists or tuples
+        if all((isinstance(row, (np.ndarray, tuple, list)) for row in array)):
             # get shape and flatten
             kwargs['limits'] = np.cumsum([len(row) for row in array])
             array = np.concatenate(array)

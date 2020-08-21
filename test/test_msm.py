@@ -58,7 +58,7 @@ def test__generate_transition_count_matrix(traj, lag_time, Tref, nstates):
      [[0., 0., 1.], [0., 2 / 3, 1 / 3], [0.4, 0.2, 0.4]])])
 def test_estimate_markov_model(traj, lag_time, Tref):
     """Test estimate markov model."""
-    T = msmhelper.estimate_markov_model(traj, lag_time)
+    T, states = msmhelper.estimate_markov_model(traj, lag_time)
     for i, row in enumerate(T):
         assert (row == Tref[i]).all()
 

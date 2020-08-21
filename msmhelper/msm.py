@@ -52,7 +52,7 @@ def build_MSM(trajs, lag_time, reversible=False, **kwargs):
         MSM = emsm.estimate_markov_model(trajs, lag_time, **kwargs)
         transmat = MSM.transition_matrix
     else:
-        transmat = estimate_markov_model(trajs, lag_time)
+        transmat, _ = estimate_markov_model(trajs, lag_time)
 
     return transmat
 
@@ -61,9 +61,6 @@ def estimate_markov_model(trajs, lag_time):
     """Estimates Markov State Model.
 
     This method estimates the MSM based on the transition count matrix.
-    .. todo::
-        - allow states to be unequal to indices
-        - return active set
 
     Parameters
     ----------
@@ -79,19 +76,28 @@ def estimate_markov_model(trajs, lag_time):
     T : ndarray
         Transition rate matrix.
 
+    permutation : ndarray
+        Array with corresponding states.
+
     """
     # format input
     trajs = tools.format_state_traj(trajs)
 
     # get number of states
-    nstates = np.unique(np.concatenate(trajs)).shape[0]
+    nstates = len(tools.unique(trajs))
+
+    # shift to indices
+    if tests.is_index_traj(trajs):
+        perm = np.arange(nstates)
+    else:
+        trajs, perm = tools.rename_by_index(trajs, return_permutation=True)
 
     # convert trajs to numba list
     if not numba.config.DISABLE_JIT:
         trajs = numba.typed.List(trajs)
 
     T_count = _generate_transition_count_matrix(trajs, lag_time, nstates)
-    return _row_normalize_matrix(T_count)
+    return _row_normalize_matrix(T_count), perm
 
 
 @numba.njit
