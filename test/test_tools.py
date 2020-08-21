@@ -77,6 +77,17 @@ def test_rename_by_index(data, expected, perm_expected):
     assert (perm == perm_expected).all()
 
 
+@pytest.mark.parametrize('data, expected, pop', [
+    ([1, 3, 3, 3, 2, 2], [1, 2, 3], [1, 2, 3]),
+    ([[1, -5, -5, 7, 7, 7], [1, 1]], [-5, 1, 7], [2, 3, 3])])
+def test_unique(data, expected, pop):
+    """Test unique."""
+    assert (msmhelper.unique(data) == expected).all()
+    result, perm = msmhelper.unique(data, return_counts=True)
+    assert (result == expected).all()
+    assert (perm == pop).all()
+
+
 @pytest.mark.parametrize('data, expected, window', [
     ([1, 1, 1, 2, 2, 2, 3, 3, 3], [1., 1., 1., 2., 2., 2., 3., 3., 3.], 1),
     ([1, 1, 1, 2, 2, 2, 3, 3, 3], [.5, 1., 1., 1.5, 2., 2., 2.5, 3., 3.], 2)])

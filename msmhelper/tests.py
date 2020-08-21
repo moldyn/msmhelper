@@ -55,8 +55,27 @@ def is_state_traj(trajs):
 
     """
     try:
-        tools._check_state_traj(trajs)
+        tools._check_state_traj(trajs)  # noqa: WPS437
     except TypeError:
         return False
     else:
         return True
+
+
+def is_index_traj(trajs):
+    """Check if states can be used as indices.
+
+    Parameters
+    ----------
+    trajs : list of ndarray
+        State trajectory/trajectories need to be lists of ndarrays of integers.
+
+    Returns
+    -------
+    is_index : bool
+
+    """
+    if is_state_traj(trajs):
+        states = tools.unique(trajs)
+        return np.array_equal(states, np.arange(len(states)))
+    return False

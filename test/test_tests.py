@@ -28,9 +28,20 @@ def test_is_quadratic(mat):
 
 
 @pytest.mark.parametrize('traj', [([1, 1, 1, 1, 1, 2, 2, 1, 2, 0, 2, 2, 0])])
-def test_format_state_traj(traj):
+def test_is_state_traj(traj):
     """Test formating state trajectory."""
     traj = tools.format_state_traj(traj)
 
     assert tests.is_state_traj(traj)
     assert not tests.is_state_traj([traj[0].astype(np.float32)])
+
+
+@pytest.mark.parametrize('traj', [([1, 1, 1, 1, 1, 2, 2, 1, 2, 0, 2, 2, 0])])
+def test_is_index_traj(traj):
+    """Test formating state trajectory."""
+    traj = tools.format_state_traj(traj)
+
+    assert tests.is_index_traj(traj)
+    traj.append(np.array([4, 5]))
+    assert not tests.is_index_traj(traj)
+    assert not tests.is_index_traj([5])

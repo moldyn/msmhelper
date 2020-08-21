@@ -81,12 +81,12 @@ def shift_data(array, val_old, val_new, dtype=np.int32):
     return _unflatten_data(array, shape_kwargs)
 
 
-def rename_by_population(traj, return_permutation=False):
+def rename_by_population(trajs, return_permutation=False):
     r"""Rename states sorted by their population starting from 1.
 
     Parameters
     ----------
-    traj : ndarray, list of ndarrays
+    trajs : list or ndarray or list of ndarrays
         State trajectory or list of state trajectories.
 
     return_permutation : bool
@@ -95,7 +95,7 @@ def rename_by_population(traj, return_permutation=False):
 
     Returns
     -------
-    traj : ndarray
+    trajs : ndarray
         Renamed data.
 
     permutation : ndarray
@@ -104,29 +104,29 @@ def rename_by_population(traj, return_permutation=False):
 
     """
     # get unique states with population
-    states, pop = np.unique(traj, return_counts=True)
+    states, pop = unique(trajs, return_counts=True)
 
     # get decreasing order
     idx_sort = np.argsort(pop)[::-1]
     states = states[idx_sort]
 
     # rename states
-    traj_renamed = shift_data(
-        traj,
+    trajs_renamed = shift_data(
+        trajs,
         val_old=states,
         val_new=np.arange(len(states)) + 1,
     )
     if return_permutation:
-        return traj_renamed, states
-    return traj_renamed
+        return trajs_renamed, states
+    return trajs_renamed
 
 
-def rename_by_index(traj, return_permutation=False):
+def rename_by_index(trajs, return_permutation=False):
     r"""Rename states sorted by their numerical values starting from 0.
 
     Parameters
     ----------
-    traj : ndarray, list of ndarrays
+    trajs : list or ndarray or list of ndarrays
         State trajectory or list of state trajectories.
 
     return_permutation : bool
@@ -135,7 +135,7 @@ def rename_by_index(traj, return_permutation=False):
 
     Returns
     -------
-    traj : ndarray
+    trajs : ndarray
         Renamed data.
 
     permutation : ndarray
@@ -144,17 +144,41 @@ def rename_by_index(traj, return_permutation=False):
 
     """
     # get unique states
-    states = np.unique(traj)
+    states = unique(trajs)
 
     # rename states
-    traj_renamed = shift_data(
-        traj,
+    trajs_renamed = shift_data(
+        trajs,
         val_old=states,
         val_new=np.arange(len(states)),
     )
     if return_permutation:
-        return traj_renamed, states
-    return traj_renamed
+        return trajs_renamed, states
+    return trajs_renamed
+
+
+def unique(trajs, **kwargs):
+    r"""Apply numpy.unique to traj.
+
+    Parameters
+    ----------
+    trajs : list or ndarray or list of ndarrays
+        State trajectory or list of state trajectories.
+
+    kwargs :
+        Arguments of [numpy.unique()](NP_DOC.numpy.unique.html)
+
+    Returns
+    -------
+    unique :
+        Number of states, depending on kwargs more.
+
+    """
+    # flatten data
+    trajs, _ = _flatten_data(trajs)
+
+    # get unique states with population
+    return np.unique(trajs, **kwargs)
 
 
 def runningmean(array, window):
@@ -340,7 +364,7 @@ def _flatten_data(array):
 
     Parameters
     ----------
-    array : ndarray, list, list of ndarrays
+    array : list or ndarray or list of ndarrays
         1D data or a list of data.
 
     Returns
@@ -356,6 +380,9 @@ def _flatten_data(array):
 
     # flatten data
     if isinstance(array, list):
+        # list of lists
+        if all((isinstance(row, list) for row in array)):
+            array = [np.array(row) for row in array]
         # list of ndarrays
         if all((isinstance(row, np.ndarray) for row in array)):
             # get shape and flatten
