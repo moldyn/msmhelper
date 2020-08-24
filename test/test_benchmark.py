@@ -22,32 +22,44 @@ def state_traj():
 
 
 @pytest.fixture
-def lag_time():
+def lagtime():
     """Define lag time."""
     return 1
 
 
 # ~~~ TESTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def test_msm_msmhelper(state_traj, lag_time, benchmark):
+def test_msm_msmhelper(state_traj, lagtime, benchmark):
     """Test row normalization."""
-    benchmark(mh.estimate_markov_model, state_traj, lag_time=lag_time)
+    assert mh.tests.is_index_traj(state_traj)
+    nstates = len(mh.tools.unique(state_traj))
+    benchmark(
+        mh.msm._estimate_markov_model,
+        state_traj,
+        lagtime=lagtime,
+        nstates=nstates,
+    )
 
 
-def test_msm_pyemma(state_traj, lag_time, benchmark):
+def test_msm_pyemma(state_traj, lagtime, benchmark):
     """Test row normalization."""
     benchmark(
         emsm.estimate_markov_model,
         state_traj,
-        lag_time,
+        lagtime,
         reversible=False,
     )
 
 
-def test_msm_pyemma_reversible(state_traj, lag_time, benchmark):
+def test_msm_pyemma_reversible(state_traj, lagtime, benchmark):
     """Test row normalization."""
     benchmark(
         emsm.estimate_markov_model,
         state_traj,
-        lag_time,
+        lagtime,
         reversible=True,
     )
+
+
+def test_is_index_traj(state_traj, benchmark):
+    """Test row normalization."""
+    benchmark(mh.tests.is_index_traj, state_traj)

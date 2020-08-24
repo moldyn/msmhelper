@@ -11,8 +11,8 @@ Author: Daniel Nagel
 
 """
 # ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-import numpy as np
 import numba
+import numpy as np
 import pytest
 
 import msmhelper
@@ -27,8 +27,7 @@ def test__row_normalize_matrix(mat, matref):
     # cast mat to ndarray
     mat = np.array(mat)
     mat = msm._row_normalize_matrix(mat)
-    for i, row in enumerate(mat):
-        assert (row == matref[i]).all()
+    np.testing.assert_array_equal(mat, matref)
 
     with pytest.raises(ValueError):
         # set first row to 0
@@ -37,10 +36,10 @@ def test__row_normalize_matrix(mat, matref):
         msm._row_normalize_matrix(mat)
 
 
-@pytest.mark.parametrize('traj, lag_time, Tref, nstates', [
+@pytest.mark.parametrize('traj, lagtime, Tref, nstates', [
     ([1, 1, 1, 1, 1, 2, 2, 1, 2, 0, 2, 2, 0], 1,
      [[0, 0, 1], [0, 4, 2], [2, 1, 2]], 3)])
-def test__generate_transition_count_matrix(traj, lag_time, Tref, nstates):
+def test__generate_transition_count_matrix(traj, lagtime, Tref, nstates):
     """Test transition count matrix estimate."""
     # convert traj to numba
     if numba.config.DISABLE_JIT:
@@ -48,34 +47,35 @@ def test__generate_transition_count_matrix(traj, lag_time, Tref, nstates):
     else:
         traj = numba.typed.List([np.array(traj)])
 
-    T = msm._generate_transition_count_matrix(traj, lag_time, nstates)
-    for i, row in enumerate(T):
-        assert (row == Tref[i]).all()
+    T = msm._generate_transition_count_matrix(traj, lagtime, nstates)
+    np.testing.assert_array_equal(T, Tref)
 
 
-@pytest.mark.parametrize('traj, lag_time, Tref', [
+@pytest.mark.parametrize('traj, lagtime, Tref, statesref', [
     ([1, 1, 1, 1, 1, 2, 2, 1, 2, 0, 2, 2, 0], 1,
-     [[0., 0., 1.], [0., 2 / 3, 1 / 3], [0.4, 0.2, 0.4]])])
-def test_estimate_markov_model(traj, lag_time, Tref):
+     [[0., 0., 1.], [0., 2 / 3, 1 / 3], [0.4, 0.2, 0.4]], [0, 1, 2]),
+    ([3, 3, 3, 3, 3, 2, 2, 3, 2, 0, 2, 2, 0], 1,
+     [[0., 1., 0.], [0.4, 0.4, 0.2], [0., 1 / 3, 2 / 3]], [0, 2, 3]),
+])
+def test_estimate_markov_model(traj, lagtime, Tref, statesref):
     """Test estimate markov model."""
-    T, states = msmhelper.estimate_markov_model(traj, lag_time)
-    for i, row in enumerate(T):
-        assert (row == Tref[i]).all()
+    T, states = msmhelper.estimate_markov_model(traj, lagtime)
+    np.testing.assert_array_equal(T, Tref)
+    np.testing.assert_array_equal(states, statesref)
 
 
-@pytest.mark.parametrize('traj, lag_time, Tref', [
+@pytest.mark.parametrize('traj, lagtime, Tref', [
     ([1, 1, 1, 1, 1, 2, 2, 1, 2, 0, 2, 2, 0], 1,
      [[0., 0., 1.], [0., 2 / 3, 1 / 3], [0.4, 0.2, 0.4]])])
-def test_build_MSM(traj, lag_time, Tref):
+def test_build_MSM(traj, lagtime, Tref):
     """Test estimate markov model."""
     # non reversible
-    T = msmhelper.build_MSM(traj, lag_time, reversible=False)
+    T = msmhelper.build_MSM(traj, lagtime, reversible=False)
     for i, row in enumerate(T):
         assert (row == Tref[i]).all()
     #  reversible
-    T = msmhelper.build_MSM(traj, lag_time, reversible=True)
-    for i, row in enumerate(T):
-        assert (row - Tref[i] < 1e-5).all()
+    T = msmhelper.build_MSM(traj, lagtime, reversible=True)
+    np.testing.assert_array_almost_equal(T, Tref)
 
 
 @pytest.mark.parametrize('matrix, eigenvaluesref, eigenvectorsref', [
@@ -86,12 +86,14 @@ def test_build_MSM(traj, lag_time, Tref):
 def test_left_eigenvectors(matrix, eigenvaluesref, eigenvectorsref):
     """Test left eigenvectors estimate."""
     eigenvalues, eigenvectors = msmhelper.left_eigenvectors(matrix)
-    assert (eigenvalues - eigenvaluesref < 1e-9).all()
-    for i, row in enumerate(eigenvectors):
-        assert (np.abs(row) - np.abs(eigenvectorsref[i]) < 1e-9).all()
+    np.testing.assert_array_almost_equal(eigenvalues, eigenvaluesref)
+    np.testing.assert_array_almost_equal(
+        np.abs(eigenvectors),
+        np.abs(eigenvectorsref),
+    )
 
     with pytest.raises(TypeError):
-        msmhelper.left_eigenvectors(matrix[ 0])
+        msmhelper.left_eigenvectors(matrix[0])
 
 
 @pytest.mark.parametrize('transmat, lagtime, result', [

@@ -18,7 +18,7 @@ from msmhelper import tests, tools
 
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def build_MSM(trajs, lag_time, reversible=False, **kwargs):
+def build_MSM(trajs, lagtime, reversible=False, **kwargs):
     """Wrapps pyemma.msm.estimate_markov_model.
 
     Based on the choice of reversibility it either calls pyemma for a
@@ -30,7 +30,7 @@ def build_MSM(trajs, lag_time, reversible=False, **kwargs):
         State trajectory/trajectories. The states should start from zero and
         need to be integers.
 
-    lag_time : int
+    lagtime : int
         Lag time for estimating the markov model given in [frames].
 
     reversible : bool, optional
@@ -49,15 +49,15 @@ def build_MSM(trajs, lag_time, reversible=False, **kwargs):
 
     """
     if reversible:
-        MSM = emsm.estimate_markov_model(trajs, lag_time, **kwargs)
+        MSM = emsm.estimate_markov_model(trajs, lagtime, **kwargs)
         transmat = MSM.transition_matrix
     else:
-        transmat, _ = estimate_markov_model(trajs, lag_time)
+        transmat, _ = estimate_markov_model(trajs, lagtime)
 
     return transmat
 
 
-def estimate_markov_model(trajs, lag_time):
+def estimate_markov_model(trajs, lagtime):
     """Estimates Markov State Model.
 
     This method estimates the MSM based on the transition count matrix.
@@ -68,7 +68,7 @@ def estimate_markov_model(trajs, lag_time):
         State trajectory/trajectories. The states should start from zero and
         need to be integers.
 
-    lag_time : int
+    lagtime : int
         Lag time for estimating the markov model given in [frames].
 
     Returns
@@ -88,28 +88,35 @@ def estimate_markov_model(trajs, lag_time):
 
     # shift to indices
     if tests.is_index_traj(trajs):
-        perm = np.arange(nstates)
+        perm = None
     else:
         trajs, perm = tools.rename_by_index(trajs, return_permutation=True)
 
+    return _estimate_markov_model(trajs, lagtime, nstates, perm)
+
+
+def _estimate_markov_model(trajs, lagtime, nstates, perm=None):
+    """Estimate MSM based on the transition count matrix."""
     # convert trajs to numba list
     if not numba.config.DISABLE_JIT:
         trajs = numba.typed.List(trajs)
 
-    T_count = _generate_transition_count_matrix(trajs, lag_time, nstates)
-    return _row_normalize_matrix(T_count), perm
+    if perm is None:
+        perm = np.arange(nstates)
+
+    Tcount = _generate_transition_count_matrix(trajs, lagtime, nstates)
+    return _row_normalize_matrix(Tcount), perm
 
 
 @numba.njit
-def _generate_transition_count_matrix(trajs, lag_time, nstates):
+def _generate_transition_count_matrix(trajs, lagtime, nstates):
     """Generate a simple transition count matrix from multiple trajectories."""
     # initialize matrix
     T_count = np.zeros((nstates, nstates), dtype=np.int64)
 
     for traj in trajs:
-        for stateFrom, stateTo in zip(traj[:-lag_time], traj[lag_time:]):
+        for stateFrom, stateTo in zip(traj[:-lagtime], traj[lagtime:]):
             T_count[stateFrom, stateTo] += 1
-
 
     return T_count
 
