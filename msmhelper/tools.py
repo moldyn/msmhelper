@@ -11,7 +11,7 @@ TODO:
 """
 # ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import datetime
-import getpass  # get user name with getpass.getuser()
+import getpass  # noqa: SC100 # get user name with getpass.getuser()
 import os
 import platform  # get pc name with platform.node()
 import sys
@@ -255,7 +255,8 @@ def swapcols(array, indicesold, indicesnew):
     if np.all(indicesnew == indicesold):
         return array
 
-    # array.T[indicesold] = array.T[indicesnew] fails for large datasets
+    # fails for large data sets
+    # noqa: E800 # array.T[indicesold] = array.T[indicesnew]
     array_swapped = np.copy(array)
     array_swapped.T[indicesold] = array.T[indicesnew]
 
@@ -321,9 +322,6 @@ def format_state_traj(trajs):
         Return list of ndarrays of integers.
 
     """
-    if isinstance(trajs, StateTraj):
-        return trajs
-
     # list or tuple
     if isinstance(trajs, (tuple, list)):
         # list of integers

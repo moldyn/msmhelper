@@ -13,10 +13,10 @@ from msmhelper import tools
 
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-class StateTraj:
+class StateTraj:  # noqa: WPS214
     """Class for handling discrete state trajectories."""
 
-    # self.__slots__ = ('states', 'trajs').
+    # noqa: E800 # add slots magic,  self.__slots__ = ('_states', '_trajs').
     def __new__(cls, trajs):
         """Initialize new instance.
 
@@ -172,4 +172,4 @@ class StateTraj:
 
     def __getitem__(self, key):
         """Get key value."""
-        return self.state_trajs.__getitem__(key)
+        return self.state_trajs.__getitem__(key)  # noqa: WPS609
