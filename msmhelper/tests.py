@@ -11,6 +11,7 @@ import numpy as np
 
 from msmhelper import tools
 from msmhelper.statetraj import StateTraj
+from msmhelper.decorators import shortcut
 
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -82,3 +83,50 @@ def is_index_traj(trajs):
         states = tools.unique(trajs)
         return np.array_equal(states, np.arange(len(states)))
     return False
+
+
+@shortcut('is_tmat')
+def is_transition_matrix(matrix):
+    """Check if transition matrix.
+
+    Parameters
+    ----------
+    matrix : ndarray
+        Transition matrix.
+
+    Returns
+    -------
+    is_tmat : bool
+
+    """
+    if is_quadratic(matrix):
+        row_sum = np.sum(matrix, axis=-1)
+        return np.array_equal(row_sum, np.ones_like(row_sum))
+    return False
+
+
+def is_ergodic(matrix):
+    """Check if transition matrix.
+
+    Taken from:
+    Wielandt, H. "Unzerlegbare, Nicht Negativen Matrizen."
+    Mathematische Zeitschrift. Vol. 52, 1950, pp. 642–648.
+
+    Parameters
+    ----------
+    matrix : ndarray
+        Transition matrix.
+
+    Returns
+    -------
+    is_tmat : bool
+
+    """
+    if not is_transition_matrix(matrix):
+        return False
+
+    nstates = len(matrix)
+    exponent = (nstates - 1)**2 + 1
+
+    matrix = np.linalg.matrix_power(matrix, exponent)
+    return (matrix > 0).all()

@@ -47,3 +47,26 @@ def test_is_index_traj(traj):
     traj.append(np.array([4, 5]))
     assert not tests.is_index_traj(traj)
     assert not tests.is_index_traj([5])
+
+
+def test_is_tmat():
+    """Test is_tmat."""
+    mat = np.array([[0.9, 0.1], [0.2, 0.8]])
+
+    # check if no error is raised
+    assert tests.is_tmat(mat)
+
+    mat[0, 0] = 0.8
+    # check for non normalized matrices
+    assert not tests.is_tmat(mat)
+
+
+def test_is_ergodic():
+    """Test is_ergodic."""
+    # if not ergodic
+    mat = np.array([[0.9, 0.1, 0.0], [0.1, 0.9, 0.0], [0.2, 0.2, 0.6]])
+    assert not tests.is_ergodic(mat)
+
+    # if not ergodic
+    mat = np.array([[0.9, 0.1, 0.0], [0.1, 0.8, 0.1], [0.2, 0.2, 0.6]])
+    assert tests.is_ergodic(mat)
