@@ -95,7 +95,7 @@ def estimate_markov_model(trajs, lagtime):
 
 def _estimate_markov_model(trajs, lagtime, nstates, perm=None):
     """Estimate MSM based on the transition count matrix."""
-    # convert trajs to numba list
+    # convert trajs to numba list # noqa: SC100
     if not numba.config.DISABLE_JIT:
         trajs = numba.typed.List(trajs)
 
@@ -126,7 +126,7 @@ def _row_normalize_matrix(matrix):
     if not row_sum.all():
         raise ValueError('Row sum of 0 can not be normalized.')
 
-    # due to missing np.newaxis row_sum[:, np.newaxis] becomes
+    # due to missing np.newaxis row_sum[:, np.newaxis] becomes # noqa: SC100
     return matrix / row_sum.reshape(matrix.shape[0], 1)
 
 

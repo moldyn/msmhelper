@@ -11,6 +11,7 @@ import numpy as np
 import pytest
 
 from msmhelper import tests, tools
+from msmhelper.statetraj import StateTraj
 
 
 # ~~~ TESTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -42,6 +43,7 @@ def test_is_index_traj(traj):
     traj = tools.format_state_traj(traj)
 
     assert tests.is_index_traj(traj)
+    assert tests.is_index_traj(StateTraj(traj))
     traj.append(np.array([4, 5]))
     assert not tests.is_index_traj(traj)
     assert not tests.is_index_traj([5])

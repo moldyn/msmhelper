@@ -16,6 +16,7 @@ import pytest
 import __main__ as main
 import msmhelper
 from msmhelper import tools
+from msmhelper.statetraj import StateTraj
 
 
 class change_main__file__:
@@ -155,6 +156,21 @@ def test__asindex():
     # wrong dimensionality
     with pytest.raises(ValueError):
         tools._asindex([idx])
+
+
+@pytest.mark.parametrize('traj', [([1, 1, 1, 1, 1, 2, 2, 1, 2, 0, 2, 2, 0])])
+def test__check_state_traj(traj):
+    """Test if state trajectory is formatted."""
+    traj = tools.format_state_traj(traj)
+
+    assert tools._check_state_traj(traj)
+    assert tools._check_state_traj(StateTraj(traj))
+
+    with pytest.raises(TypeError):
+        tools._check_state_traj([traj[0].astype(np.float32)])
+
+    with pytest.raises(TypeError):
+        tools._check_state_traj(traj[0])
 
 
 def test_get_runtime_user_information():

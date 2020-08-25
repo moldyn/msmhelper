@@ -17,6 +17,7 @@ import pytest
 
 import msmhelper
 from msmhelper import msm
+from msmhelper.statetraj import StateTraj
 
 
 # ~~~ TESTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -41,7 +42,7 @@ def test__row_normalize_matrix(mat, matref):
      [[0, 0, 1], [0, 4, 2], [2, 1, 2]], 3)])
 def test__generate_transition_count_matrix(traj, lagtime, Tref, nstates):
     """Test transition count matrix estimate."""
-    # convert traj to numba
+    # convert traj to numba # noqa: SC100
     if numba.config.DISABLE_JIT:
         traj = [traj]
     else:
@@ -66,18 +67,31 @@ def test_estimate_markov_model(traj, lagtime, Tref, statesref):
 
 @pytest.mark.parametrize('traj, lagtime, Tref, statesref', [
     ([1, 1, 1, 1, 1, 2, 2, 1, 2, 0, 2, 2, 0], 1,
-     [[0., 0., 1.], [0., 2 / 3, 1 / 3], [0.4, 0.2, 0.4]], [0, 1, 2])])
-def test_build_MSM(traj, lagtime, Tref, statesref):
+     [[0., 0., 1.], [0., 2 / 3, 1 / 3], [0.4, 0.2, 0.4]], [0, 1, 2]),
+])
+def test__estimate_markov_model(traj, lagtime, Tref, statesref):
     """Test estimate markov model."""
-    # non reversible
-    T, states = msmhelper.build_MSM(traj, lagtime, reversible=False)
-    np.testing.assert_array_almost_equal(T, Tref)
+    traj = StateTraj(traj)
+    T, states = msm._estimate_markov_model(traj.trajs, lagtime, traj.nstates)
+    np.testing.assert_array_equal(T, Tref)
     np.testing.assert_array_equal(states, statesref)
 
-    #  reversible
-    T, states = msmhelper.build_MSM(traj, lagtime, reversible=True)
-    np.testing.assert_array_almost_equal(T, Tref)
-    np.testing.assert_array_equal(states, statesref)
+
+@pytest.mark.parametrize('trajs, lagtime, Tref, statesref', [
+    ([1, 1, 1, 1, 1, 2, 2, 1, 2, 0, 2, 2, 0], 1,
+     [[0., 0., 1.], [0., 2 / 3, 1 / 3], [0.4, 0.2, 0.4]], [0, 1, 2])])
+def test_build_MSM(trajs, lagtime, Tref, statesref):
+    """Test estimate markov model."""
+    for traj in [trajs, StateTraj(trajs)]:
+        # non reversible
+        T, states = msmhelper.build_MSM(traj, lagtime, reversible=False)
+        np.testing.assert_array_almost_equal(T, Tref)
+        np.testing.assert_array_equal(states, statesref)
+
+        #  reversible
+        T, states = msmhelper.build_MSM(traj, lagtime, reversible=True)
+        np.testing.assert_array_almost_equal(T, Tref)
+        np.testing.assert_array_equal(states, statesref)
 
 
 @pytest.mark.parametrize('matrix, eigenvaluesref, eigenvectorsref', [
