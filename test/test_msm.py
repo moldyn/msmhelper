@@ -64,18 +64,20 @@ def test_estimate_markov_model(traj, lagtime, Tref, statesref):
     np.testing.assert_array_equal(states, statesref)
 
 
-@pytest.mark.parametrize('traj, lagtime, Tref', [
+@pytest.mark.parametrize('traj, lagtime, Tref, statesref', [
     ([1, 1, 1, 1, 1, 2, 2, 1, 2, 0, 2, 2, 0], 1,
-     [[0., 0., 1.], [0., 2 / 3, 1 / 3], [0.4, 0.2, 0.4]])])
-def test_build_MSM(traj, lagtime, Tref):
+     [[0., 0., 1.], [0., 2 / 3, 1 / 3], [0.4, 0.2, 0.4]], [0, 1, 2])])
+def test_build_MSM(traj, lagtime, Tref, statesref):
     """Test estimate markov model."""
     # non reversible
-    T = msmhelper.build_MSM(traj, lagtime, reversible=False)
-    for i, row in enumerate(T):
-        assert (row == Tref[i]).all()
-    #  reversible
-    T = msmhelper.build_MSM(traj, lagtime, reversible=True)
+    T, states = msmhelper.build_MSM(traj, lagtime, reversible=False)
     np.testing.assert_array_almost_equal(T, Tref)
+    np.testing.assert_array_equal(states, statesref)
+
+    #  reversible
+    T, states = msmhelper.build_MSM(traj, lagtime, reversible=True)
+    np.testing.assert_array_almost_equal(T, Tref)
+    np.testing.assert_array_equal(states, statesref)
 
 
 @pytest.mark.parametrize('matrix, eigenvaluesref, eigenvectorsref', [

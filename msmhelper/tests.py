@@ -10,6 +10,7 @@ All rights reserved.
 import numpy as np
 
 from msmhelper import tools
+from msmhelper.statetraj import StateTraj
 
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -75,6 +76,8 @@ def is_index_traj(trajs):
     is_index : bool
 
     """
+    if isinstance(trajs, StateTraj):
+        return True
     if is_state_traj(trajs):
         states = tools.unique(trajs)
         return np.array_equal(states, np.arange(len(states)))

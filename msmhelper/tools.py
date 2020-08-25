@@ -19,6 +19,7 @@ import sys
 import numpy as np
 
 import __main__ as main
+from msmhelper.statetraj import StateTraj
 
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -33,7 +34,7 @@ def shift_data(array, val_old, val_new, dtype=np.int32):
 
     Parameters
     ----------
-    array : ndarray, list, list of ndarrays
+    array : StateTraj or ndarray or list or list of ndarrays
         1D data or a list of data.
 
     val_old : ndarray or list
@@ -320,6 +321,9 @@ def format_state_traj(trajs):
         Return list of ndarrays of integers.
 
     """
+    if isinstance(trajs, StateTraj):
+        return trajs
+
     # list or tuple
     if isinstance(trajs, (tuple, list)):
         # list of integers
@@ -344,6 +348,9 @@ def format_state_traj(trajs):
 def _check_state_traj(trajs):
     """Check if state trajectory is correct formatted."""
     # check for integers
+    if isinstance(trajs, StateTraj):
+        return True
+
     for traj in trajs:
         if not isinstance(traj, np.ndarray):
             raise TypeError(

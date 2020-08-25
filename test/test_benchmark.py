@@ -18,7 +18,7 @@ import msmhelper as mh
 def state_traj():
     """Define state trajectory."""
     np.random.seed(137)
-    return mh.format_state_traj(np.random.randint(10, size=int(1e6)))
+    return mh.StateTraj(np.random.randint(low=1, high=11, size=int(1e6)))
 
 
 @pytest.fixture
@@ -28,20 +28,28 @@ def lagtime():
 
 
 # ~~~ TESTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def test_msm_msmhelper(state_traj, lagtime, benchmark):
+def test_msm_msmhelper_statetraj(state_traj, lagtime, benchmark):
     """Test row normalization."""
-    assert mh.tests.is_index_traj(state_traj)
-    nstates = len(mh.tools.unique(state_traj))
     benchmark(
-        mh.msm._estimate_markov_model,
+        mh.msm.estimate_markov_model,
         state_traj,
         lagtime=lagtime,
-        nstates=nstates,
+    )
+
+
+def test_msm_msmhelper_list(state_traj, lagtime, benchmark):
+    """Test row normalization."""
+    state_traj = state_traj.state_trajs
+    benchmark(
+        mh.msm.estimate_markov_model,
+        state_traj,
+        lagtime=lagtime,
     )
 
 
 def test_msm_pyemma(state_traj, lagtime, benchmark):
     """Test row normalization."""
+    state_traj = state_traj.state_trajs
     benchmark(
         emsm.estimate_markov_model,
         state_traj,
@@ -52,6 +60,7 @@ def test_msm_pyemma(state_traj, lagtime, benchmark):
 
 def test_msm_pyemma_reversible(state_traj, lagtime, benchmark):
     """Test row normalization."""
+    state_traj = state_traj.state_trajs
     benchmark(
         emsm.estimate_markov_model,
         state_traj,
@@ -62,4 +71,5 @@ def test_msm_pyemma_reversible(state_traj, lagtime, benchmark):
 
 def test_is_index_traj(state_traj, benchmark):
     """Test row normalization."""
+    state_traj = state_traj.state_trajs
     benchmark(mh.tests.is_index_traj, state_traj)

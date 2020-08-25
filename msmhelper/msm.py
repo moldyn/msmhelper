@@ -14,7 +14,8 @@ import numba
 import numpy as np
 from pyemma import msm as emsm
 
-from msmhelper import tests, tools
+from msmhelper import tests
+from msmhelper.statetraj import StateTraj
 
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -49,12 +50,14 @@ def build_MSM(trajs, lagtime, reversible=False, **kwargs):
 
     """
     if reversible:
+        if isinstance(trajs, StateTraj):
+            trajs = trajs.state_trajs
         MSM = emsm.estimate_markov_model(trajs, lagtime, **kwargs)
-        transmat = MSM.transition_matrix
+        transmat, states = MSM.transition_matrix, MSM.active_set
     else:
-        transmat, _ = estimate_markov_model(trajs, lagtime)
+        transmat, states = estimate_markov_model(trajs, lagtime)
 
-    return transmat
+    return transmat, states
 
 
 def estimate_markov_model(trajs, lagtime):
@@ -64,7 +67,7 @@ def estimate_markov_model(trajs, lagtime):
 
     Parameters
     ----------
-    trajs : list or ndarray or list of ndarray
+    trajs : statetraj or list or ndarray or list of ndarray
         State trajectory/trajectories. The states should start from zero and
         need to be integers.
 
@@ -80,19 +83,14 @@ def estimate_markov_model(trajs, lagtime):
         Array with corresponding states.
 
     """
-    # format input
-    trajs = tools.format_state_traj(trajs)
+    trajs = StateTraj(trajs)
 
-    # get number of states
-    nstates = len(tools.unique(trajs))
-
-    # shift to indices
-    if tests.is_index_traj(trajs):
-        perm = None
-    else:
-        trajs, perm = tools.rename_by_index(trajs, return_permutation=True)
-
-    return _estimate_markov_model(trajs, lagtime, nstates, perm)
+    return _estimate_markov_model(
+        trajs.trajs,
+        lagtime,
+        trajs.nstates,
+        trajs.states,
+    )
 
 
 def _estimate_markov_model(trajs, lagtime, nstates, perm=None):
@@ -204,12 +202,11 @@ def implied_timescales(trajs, lagtimes, reversible=False):
     """Calculate the implied timescales.
 
     Calculate the implied timescales for the given values.
-    .. todo::
-        - catch if for higher lagtimes the dimensionality changes
+    .. todo:: catch if for higher lagtimes the dimensionality changes
 
     Parameters
     ----------
-    trajs : list or ndarray or list of ndarray
+    trajs : StateTraj or list or ndarray or list of ndarray
         State trajectory/trajectories. The states should start from zero and
         need to be integers.
 
@@ -226,10 +223,10 @@ def implied_timescales(trajs, lagtimes, reversible=False):
 
     """
     # format input
-    trajs = tools.format_state_traj(trajs)
+    trajs = StateTraj(trajs)
     lagtimes = np.atleast_1d(lagtimes)
 
-    # check that lagtimes are array of integers
+    # check that lag times are array of integers
     if not np.issubdtype(lagtimes.dtype, np.integer):
         raise TypeError(
             'Lagtimes needs to be integers but are {0}'.format(lagtimes.dtype),
@@ -238,11 +235,10 @@ def implied_timescales(trajs, lagtimes, reversible=False):
         raise TypeError('Lagtimes needs to be positive integers')
 
     # initialize result
-    nstates = len(np.unique(np.concatenate(trajs)))
-    impl_timescales = np.zeros((len(lagtimes), nstates - 1))
+    impl_timescales = np.zeros((len(lagtimes), trajs.nstates - 1))
 
     for idx, lagtime in enumerate(lagtimes):
-        transmat = build_MSM(trajs, lagtime, reversible=reversible)
+        transmat, _ = build_MSM(trajs, lagtime, reversible=reversible)
         impl_timescales[idx] = _implied_timescales(transmat, lagtime)
 
     return impl_timescales
