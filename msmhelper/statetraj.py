@@ -132,7 +132,7 @@ class StateTraj:  # noqa: WPS214
             List of ndarrays holding the input data.
 
         """
-        return self._trajs
+        return self.trajs
 
     @property
     def trajs(self):
@@ -158,10 +158,6 @@ class StateTraj:  # noqa: WPS214
         """Return string representation of class."""
         return ('{trajs!s}'.format(trajs=self.state_trajs))
 
-    def __array__(self):
-        """Return array representation."""
-        return self.state_trajs
-
     def __iter__(self):
         """Iterate over trajectories."""
         return iter(self.state_trajs)
@@ -173,3 +169,15 @@ class StateTraj:  # noqa: WPS214
     def __getitem__(self, key):
         """Get key value."""
         return self.state_trajs.__getitem__(key)  # noqa: WPS609
+
+    def __eq__(self, other):
+        """Compare two objects."""
+        if not isinstance(other, StateTraj):
+            return NotImplemented
+        return (
+            self.ntrajs == other.ntrajs and
+            all(
+                np.array_equal(self[idx], other[idx])
+                for idx in range(self.ntrajs)
+            )
+        )
