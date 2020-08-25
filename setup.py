@@ -17,7 +17,7 @@ README = (HERE / 'README.md').read_text()
 # This call to setup() does all the work
 setuptools.setup(
     name='msmhelper',
-    version='0.2.0',
+    version='0.3.0',
     description='Helper functions for Markov State Models.',
     long_description=README,
     long_description_content_type='text/markdown',
