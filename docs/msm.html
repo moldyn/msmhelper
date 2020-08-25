@@ -29,246 +29,6 @@ Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.</p>
 <p>Authors: Daniel Nagel
 Georg Diez</p>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python"># -*- coding: utf-8 -*-
-&#34;&#34;&#34;Create Markov State Model.
-
-BSD 3-Clause License
-Copyright (c) 2019-2020, Daniel Nagel
-All rights reserved.
-
-Authors: Daniel Nagel
-         Georg Diez
-
-&#34;&#34;&#34;
-# ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-import numba
-import numpy as np
-from pyemma import msm as emsm
-
-from msmhelper import tests, tools
-
-
-# ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def build_MSM(trajs, lag_time, reversible=False, **kwargs):
-    &#34;&#34;&#34;Wrapps pyemma.msm.estimate_markov_model.
-
-    Based on the choice of reversibility it either calls pyemma for a
-    reversible matrix or it creates a transition count matrix.
-
-    Parameters
-    ----------
-    trajs : list or ndarray or list of ndarray
-        State trajectory/trajectories. The states should start from zero and
-        need to be integers.
-
-    lag_time : int
-        Lag time for estimating the markov model given in [frames].
-
-    reversible : bool, optional
-        If `True` it will uses pyemma.msm.estimate_markov_model which does not
-        guarantee that the matrix is of full dimension. In case of `False` or
-        if not statedm the local function based on a simple transitition count
-        matrix will be used instead.
-
-    kwargs
-        For passing values to `pyemma.msm.estimate_markov_model`.
-
-    Returns
-    -------
-    transmat : ndarray
-        Transition rate matrix.
-
-    &#34;&#34;&#34;
-    if reversible:
-        MSM = emsm.estimate_markov_model(trajs, lag_time, **kwargs)
-        transmat = MSM.transition_matrix
-    else:
-        transmat = estimate_markov_model(trajs, lag_time)
-
-    return transmat
-
-
-def estimate_markov_model(trajs, lag_time):
-    &#34;&#34;&#34;Estimates Markov State Model.
-
-    This method estimates the MSM based on the transition count matrix.
-    .. todo::
-        - allow states to be unequal to indices
-        - return active set
-
-    Parameters
-    ----------
-    trajs : list or ndarray or list of ndarray
-        State trajectory/trajectories. The states should start from zero and
-        need to be integers.
-
-    lag_time : int
-        Lag time for estimating the markov model given in [frames].
-
-    Returns
-    -------
-    T : ndarray
-        Transition rate matrix.
-
-    &#34;&#34;&#34;
-    # format input
-    trajs = tools.format_state_traj(trajs)
-
-    # get number of states
-    nstates = np.unique(np.concatenate(trajs)).shape[0]
-
-    # convert trajs to numba list
-    if not numba.config.DISABLE_JIT:
-        trajs = numba.typed.List(trajs)
-
-    T_count = _generate_transition_count_matrix(trajs, lag_time, nstates)
-    return _row_normalize_matrix(T_count)
-
-
-@numba.njit
-def _generate_transition_count_matrix(trajs, lag_time, nstates):
-    &#34;&#34;&#34;Generate a simple transition count matrix from multiple trajectories.&#34;&#34;&#34;
-    # initialize matrix
-    T_count = np.zeros((nstates, nstates), dtype=np.int64)
-
-    for traj in trajs:
-        for stateFrom, stateTo in zip(traj[:-lag_time], traj[lag_time:]):
-            T_count[stateFrom, stateTo] += 1
-
-
-    return T_count
-
-
-@numba.njit
-def _row_normalize_matrix(matrix):
-    &#34;&#34;&#34;Row normalize the given 2d matrix.&#34;&#34;&#34;
-    row_sum = np.sum(matrix, axis=1)
-    if not row_sum.all():
-        raise ValueError(&#39;Row sum of 0 can not be normalized.&#39;)
-
-    # due to missing np.newaxis row_sum[:, np.newaxis] becomes
-    return matrix / row_sum.reshape(matrix.shape[0], 1)
-
-
-def left_eigenvectors(matrix):
-    &#34;&#34;&#34;Estimate left eigenvectors.
-
-    Estimates the left eigenvectors and corresponding eigenvalues of a
-    quadratic matrix.
-
-    Parameters
-    ----------
-    matrix : ndarray
-        Quadratic 2d matrix eigenvectors and eigenvalues or determined of.
-
-    Returns
-    -------
-    eigenvalues : ndarray
-        N eigenvalues sorted by their value (descending).
-
-    eigenvectors : ndarray
-        N eigenvectors sorted by descending eigenvalues.
-
-    &#34;&#34;&#34;
-    matrix = np.asarray(matrix)
-    if not tests.is_quadratic(matrix):
-        raise TypeError(&#39;Matrix needs to be quadratic {0}&#39;.format(matrix))
-
-    # Transpose matrix and therefore determine eigenvalues and left
-    # eigenvectors
-    matrix_T = np.matrix.transpose(matrix)
-    eigenvalues, eigenvectors = np.linalg.eig(matrix_T)
-
-    # Transpose eigenvectors, since v[:,i] is eigenvector
-    eigenvectors = eigenvectors.T
-
-    # Sort them by descending eigenvalues
-    idx_eigenvalues = eigenvalues.argsort()[::-1]
-    eigenvalues_sorted = eigenvalues[idx_eigenvalues]
-    eigenvectors_sorted = eigenvectors[idx_eigenvalues]
-
-    return eigenvalues_sorted, eigenvectors_sorted
-
-
-def _implied_timescales(transmat, lagtime):
-    &#34;&#34;&#34;
-    Calculate implied timescales.
-
-    .. todo::
-        - Clearify usage. Better passing trajs to calculate matrix?
-
-    Parameters
-    ----------
-    transmat : ndarray
-        Quadratic transition matrix.
-
-    lagtime: int
-        Lagtime for estimating the markov model given in [frames].
-
-    Returns
-    -------
-    timescales: ndarray
-        Implied timescale given in frames.
-
-    &#34;&#34;&#34;
-    transmat = np.asarray(transmat)
-
-    eigenvalues, eigenvectors = left_eigenvectors(transmat)
-    eigenvalues = np.abs(eigenvalues)  # avoid numerical errors
-    return - lagtime / np.log(eigenvalues[1:])
-
-
-def implied_timescales(trajs, lagtimes, reversible=False):
-    &#34;&#34;&#34;Calculate the implied timescales.
-
-    Calculate the implied timescales for the given values.
-    .. todo::
-        - catch if for higher lagtimes the dimensionality changes
-
-    Parameters
-    ----------
-    trajs : list or ndarray or list of ndarray
-        State trajectory/trajectories. The states should start from zero and
-        need to be integers.
-
-    lagtimes : list or ndarray int
-        Lagtimes for estimating the markov model given in [frames].
-
-    reversible : bool
-        If reversibility should be enforced for the markov state model.
-
-    Returns
-    -------
-    T : ndarray
-        Transition rate matrix.
-
-    &#34;&#34;&#34;
-    # format input
-    trajs = tools.format_state_traj(trajs)
-    lagtimes = np.atleast_1d(lagtimes)
-
-    # check that lagtimes are array of integers
-    if not np.issubdtype(lagtimes.dtype, np.integer):
-        raise TypeError(
-            &#39;Lagtimes needs to be integers but are {0}&#39;.format(lagtimes.dtype),
-        )
-    if not (lagtimes &gt; 0).all():
-        raise TypeError(&#39;Lagtimes needs to be positive integers&#39;)
-
-    # initialize result
-    nstates = len(np.unique(np.concatenate(trajs)))
-    impl_timescales = np.zeros((len(lagtimes), nstates - 1))
-
-    for idx, lagtime in enumerate(lagtimes):
-        transmat = build_MSM(trajs, lagtime, reversible=reversible)
-        impl_timescales[idx] = _implied_timescales(transmat, lagtime)
-
-    return impl_timescales</code></pre>
-</details>
 </section>
 <section>
 </section>
@@ -278,7 +38,7 @@ def implied_timescales(trajs, lagtimes, reversible=False):
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="msmhelper.msm.build_MSM"><code class="name flex">
-<span>def <span class="ident">build_MSM</span></span>(<span>trajs, lag_time, reversible=False, **kwargs)</span>
+<span>def <span class="ident">build_MSM</span></span>(<span>trajs, lagtime, reversible=False, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Wrapps pyemma.msm.estimate_markov_model.</p>
@@ -289,7 +49,7 @@ reversible matrix or it creates a transition count matrix.</p>
 <dt><strong><code>trajs</code></strong> :&ensp;<code>list</code> or <code>ndarray</code> or <code>list</code> of <code>ndarray</code></dt>
 <dd>State trajectory/trajectories. The states should start from zero and
 need to be integers.</dd>
-<dt><strong><code>lag_time</code></strong> :&ensp;<code>int</code></dt>
+<dt><strong><code>lagtime</code></strong> :&ensp;<code>int</code></dt>
 <dd>Lag time for estimating the markov model given in [frames].</dd>
 <dt><strong><code>reversible</code></strong> :&ensp;<code>bool</code>, optional</dt>
 <dd>If <code>True</code> it will uses pyemma.msm.estimate_markov_model which does not
@@ -304,114 +64,28 @@ matrix will be used instead.</dd>
 <dt><strong><code>transmat</code></strong> :&ensp;<code>ndarray</code></dt>
 <dd>Transition rate matrix.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def build_MSM(trajs, lag_time, reversible=False, **kwargs):
-    &#34;&#34;&#34;Wrapps pyemma.msm.estimate_markov_model.
-
-    Based on the choice of reversibility it either calls pyemma for a
-    reversible matrix or it creates a transition count matrix.
-
-    Parameters
-    ----------
-    trajs : list or ndarray or list of ndarray
-        State trajectory/trajectories. The states should start from zero and
-        need to be integers.
-
-    lag_time : int
-        Lag time for estimating the markov model given in [frames].
-
-    reversible : bool, optional
-        If `True` it will uses pyemma.msm.estimate_markov_model which does not
-        guarantee that the matrix is of full dimension. In case of `False` or
-        if not statedm the local function based on a simple transitition count
-        matrix will be used instead.
-
-    kwargs
-        For passing values to `pyemma.msm.estimate_markov_model`.
-
-    Returns
-    -------
-    transmat : ndarray
-        Transition rate matrix.
-
-    &#34;&#34;&#34;
-    if reversible:
-        MSM = emsm.estimate_markov_model(trajs, lag_time, **kwargs)
-        transmat = MSM.transition_matrix
-    else:
-        transmat = estimate_markov_model(trajs, lag_time)
-
-    return transmat</code></pre>
-</details>
 </dd>
 <dt id="msmhelper.msm.estimate_markov_model"><code class="name flex">
-<span>def <span class="ident">estimate_markov_model</span></span>(<span>trajs, lag_time)</span>
+<span>def <span class="ident">estimate_markov_model</span></span>(<span>trajs, lagtime)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Estimates Markov State Model.</p>
-<div class="admonition todo">
-<p class="admonition-title">TODO</p>
-<ul>
-<li>allow states to be unequal to indices</li>
-<li>return active set</li>
-</ul>
-</div>
+<p>This method estimates the MSM based on the transition count matrix.</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
-<dt><strong><code>trajs</code></strong> :&ensp;<code>list</code> or <code>ndarray</code> or <code>list</code> of <code>ndarray</code></dt>
+<dt><strong><code>trajs</code></strong> :&ensp;<code>statetraj</code> or <code>list</code> or <code>ndarray</code> or <code>list</code> of <code>ndarray</code></dt>
 <dd>State trajectory/trajectories. The states should start from zero and
 need to be integers.</dd>
-<dt><strong><code>lag_time</code></strong> :&ensp;<code>int</code></dt>
+<dt><strong><code>lagtime</code></strong> :&ensp;<code>int</code></dt>
 <dd>Lag time for estimating the markov model given in [frames].</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <dl>
 <dt><strong><code>T</code></strong> :&ensp;<code>ndarray</code></dt>
 <dd>Transition rate matrix.</dd>
+<dt><strong><code>permutation</code></strong> :&ensp;<code>ndarray</code></dt>
+<dd>Array with corresponding states.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def estimate_markov_model(trajs, lag_time):
-    &#34;&#34;&#34;Estimates Markov State Model.
-
-    This method estimates the MSM based on the transition count matrix.
-    .. todo::
-        - allow states to be unequal to indices
-        - return active set
-
-    Parameters
-    ----------
-    trajs : list or ndarray or list of ndarray
-        State trajectory/trajectories. The states should start from zero and
-        need to be integers.
-
-    lag_time : int
-        Lag time for estimating the markov model given in [frames].
-
-    Returns
-    -------
-    T : ndarray
-        Transition rate matrix.
-
-    &#34;&#34;&#34;
-    # format input
-    trajs = tools.format_state_traj(trajs)
-
-    # get number of states
-    nstates = np.unique(np.concatenate(trajs)).shape[0]
-
-    # convert trajs to numba list
-    if not numba.config.DISABLE_JIT:
-        trajs = numba.typed.List(trajs)
-
-    T_count = _generate_transition_count_matrix(trajs, lag_time, nstates)
-    return _row_normalize_matrix(T_count)</code></pre>
-</details>
 </dd>
 <dt id="msmhelper.msm.implied_timescales"><code class="name flex">
 <span>def <span class="ident">implied_timescales</span></span>(<span>trajs, lagtimes, reversible=False)</span>
@@ -420,13 +94,11 @@ need to be integers.</dd>
 <div class="desc"><p>Calculate the implied timescales.</p>
 <div class="admonition todo">
 <p class="admonition-title">TODO</p>
-<ul>
-<li>catch if for higher lagtimes the dimensionality changes</li>
-</ul>
+<p>catch if for higher lagtimes the dimensionality changes</p>
 </div>
 <h2 id="parameters">Parameters</h2>
 <dl>
-<dt><strong><code>trajs</code></strong> :&ensp;<code>list</code> or <code>ndarray</code> or <code>list</code> of <code>ndarray</code></dt>
+<dt><strong><code>trajs</code></strong> :&ensp;<code>StateTraj</code> or <code>list</code> or <code>ndarray</code> or <code>list</code> of <code>ndarray</code></dt>
 <dd>State trajectory/trajectories. The states should start from zero and
 need to be integers.</dd>
 <dt><strong><code>lagtimes</code></strong> :&ensp;<code>list</code> or <code>ndarray int</code></dt>
@@ -439,57 +111,6 @@ need to be integers.</dd>
 <dt><strong><code>T</code></strong> :&ensp;<code>ndarray</code></dt>
 <dd>Transition rate matrix.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def implied_timescales(trajs, lagtimes, reversible=False):
-    &#34;&#34;&#34;Calculate the implied timescales.
-
-    Calculate the implied timescales for the given values.
-    .. todo::
-        - catch if for higher lagtimes the dimensionality changes
-
-    Parameters
-    ----------
-    trajs : list or ndarray or list of ndarray
-        State trajectory/trajectories. The states should start from zero and
-        need to be integers.
-
-    lagtimes : list or ndarray int
-        Lagtimes for estimating the markov model given in [frames].
-
-    reversible : bool
-        If reversibility should be enforced for the markov state model.
-
-    Returns
-    -------
-    T : ndarray
-        Transition rate matrix.
-
-    &#34;&#34;&#34;
-    # format input
-    trajs = tools.format_state_traj(trajs)
-    lagtimes = np.atleast_1d(lagtimes)
-
-    # check that lagtimes are array of integers
-    if not np.issubdtype(lagtimes.dtype, np.integer):
-        raise TypeError(
-            &#39;Lagtimes needs to be integers but are {0}&#39;.format(lagtimes.dtype),
-        )
-    if not (lagtimes &gt; 0).all():
-        raise TypeError(&#39;Lagtimes needs to be positive integers&#39;)
-
-    # initialize result
-    nstates = len(np.unique(np.concatenate(trajs)))
-    impl_timescales = np.zeros((len(lagtimes), nstates - 1))
-
-    for idx, lagtime in enumerate(lagtimes):
-        transmat = build_MSM(trajs, lagtime, reversible=reversible)
-        impl_timescales[idx] = _implied_timescales(transmat, lagtime)
-
-    return impl_timescales</code></pre>
-</details>
 </dd>
 <dt id="msmhelper.msm.left_eigenvectors"><code class="name flex">
 <span>def <span class="ident">left_eigenvectors</span></span>(<span>matrix)</span>
@@ -510,49 +131,6 @@ quadratic matrix.</p>
 <dt><strong><code>eigenvectors</code></strong> :&ensp;<code>ndarray</code></dt>
 <dd>N eigenvectors sorted by descending eigenvalues.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def left_eigenvectors(matrix):
-    &#34;&#34;&#34;Estimate left eigenvectors.
-
-    Estimates the left eigenvectors and corresponding eigenvalues of a
-    quadratic matrix.
-
-    Parameters
-    ----------
-    matrix : ndarray
-        Quadratic 2d matrix eigenvectors and eigenvalues or determined of.
-
-    Returns
-    -------
-    eigenvalues : ndarray
-        N eigenvalues sorted by their value (descending).
-
-    eigenvectors : ndarray
-        N eigenvectors sorted by descending eigenvalues.
-
-    &#34;&#34;&#34;
-    matrix = np.asarray(matrix)
-    if not tests.is_quadratic(matrix):
-        raise TypeError(&#39;Matrix needs to be quadratic {0}&#39;.format(matrix))
-
-    # Transpose matrix and therefore determine eigenvalues and left
-    # eigenvectors
-    matrix_T = np.matrix.transpose(matrix)
-    eigenvalues, eigenvectors = np.linalg.eig(matrix_T)
-
-    # Transpose eigenvectors, since v[:,i] is eigenvector
-    eigenvectors = eigenvectors.T
-
-    # Sort them by descending eigenvalues
-    idx_eigenvalues = eigenvalues.argsort()[::-1]
-    eigenvalues_sorted = eigenvalues[idx_eigenvalues]
-    eigenvectors_sorted = eigenvectors[idx_eigenvalues]
-
-    return eigenvalues_sorted, eigenvectors_sorted</code></pre>
-</details>
 </dd>
 </dl>
 </section>

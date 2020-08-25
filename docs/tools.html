@@ -31,416 +31,6 @@ All rights reserved.</p>
 <ul>
 <li>Correct border effects of running mean</li>
 </ul>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python"># -*- coding: utf-8 -*-
-&#34;&#34;&#34;Set of helpful functions.
-
-BSD 3-Clause License
-Copyright (c) 2019-2020, Daniel Nagel
-All rights reserved.
-
-TODO:
-    - Correct border effects of running mean
-
-&#34;&#34;&#34;
-# ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-import datetime
-import getpass  # get user name with getpass.getuser()
-import os
-import platform  # get pc name with platform.node()
-import sys
-
-import numpy as np
-
-import __main__ as main
-
-
-# ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def shift_data(array, val_old, val_new, dtype=np.int32):
-    &#34;&#34;&#34;Shift integer array (data) from old to new values.
-
-    &gt; **CAUTION:**
-    &gt; The values of `val_old`, `val_new` and `data` needs to be integers.
-
-    The basic function is based on Ashwini_Chaudhary solution:
-    https://stackoverflow.com/a/29408060
-
-    Parameters
-    ----------
-    array : ndarray, list, list of ndarrays
-        1D data or a list of data.
-
-    val_old : ndarray or list
-        Values in data which should be replaced. All values needs to be within
-        the range of `[data.min(), data.max()]`
-
-    val_new : ndarray or list
-        Values which will be used instead of old ones.
-
-    dtype : data-type, optional
-        The desired data-type. Needs to be of type unsigned integer.
-
-    Returns
-    -------
-    array : ndarray
-        Shifted data in same shape as input.
-
-    &#34;&#34;&#34;
-    # check data-type
-    if not np.issubdtype(dtype, np.integer):
-        raise TypeError(&#39;An unsigned integer type is needed.&#39;)
-
-    # flatten data
-    array, shape_kwargs = _flatten_data(array)
-
-    # offset data and val_old to allow negative values
-    offset = np.min([np.min(array), np.min(val_new)])
-
-    # convert to np.array
-    val_old = (np.asarray(val_old) - offset).astype(dtype)
-    val_new = (np.asarray(val_new) - offset).astype(dtype)
-
-    # convert data and shift
-    array = (array - offset).astype(dtype)
-
-    # shift data
-    conv = np.arange(array.max() + 1, dtype=dtype)
-    conv[val_old] = val_new
-    array = conv[array]
-
-    # shift data back
-    array = array.astype(np.int32) + offset
-
-    # reshape and return
-    return _unflatten_data(array, shape_kwargs)
-
-
-def rename_by_population(traj, return_permutation=False):
-    r&#34;&#34;&#34;Rename states sorted by their population starting from 1.
-
-    Parameters
-    ----------
-    traj : ndarray, list of ndarrays
-        State trajectory or list of state trajectories.
-
-    return_permutation : bool
-        Return additionaly the permutation to achieve performed renaming.
-        Default is False.
-
-    Returns
-    -------
-    traj : ndarray
-        Renamed data.
-
-    permutation : ndarray
-        Permutation going from old to new state nameing. So the `i`th state
-        of the new naming corresponds to the old state `permutation[i-1]`.
-
-    &#34;&#34;&#34;
-    # get unique states with population
-    states, pop = np.unique(traj, return_counts=True)
-
-    # get decreasing order
-    idx_sort = np.argsort(pop)[::-1]
-    states = states[idx_sort]
-
-    # rename states
-    traj_renamed = shift_data(
-        traj,
-        val_old=states,
-        val_new=np.arange(len(states)) + 1,
-    )
-    if return_permutation:
-        return traj_renamed, states
-    return traj_renamed
-
-
-def rename_by_index(traj, return_permutation=False):
-    r&#34;&#34;&#34;Rename states sorted by their numerical values starting from 0.
-
-    Parameters
-    ----------
-    traj : ndarray, list of ndarrays
-        State trajectory or list of state trajectories.
-
-    return_permutation : bool
-        Return additionaly the permutation to achieve performed renaming.
-        Default is False.
-
-    Returns
-    -------
-    traj : ndarray
-        Renamed data.
-
-    permutation : ndarray
-        Permutation going from old to new state nameing. So the `i`th state
-        of the new naming corresponds to the old state `permutation[i-1]`.
-
-    &#34;&#34;&#34;
-    # get unique states
-    states = np.unique(traj)
-
-    # rename states
-    traj_renamed = shift_data(
-        traj,
-        val_old=states,
-        val_new=np.arange(len(states)),
-    )
-    if return_permutation:
-        return traj_renamed, states
-    return traj_renamed
-
-
-def runningmean(array, window):
-    r&#34;&#34;&#34;Compute centered running average with given window size.
-
-    This function returns the centered based running average of the given
-    data. The output of this function is of the same length as the input,
-    by assuming that the given data is zero before and after the given
-    series. Hence, there are border affects which are not corrected.
-
-    &gt; **CAUTION:**
-    &gt; If the given window is even (not symmetric) it will be shifted towards
-    &gt; the beginning of the current value. So for `window=4`, it will consider
-    &gt; the current position \(i\), the two to the left \(i-2\) and \(i-1\) and
-    &gt; one to the right \(i+1\).
-
-    Function is taken from lapis:
-    https://stackoverflow.com/questions/13728392/moving-average-or-running-mean
-
-    Parameters
-    ----------
-    array : ndarray
-        One dimensional numpy array.
-
-    window : int
-        Integer which specifies window-width.
-
-    Returns
-    -------
-    array_rmean : ndarray
-        Data which is time-averaged over the specified window.
-
-    &#34;&#34;&#34;
-    # Calculate running mean
-    return np.convolve(
-        array,
-        np.ones(window) / window,
-        mode=&#39;same&#39;,
-    )
-
-
-def swapcols(array, indicesold, indicesnew):
-    r&#34;&#34;&#34;Interchange cols of an ndarray.
-
-    This method swaps the specified columns.
-    .. todo:: Optimize memory usage
-
-    Parameters
-    ----------
-    array : ndarray
-        2D numpy array.
-    indicesold : integer or ndarray
-        1D array of indices.
-    indicesnew : integer or ndarray
-        1D array of new indices
-
-    Returns
-    -------
-    array_swapped : ndarray
-        2D numpy array with swappend columns.
-
-    &#34;&#34;&#34;
-    # cast to 1d arrays
-    indicesnew = _asindex(indicesnew)
-    indicesold = _asindex(indicesold)
-
-    if len(indicesnew) != len(indicesold):
-        raise ValueError(&#39;Indices needs to be of same shape.&#39;)
-
-    # cast data
-    array = np.asarray(array)
-
-    if np.all(indicesnew == indicesold):
-        return array
-
-    # array.T[indicesold] = array.T[indicesnew] fails for large datasets
-    array_swapped = np.copy(array)
-    array_swapped.T[indicesold] = array.T[indicesnew]
-
-    return array_swapped
-
-
-def get_runtime_user_information():
-    r&#34;&#34;&#34;Get user runtime information.
-
-    &gt; **CAUTION:**
-    &gt; For python 3.5 or lower the date is not formatted and contains
-    &gt; microscends.
-
-    Returns
-    -------
-    RUI : dict
-        Holding username in &#39;user&#39;, pc name in &#39;pc&#39;, date of execution &#39;date&#39;,
-        path of execution &#39;script_dir&#39; and name of execution main file
-        &#39;script_name&#39;. In case of interactive usage, script_name is &#39;console&#39;.
-
-    &#34;&#34;&#34;
-    try:
-        script_dir, script_name = os.path.split(
-            os.path.abspath(main.__file__),  # noqa: WPS609
-        )
-    except AttributeError:
-        script_dir, script_name = &#39;&#39;, &#39;console&#39;
-
-    # get time without microseconds
-    date = datetime.datetime.now()
-    if sys.version_info &gt;= (3, 6):
-        date = date.isoformat(sep=&#39; &#39;, timespec=&#39;seconds&#39;)
-
-    return {
-        &#39;user&#39;: getpass.getuser(),
-        &#39;pc&#39;: platform.node(),
-        &#39;date&#39;: date,
-        &#39;script_dir&#39;: script_dir,
-        &#39;script_name&#39;: script_name,
-    }
-
-
-def _asindex(idx):
-    &#34;&#34;&#34;Cast to 1d integer ndarray.&#34;&#34;&#34;
-    idx = np.atleast_1d(idx).astype(np.int64)
-    if len(idx.shape) &gt; 1:
-        raise ValueError(&#39;Wrong dimensionality of indices.&#39;)
-    return idx
-
-
-def format_state_traj(trajs):
-    &#34;&#34;&#34;Convert state trajectory to list of ndarrays.
-
-    Parameters
-    ----------
-    trajs : list or ndarray or list of ndarray
-        State trajectory/trajectories. The states should start from zero and
-        need to be integers.
-
-    Returns
-    -------
-    trajs : list of ndarray
-        Return list of ndarrays of integers.
-
-    &#34;&#34;&#34;
-    # list or tuple
-    if isinstance(trajs, (tuple, list)):
-        # list of integers
-        if all((np.issubdtype(type(state), np.integer) for state in trajs)):
-            trajs = [np.array(trajs)]
-        # list of lists
-        elif all((isinstance(traj, list) for traj in trajs)):
-            trajs = [np.array(traj) for traj in trajs]
-    # ndarray
-    if isinstance(trajs, np.ndarray):
-        if len(trajs.shape) == 1:
-            trajs = [trajs]
-        elif len(trajs.shape) == 2:
-            trajs = list(trajs)
-
-    # check for integers
-    _check_state_traj(trajs)
-
-    return trajs
-
-
-def _check_state_traj(trajs):
-    &#34;&#34;&#34;Check if state trajectory is correct formatted.&#34;&#34;&#34;
-    # check for integers
-    for traj in trajs:
-        if not isinstance(traj, np.ndarray):
-            raise TypeError(
-                &#39;Trajs need to be np.ndarray but are {0}&#39;.format(type(traj)),
-            )
-        if not np.issubdtype(traj.dtype, np.integer):
-            raise TypeError(
-                &#39;States needs to be integers but are {0}&#39;.format(traj.dtype),
-            )
-    return True
-
-
-def _flatten_data(array):
-    &#34;&#34;&#34;Flatten data to 1D ndarray.
-
-    This method flattens ndarrays, list of ndarrays to a 1D ndarray. This can
-    be undone with _unflatten_data().
-
-    Parameters
-    ----------
-    array : ndarray, list, list of ndarrays
-        1D data or a list of data.
-
-    Returns
-    -------
-    data : ndarray
-        Flattened data.
-
-    kwargs : dict
-        Dictionary with information to restore shape.
-
-    &#34;&#34;&#34;
-    kwargs = {}
-
-    # flatten data
-    if isinstance(array, list):
-        # list of ndarrays
-        if all((isinstance(row, np.ndarray) for row in array)):
-            # get shape and flatten
-            kwargs[&#39;limits&#39;] = np.cumsum([len(row) for row in array])
-            array = np.concatenate(array)
-        # list of numbers
-        else:
-            array = np.asarray(array)
-    elif isinstance(array, np.ndarray):
-        # get shape and flatten
-        kwargs[&#39;data_shape&#39;] = array.shape
-        array = array.flatten()
-
-    return array, kwargs
-
-
-def _unflatten_data(array, kwargs):
-    &#34;&#34;&#34;Unflatten data to original structure.
-
-    This method undoes _flatten_data().
-
-    Parameters
-    ----------
-    array : ndarray
-        Flattened data.
-
-    kwargs : dict
-        Dictionary with information to restore shape. Provided by
-        _flatten_data().
-
-    Returns
-    -------
-    array : ndarray, list, list of ndarrays
-        Data with restored shape.
-
-    &#34;&#34;&#34;
-    # parse kwargs
-    data_shape = kwargs.get(&#39;data_shape&#39;)
-    limits = kwargs.get(&#39;limits&#39;)
-
-    # reshape
-    if data_shape is not None:
-        array = array.reshape(data_shape)
-    elif limits is not None:
-        array = np.split(array, limits)[:-1]
-
-    return array</code></pre>
-</details>
 </section>
 <section>
 </section>
@@ -465,45 +55,6 @@ need to be integers.</dd>
 <dt><strong><code>trajs</code></strong> :&ensp;<code>list</code> of <code>ndarray</code></dt>
 <dd>Return list of ndarrays of integers.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def format_state_traj(trajs):
-    &#34;&#34;&#34;Convert state trajectory to list of ndarrays.
-
-    Parameters
-    ----------
-    trajs : list or ndarray or list of ndarray
-        State trajectory/trajectories. The states should start from zero and
-        need to be integers.
-
-    Returns
-    -------
-    trajs : list of ndarray
-        Return list of ndarrays of integers.
-
-    &#34;&#34;&#34;
-    # list or tuple
-    if isinstance(trajs, (tuple, list)):
-        # list of integers
-        if all((np.issubdtype(type(state), np.integer) for state in trajs)):
-            trajs = [np.array(trajs)]
-        # list of lists
-        elif all((isinstance(traj, list) for traj in trajs)):
-            trajs = [np.array(traj) for traj in trajs]
-    # ndarray
-    if isinstance(trajs, np.ndarray):
-        if len(trajs.shape) == 1:
-            trajs = [trajs]
-        elif len(trajs.shape) == 2:
-            trajs = list(trajs)
-
-    # check for integers
-    _check_state_traj(trajs)
-
-    return trajs</code></pre>
-</details>
 </dd>
 <dt id="msmhelper.tools.get_runtime_user_information"><code class="name flex">
 <span>def <span class="ident">get_runtime_user_information</span></span>(<span>)</span>
@@ -522,54 +73,15 @@ microscends.</p>
 path of execution 'script_dir' and name of execution main file
 'script_name'. In case of interactive usage, script_name is 'console'.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def get_runtime_user_information():
-    r&#34;&#34;&#34;Get user runtime information.
-
-    &gt; **CAUTION:**
-    &gt; For python 3.5 or lower the date is not formatted and contains
-    &gt; microscends.
-
-    Returns
-    -------
-    RUI : dict
-        Holding username in &#39;user&#39;, pc name in &#39;pc&#39;, date of execution &#39;date&#39;,
-        path of execution &#39;script_dir&#39; and name of execution main file
-        &#39;script_name&#39;. In case of interactive usage, script_name is &#39;console&#39;.
-
-    &#34;&#34;&#34;
-    try:
-        script_dir, script_name = os.path.split(
-            os.path.abspath(main.__file__),  # noqa: WPS609
-        )
-    except AttributeError:
-        script_dir, script_name = &#39;&#39;, &#39;console&#39;
-
-    # get time without microseconds
-    date = datetime.datetime.now()
-    if sys.version_info &gt;= (3, 6):
-        date = date.isoformat(sep=&#39; &#39;, timespec=&#39;seconds&#39;)
-
-    return {
-        &#39;user&#39;: getpass.getuser(),
-        &#39;pc&#39;: platform.node(),
-        &#39;date&#39;: date,
-        &#39;script_dir&#39;: script_dir,
-        &#39;script_name&#39;: script_name,
-    }</code></pre>
-</details>
 </dd>
 <dt id="msmhelper.tools.rename_by_index"><code class="name flex">
-<span>def <span class="ident">rename_by_index</span></span>(<span>traj, return_permutation=False)</span>
+<span>def <span class="ident">rename_by_index</span></span>(<span>trajs, return_permutation=False)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Rename states sorted by their numerical values starting from 0.</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
-<dt><strong><code>traj</code></strong> :&ensp;<code>ndarray, list</code> of <code>ndarrays</code></dt>
+<dt><strong><code>trajs</code></strong> :&ensp;<code>list</code> or <code>ndarray</code> or <code>list</code> of <code>ndarrays</code></dt>
 <dd>State trajectory or list of state trajectories.</dd>
 <dt><strong><code>return_permutation</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Return additionaly the permutation to achieve performed renaming.
@@ -577,60 +89,21 @@ Default is False.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <dl>
-<dt><strong><code>traj</code></strong> :&ensp;<code>ndarray</code></dt>
+<dt><strong><code>trajs</code></strong> :&ensp;<code>ndarray</code></dt>
 <dd>Renamed data.</dd>
 <dt><strong><code>permutation</code></strong> :&ensp;<code>ndarray</code></dt>
 <dd>Permutation going from old to new state nameing. So the <code>i</code>th state
 of the new naming corresponds to the old state <code>permutation[i-1]</code>.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def rename_by_index(traj, return_permutation=False):
-    r&#34;&#34;&#34;Rename states sorted by their numerical values starting from 0.
-
-    Parameters
-    ----------
-    traj : ndarray, list of ndarrays
-        State trajectory or list of state trajectories.
-
-    return_permutation : bool
-        Return additionaly the permutation to achieve performed renaming.
-        Default is False.
-
-    Returns
-    -------
-    traj : ndarray
-        Renamed data.
-
-    permutation : ndarray
-        Permutation going from old to new state nameing. So the `i`th state
-        of the new naming corresponds to the old state `permutation[i-1]`.
-
-    &#34;&#34;&#34;
-    # get unique states
-    states = np.unique(traj)
-
-    # rename states
-    traj_renamed = shift_data(
-        traj,
-        val_old=states,
-        val_new=np.arange(len(states)),
-    )
-    if return_permutation:
-        return traj_renamed, states
-    return traj_renamed</code></pre>
-</details>
 </dd>
 <dt id="msmhelper.tools.rename_by_population"><code class="name flex">
-<span>def <span class="ident">rename_by_population</span></span>(<span>traj, return_permutation=False)</span>
+<span>def <span class="ident">rename_by_population</span></span>(<span>trajs, return_permutation=False)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Rename states sorted by their population starting from 1.</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
-<dt><strong><code>traj</code></strong> :&ensp;<code>ndarray, list</code> of <code>ndarrays</code></dt>
+<dt><strong><code>trajs</code></strong> :&ensp;<code>list</code> or <code>ndarray</code> or <code>list</code> of <code>ndarrays</code></dt>
 <dd>State trajectory or list of state trajectories.</dd>
 <dt><strong><code>return_permutation</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Return additionaly the permutation to achieve performed renaming.
@@ -638,55 +111,12 @@ Default is False.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <dl>
-<dt><strong><code>traj</code></strong> :&ensp;<code>ndarray</code></dt>
+<dt><strong><code>trajs</code></strong> :&ensp;<code>ndarray</code></dt>
 <dd>Renamed data.</dd>
 <dt><strong><code>permutation</code></strong> :&ensp;<code>ndarray</code></dt>
 <dd>Permutation going from old to new state nameing. So the <code>i</code>th state
 of the new naming corresponds to the old state <code>permutation[i-1]</code>.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def rename_by_population(traj, return_permutation=False):
-    r&#34;&#34;&#34;Rename states sorted by their population starting from 1.
-
-    Parameters
-    ----------
-    traj : ndarray, list of ndarrays
-        State trajectory or list of state trajectories.
-
-    return_permutation : bool
-        Return additionaly the permutation to achieve performed renaming.
-        Default is False.
-
-    Returns
-    -------
-    traj : ndarray
-        Renamed data.
-
-    permutation : ndarray
-        Permutation going from old to new state nameing. So the `i`th state
-        of the new naming corresponds to the old state `permutation[i-1]`.
-
-    &#34;&#34;&#34;
-    # get unique states with population
-    states, pop = np.unique(traj, return_counts=True)
-
-    # get decreasing order
-    idx_sort = np.argsort(pop)[::-1]
-    states = states[idx_sort]
-
-    # rename states
-    traj_renamed = shift_data(
-        traj,
-        val_old=states,
-        val_new=np.arange(len(states)) + 1,
-    )
-    if return_permutation:
-        return traj_renamed, states
-    return traj_renamed</code></pre>
-</details>
 </dd>
 <dt id="msmhelper.tools.runningmean"><code class="name flex">
 <span>def <span class="ident">runningmean</span></span>(<span>array, window)</span>
@@ -718,48 +148,6 @@ one to the right <span><span class="MathJax_Preview">i+1</span><script type="mat
 <dt><strong><code>array_rmean</code></strong> :&ensp;<code>ndarray</code></dt>
 <dd>Data which is time-averaged over the specified window.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def runningmean(array, window):
-    r&#34;&#34;&#34;Compute centered running average with given window size.
-
-    This function returns the centered based running average of the given
-    data. The output of this function is of the same length as the input,
-    by assuming that the given data is zero before and after the given
-    series. Hence, there are border affects which are not corrected.
-
-    &gt; **CAUTION:**
-    &gt; If the given window is even (not symmetric) it will be shifted towards
-    &gt; the beginning of the current value. So for `window=4`, it will consider
-    &gt; the current position \(i\), the two to the left \(i-2\) and \(i-1\) and
-    &gt; one to the right \(i+1\).
-
-    Function is taken from lapis:
-    https://stackoverflow.com/questions/13728392/moving-average-or-running-mean
-
-    Parameters
-    ----------
-    array : ndarray
-        One dimensional numpy array.
-
-    window : int
-        Integer which specifies window-width.
-
-    Returns
-    -------
-    array_rmean : ndarray
-        Data which is time-averaged over the specified window.
-
-    &#34;&#34;&#34;
-    # Calculate running mean
-    return np.convolve(
-        array,
-        np.ones(window) / window,
-        mode=&#39;same&#39;,
-    )</code></pre>
-</details>
 </dd>
 <dt id="msmhelper.tools.shift_data"><code class="name flex">
 <span>def <span class="ident">shift_data</span></span>(<span>array, val_old, val_new, dtype=numpy.int32)</span>
@@ -774,7 +162,7 @@ The values of <code>val_old</code>, <code>val_new</code> and <code>data</code> n
 <a href="https://stackoverflow.com/a/29408060">https://stackoverflow.com/a/29408060</a></p>
 <h2 id="parameters">Parameters</h2>
 <dl>
-<dt><strong><code>array</code></strong> :&ensp;<code>ndarray, list, list</code> of <code>ndarrays</code></dt>
+<dt><strong><code>array</code></strong> :&ensp;<code>StateTraj</code> or <code>ndarray</code> or <code>list</code> or <code>list</code> of <code>ndarrays</code></dt>
 <dd>1D data or a list of data.</dd>
 <dt><strong><code>val_old</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
 <dd>Values in data which should be replaced. All values needs to be within
@@ -789,68 +177,6 @@ the range of <code>[data.min(), data.max()]</code></dd>
 <dt><strong><code>array</code></strong> :&ensp;<code>ndarray</code></dt>
 <dd>Shifted data in same shape as input.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def shift_data(array, val_old, val_new, dtype=np.int32):
-    &#34;&#34;&#34;Shift integer array (data) from old to new values.
-
-    &gt; **CAUTION:**
-    &gt; The values of `val_old`, `val_new` and `data` needs to be integers.
-
-    The basic function is based on Ashwini_Chaudhary solution:
-    https://stackoverflow.com/a/29408060
-
-    Parameters
-    ----------
-    array : ndarray, list, list of ndarrays
-        1D data or a list of data.
-
-    val_old : ndarray or list
-        Values in data which should be replaced. All values needs to be within
-        the range of `[data.min(), data.max()]`
-
-    val_new : ndarray or list
-        Values which will be used instead of old ones.
-
-    dtype : data-type, optional
-        The desired data-type. Needs to be of type unsigned integer.
-
-    Returns
-    -------
-    array : ndarray
-        Shifted data in same shape as input.
-
-    &#34;&#34;&#34;
-    # check data-type
-    if not np.issubdtype(dtype, np.integer):
-        raise TypeError(&#39;An unsigned integer type is needed.&#39;)
-
-    # flatten data
-    array, shape_kwargs = _flatten_data(array)
-
-    # offset data and val_old to allow negative values
-    offset = np.min([np.min(array), np.min(val_new)])
-
-    # convert to np.array
-    val_old = (np.asarray(val_old) - offset).astype(dtype)
-    val_new = (np.asarray(val_new) - offset).astype(dtype)
-
-    # convert data and shift
-    array = (array - offset).astype(dtype)
-
-    # shift data
-    conv = np.arange(array.max() + 1, dtype=dtype)
-    conv[val_old] = val_new
-    array = conv[array]
-
-    # shift data back
-    array = array.astype(np.int32) + offset
-
-    # reshape and return
-    return _unflatten_data(array, shape_kwargs)</code></pre>
-</details>
 </dd>
 <dt id="msmhelper.tools.swapcols"><code class="name flex">
 <span>def <span class="ident">swapcols</span></span>(<span>array, indicesold, indicesnew)</span>
@@ -875,50 +201,24 @@ the range of <code>[data.min(), data.max()]</code></dd>
 <dt><strong><code>array_swapped</code></strong> :&ensp;<code>ndarray</code></dt>
 <dd>2D numpy array with swappend columns.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def swapcols(array, indicesold, indicesnew):
-    r&#34;&#34;&#34;Interchange cols of an ndarray.
-
-    This method swaps the specified columns.
-    .. todo:: Optimize memory usage
-
-    Parameters
-    ----------
-    array : ndarray
-        2D numpy array.
-    indicesold : integer or ndarray
-        1D array of indices.
-    indicesnew : integer or ndarray
-        1D array of new indices
-
-    Returns
-    -------
-    array_swapped : ndarray
-        2D numpy array with swappend columns.
-
-    &#34;&#34;&#34;
-    # cast to 1d arrays
-    indicesnew = _asindex(indicesnew)
-    indicesold = _asindex(indicesold)
-
-    if len(indicesnew) != len(indicesold):
-        raise ValueError(&#39;Indices needs to be of same shape.&#39;)
-
-    # cast data
-    array = np.asarray(array)
-
-    if np.all(indicesnew == indicesold):
-        return array
-
-    # array.T[indicesold] = array.T[indicesnew] fails for large datasets
-    array_swapped = np.copy(array)
-    array_swapped.T[indicesold] = array.T[indicesnew]
-
-    return array_swapped</code></pre>
-</details>
+</dd>
+<dt id="msmhelper.tools.unique"><code class="name flex">
+<span>def <span class="ident">unique</span></span>(<span>trajs, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Apply numpy.unique to traj.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>trajs</code></strong> :&ensp;<code>list</code> or <code>ndarray</code> or <code>list</code> of <code>ndarrays</code></dt>
+<dd>State trajectory or list of state trajectories.</dd>
+</dl>
+<p>kwargs :
+Arguments of <a href="https://docs.scipy.org/doc/numpy/reference/generated.numpy.unique.html">numpy.unique()</a></p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>unique :</code></dt>
+<dd>Number of states, depending on kwargs more.</dd>
+</dl></div>
 </dd>
 </dl>
 </section>
@@ -945,6 +245,7 @@ the range of <code>[data.min(), data.max()]</code></dd>
 <li><code><a title="msmhelper.tools.runningmean" href="#msmhelper.tools.runningmean">runningmean</a></code></li>
 <li><code><a title="msmhelper.tools.shift_data" href="#msmhelper.tools.shift_data">shift_data</a></code></li>
 <li><code><a title="msmhelper.tools.swapcols" href="#msmhelper.tools.swapcols">swapcols</a></code></li>
+<li><code><a title="msmhelper.tools.unique" href="#msmhelper.tools.unique">unique</a></code></li>
 </ul>
 </li>
 </ul>

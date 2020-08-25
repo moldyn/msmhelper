@@ -27,73 +27,6 @@
 <p>BSD 3-Clause License
 Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.</p>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python"># -*- coding: utf-8 -*-
-&#34;&#34;&#34;Set of helpful test functions.
-
-BSD 3-Clause License
-Copyright (c) 2019-2020, Daniel Nagel
-All rights reserved.
-
-&#34;&#34;&#34;
-# ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-import numpy as np
-
-from msmhelper import tools
-
-
-# ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def is_quadratic(matrix):
-    &#34;&#34;&#34;Check if matrix is quadratic.
-
-    Parameters
-    ----------
-    matrix : ndarray, list of lists
-        Matrix which is checked if is 2d array.
-
-    Returns
-    -------
-    is_quadratic : bool
-
-    &#34;&#34;&#34;
-    # cast to 2d for easier error checking
-
-    matrix = np.atleast_2d(matrix)
-    shape = np.shape(matrix)
-
-    # Check whether matrix is quadratic.
-    if shape[0] != shape[1]:
-        return False
-    # check if scalar or tensor higher than 2d
-    if shape[0] == 1 or matrix.ndim &gt; 2:
-        return False
-
-    return True
-
-
-def is_state_traj(trajs):
-    &#34;&#34;&#34;Check if state trajectory is correct formatted.
-
-    Parameters
-    ----------
-    trajs : list of ndarray
-        State trajectory/trajectories need to be lists of ndarrays of integers.
-
-    Returns
-    -------
-    is_state_traj : bool
-
-    &#34;&#34;&#34;
-    try:
-        tools._check_state_traj(trajs)
-    except TypeError:
-        return False
-    else:
-        return True</code></pre>
-</details>
 </section>
 <section>
 </section>
@@ -102,6 +35,22 @@ def is_state_traj(trajs):
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="msmhelper.tests.is_index_traj"><code class="name flex">
+<span>def <span class="ident">is_index_traj</span></span>(<span>trajs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Check if states can be used as indices.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>trajs</code></strong> :&ensp;<code>list</code> of <code>ndarray</code></dt>
+<dd>State trajectory/trajectories need to be lists of ndarrays of integers.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>is_index</code></strong> :&ensp;<code>bool</code></dt>
+<dd>&nbsp;</dd>
+</dl></div>
+</dd>
 <dt id="msmhelper.tests.is_quadratic"><code class="name flex">
 <span>def <span class="ident">is_quadratic</span></span>(<span>matrix)</span>
 </code></dt>
@@ -117,37 +66,6 @@ def is_state_traj(trajs):
 <dt><strong><code>is_quadratic</code></strong> :&ensp;<code>bool</code></dt>
 <dd>&nbsp;</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def is_quadratic(matrix):
-    &#34;&#34;&#34;Check if matrix is quadratic.
-
-    Parameters
-    ----------
-    matrix : ndarray, list of lists
-        Matrix which is checked if is 2d array.
-
-    Returns
-    -------
-    is_quadratic : bool
-
-    &#34;&#34;&#34;
-    # cast to 2d for easier error checking
-
-    matrix = np.atleast_2d(matrix)
-    shape = np.shape(matrix)
-
-    # Check whether matrix is quadratic.
-    if shape[0] != shape[1]:
-        return False
-    # check if scalar or tensor higher than 2d
-    if shape[0] == 1 or matrix.ndim &gt; 2:
-        return False
-
-    return True</code></pre>
-</details>
 </dd>
 <dt id="msmhelper.tests.is_state_traj"><code class="name flex">
 <span>def <span class="ident">is_state_traj</span></span>(<span>trajs)</span>
@@ -164,30 +82,6 @@ def is_state_traj(trajs):
 <dt><strong><code>is_state_traj</code></strong> :&ensp;<code>bool</code></dt>
 <dd>&nbsp;</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def is_state_traj(trajs):
-    &#34;&#34;&#34;Check if state trajectory is correct formatted.
-
-    Parameters
-    ----------
-    trajs : list of ndarray
-        State trajectory/trajectories need to be lists of ndarrays of integers.
-
-    Returns
-    -------
-    is_state_traj : bool
-
-    &#34;&#34;&#34;
-    try:
-        tools._check_state_traj(trajs)
-    except TypeError:
-        return False
-    else:
-        return True</code></pre>
-</details>
 </dd>
 </dl>
 </section>
@@ -207,6 +101,7 @@ def is_state_traj(trajs):
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="msmhelper.tests.is_index_traj" href="#msmhelper.tests.is_index_traj">is_index_traj</a></code></li>
 <li><code><a title="msmhelper.tests.is_quadratic" href="#msmhelper.tests.is_quadratic">is_quadratic</a></code></li>
 <li><code><a title="msmhelper.tests.is_state_traj" href="#msmhelper.tests.is_state_traj">is_state_traj</a></code></li>
 </ul>
