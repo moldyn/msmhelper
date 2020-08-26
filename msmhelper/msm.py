@@ -15,6 +15,7 @@ import numpy as np
 from pyemma import msm as emsm
 
 from msmhelper import tests
+from msmhelper.decorators import shortcut
 from msmhelper.statetraj import StateTraj
 
 
@@ -245,3 +246,72 @@ def implied_timescales(trajs, lagtimes, reversible=False):
         impl_timescales[idx] = _implied_timescales(transmat, lagtime)
 
     return impl_timescales
+
+
+@shortcut('CKtest')
+def chapman_kolmogorov_test(trajs, lagtimes, tmax):
+    """Calculate the Chapman Kolmogorov equation.
+
+    Parameters
+    ----------
+    trajs : StateTraj or list or ndarray or list of ndarray
+        State trajectory/trajectories. The states should start from zero and
+        need to be integers.
+
+    lagtimes : list or ndarray int
+        Lagtimes for estimating the markov model given in [frames].
+
+    tmax : int
+        Longest time to evaluate the CK equation given in [frames].
+
+    Returns
+    -------
+    T : ndarray
+        Transition rate matrix.
+
+    """
+    # format input
+    trajs = StateTraj(trajs)
+    lagtimes = np.atleast_1d(lagtimes)
+
+    # check that lag times are array of integers
+    if not np.issubdtype(lagtimes.dtype, np.integer):
+        raise TypeError(
+            'Lagtimes needs to be integers but are {0}'.format(lagtimes.dtype),
+        )
+    if not (lagtimes > 0).all():
+        raise TypeError('Lagtimes needs to be positive integers')
+
+    if not isinstance(tmax, int) or tmax < 0:
+        raise TypeError('tmax needs to be a positive integer')
+
+    # allocate memory
+    ckeqs = {}
+    for lagtime in lagtimes:
+        ckeq, times = _chapman_kolmogorov_test(trajs, lagtime, tmax)
+        ckeqs[lagtime] = {'ck': ckeq, 'time': times}
+
+    return ckeqs
+
+
+def _chapman_kolmogorov_test(trajs, lagtime, tmax):
+    """Calculate the Chapman Kolmogorov equation."""
+    exponent = np.ceil(np.log2(tmax / lagtime))
+    times = lagtime * np.logspace(
+        start=0,
+        stop=exponent,
+        num=exponent + 1,
+        base=2,
+        type=np.int64,
+    )
+    ckeq = np.empty((trajs.nstates, len(times)))
+
+    # estimate Markov model
+    tmat, _ = estimate_markov_model(trajs, lagtime=lagtime)
+    ckeq[0] = np.diagonal(tmat)
+
+    for idx in range(1, len(times) + 1):
+        tmat = tmat @ tmat  # noqa: WPS350
+        ckeq[idx] = np.diagonal(tmat)
+
+    return ckeq, times
