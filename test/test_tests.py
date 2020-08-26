@@ -60,6 +60,9 @@ def test_is_tmat():
     # check for non normalized matrices
     assert not tests.is_tmat(mat)
 
+    # check for non quadratic matrices
+    assert not tests.is_quadratic(mat[0])
+
 
 def test_is_ergodic():
     """Test is_ergodic."""
@@ -67,6 +70,10 @@ def test_is_ergodic():
     mat = np.array([[0.9, 0.1, 0.0], [0.1, 0.9, 0.0], [0.2, 0.2, 0.6]])
     assert not tests.is_ergodic(mat)
 
-    # if not ergodic
+    # if ergodic
     mat = np.array([[0.9, 0.1, 0.0], [0.1, 0.8, 0.1], [0.2, 0.2, 0.6]])
     assert tests.is_ergodic(mat)
+
+    # if is not a transition matrix
+    mat[0, 0] = 0.8
+    assert not tests.is_ergodic(mat)

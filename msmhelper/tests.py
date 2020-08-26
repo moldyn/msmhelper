@@ -99,14 +99,16 @@ def is_transition_matrix(matrix):
     is_tmat : bool
 
     """
-    if is_quadratic(matrix):
-        row_sum = np.sum(matrix, axis=-1)
-        return np.array_equal(row_sum, np.ones_like(row_sum))
-    return False
+    matrix = np.atleast_2d(matrix)
+    nstates = matrix.shape[0]
+    return (
+        is_quadratic(matrix) and
+        np.array_equal(matrix.sum(axis=-1), np.ones(nstates))
+    )
 
 
 def is_ergodic(matrix):
-    """Check if transition matrix.
+    """Check if matrix is ergodic.
 
     Taken from:
     Wielandt, H. "Unzerlegbare, Nicht Negativen Matrizen."

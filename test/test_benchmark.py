@@ -29,7 +29,7 @@ def lagtime():
 
 # ~~~ TESTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def test_msm_msmhelper_statetraj(state_traj, lagtime, benchmark):
-    """Test row normalization."""
+    """Benchmark msmhelper with StateTraj class."""
     benchmark(
         mh.msm.estimate_markov_model,
         state_traj,
@@ -38,7 +38,7 @@ def test_msm_msmhelper_statetraj(state_traj, lagtime, benchmark):
 
 
 def test_msm_msmhelper_list(state_traj, lagtime, benchmark):
-    """Test row normalization."""
+    """Benchmark msmhelper without StateTraj class."""
     state_traj = state_traj.state_trajs
     benchmark(
         mh.msm.estimate_markov_model,
@@ -48,7 +48,7 @@ def test_msm_msmhelper_list(state_traj, lagtime, benchmark):
 
 
 def test_msm_pyemma(state_traj, lagtime, benchmark):
-    """Test row normalization."""
+    """Benchmark pyemma without reversibility."""
     state_traj = state_traj.state_trajs
     benchmark(
         emsm.estimate_markov_model,
@@ -59,7 +59,7 @@ def test_msm_pyemma(state_traj, lagtime, benchmark):
 
 
 def test_msm_pyemma_reversible(state_traj, lagtime, benchmark):
-    """Test row normalization."""
+    """Benchmark pyemma with reversibility."""
     state_traj = state_traj.state_trajs
     benchmark(
         emsm.estimate_markov_model,
