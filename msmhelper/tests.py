@@ -10,8 +10,8 @@ All rights reserved.
 import numpy as np
 
 from msmhelper import tools
-from msmhelper.statetraj import StateTraj
 from msmhelper.decorators import shortcut
+from msmhelper.statetraj import StateTraj
 
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

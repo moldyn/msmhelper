@@ -154,20 +154,23 @@ def left_eigenvectors(matrix):
     if not tests.is_quadratic(matrix):
         raise TypeError('Matrix needs to be quadratic {0}'.format(matrix))
 
+    return _left_eigenvectors(matrix)
+
+
+def _left_eigenvectors(matrix):
+    """Estimate left eigenvectors."""
     # Transpose matrix and therefore determine eigenvalues and left
     # eigenvectors
-    matrix_T = np.matrix.transpose(matrix)
-    eigenvalues, eigenvectors = np.linalg.eig(matrix_T)
+    matrix = matrix.transpose()
+    eigenvalues, eigenvectors = np.linalg.eig(matrix)
 
     # Transpose eigenvectors, since v[:,i] is eigenvector
     eigenvectors = eigenvectors.T
 
     # Sort them by descending eigenvalues
     idx_eigenvalues = eigenvalues.argsort()[::-1]
-    eigenvalues_sorted = eigenvalues[idx_eigenvalues]
-    eigenvectors_sorted = eigenvectors[idx_eigenvalues]
 
-    return eigenvalues_sorted, eigenvectors_sorted
+    return eigenvalues[idx_eigenvalues], eigenvectors[idx_eigenvalues]
 
 
 def _implied_timescales(transmat, lagtime):
