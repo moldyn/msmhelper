@@ -103,7 +103,7 @@ def is_transition_matrix(matrix):
     nstates = matrix.shape[0]
     return (
         is_quadratic(matrix) and
-        np.array_equal(matrix.sum(axis=-1), np.ones(nstates))
+        np.allclose(matrix.sum(axis=-1), np.ones(nstates))
     )
 
 
@@ -130,5 +130,5 @@ def is_ergodic(matrix):
     nstates = len(matrix)
     exponent = (nstates - 1)**2 + 1
 
-    matrix = np.linalg.matrix_power(matrix, exponent)
+    matrix = tools.matrix_power(matrix, exponent)
     return (matrix > 0).all()

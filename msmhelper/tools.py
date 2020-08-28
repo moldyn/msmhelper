@@ -16,6 +16,7 @@ import os
 import platform  # get pc name with platform.node()
 import sys
 
+import numba
 import numpy as np
 
 import __main__ as main
@@ -432,3 +433,9 @@ def _unflatten_data(array, kwargs):
         array = np.split(array, limits)[:-1]
 
     return array
+
+
+@numba.njit
+def matrix_power(matrix, power):
+    """Calculate matrix power."""
+    return np.linalg.matrix_power(matrix, power)

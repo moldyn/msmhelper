@@ -14,7 +14,7 @@ import numba
 import numpy as np
 from pyemma import msm as emsm
 
-from msmhelper import tests
+from msmhelper import tests, tools
 from msmhelper.decorators import shortcut
 from msmhelper.statetraj import StateTraj
 
@@ -248,7 +248,7 @@ def implied_timescales(trajs, lagtimes, reversible=False):
     return impl_timescales
 
 
-@shortcut('CKtest')
+@shortcut('ck_test')
 def chapman_kolmogorov_test(trajs, lagtimes, tmax):
     """Calculate the Chapman Kolmogorov equation.
 
@@ -273,6 +273,7 @@ def chapman_kolmogorov_test(trajs, lagtimes, tmax):
     # format input
     trajs = StateTraj(trajs)
     lagtimes = np.atleast_1d(lagtimes)
+    lagtimes = np.sort(lagtimes)
 
     # check that lag times are array of integers
     if not np.issubdtype(lagtimes.dtype, np.integer):
@@ -282,36 +283,80 @@ def chapman_kolmogorov_test(trajs, lagtimes, tmax):
     if not (lagtimes > 0).all():
         raise TypeError('Lagtimes needs to be positive integers')
 
+    if lagtimes.ndim != 1:
+        raise TypeError(
+            'Lagtimes needs to be maximal 1d, but {0}'.format(lagtimes),
+        )
+
     if not isinstance(tmax, int) or tmax < 0:
         raise TypeError('tmax needs to be a positive integer')
 
     # allocate memory
     ckeqs = {}
     for lagtime in lagtimes:
-        ckeq, times = _chapman_kolmogorov_test(trajs, lagtime, tmax)
-        ckeqs[lagtime] = {'ck': ckeq, 'time': times}
+        ckeqs[lagtime] = _chapman_kolmogorov_test(trajs, lagtime, tmax)
+    ckeqs['md'] = _chapman_kolmogorov_test_md(trajs, lagtimes[0], tmax)
 
     return ckeqs
 
 
 def _chapman_kolmogorov_test(trajs, lagtime, tmax):
-    """Calculate the Chapman Kolmogorov equation."""
-    exponent = np.ceil(np.log2(tmax / lagtime))
-    times = lagtime * np.logspace(
-        start=0,
-        stop=exponent,
-        num=exponent + 1,
-        base=2,
-        type=np.int64,
-    )
-    ckeq = np.empty((trajs.nstates, len(times)))
+    r"""Calculate the Chapman Kolmogorov equation $T^n(\tau)$."""
+    # exponent = int(np.floor(np.log2(tmax / lagtime)))
+    # times = lagtime * np.logspace(
+    #     start=0,
+    #     stop=exponent,
+    #     num=exponent + 1,
+    #     base=2,
+    #     dtype=np.int64,
+    # )
+    # ntimes = len(times)
+    # ckeq = np.empty((trajs.nstates, ntimes))
+#
+    # # estimate Markov model
+    # tmat, _ = estimate_markov_model(trajs, lagtime=lagtime)
+    # ckeq[:, 0] = np.diagonal(tmat)
+#
+    # is_ergodic = tests.is_ergodic(tmat)
+#
+    # for idx in range(1, ntimes):
+    #     tmat = tmat @ tmat  # noqa: WPS350
+    #     ckeq[:, idx] = np.diagonal(tmat)
+    steps = int(np.floor(tmax / lagtime))
+    times = lagtime * np.arange(1, steps + 1)
+    ntimes = len(times)
+    ckeq = np.empty((trajs.nstates, ntimes))
 
     # estimate Markov model
     tmat, _ = estimate_markov_model(trajs, lagtime=lagtime)
-    ckeq[0] = np.diagonal(tmat)
 
-    for idx in range(1, len(times) + 1):
-        tmat = tmat @ tmat  # noqa: WPS350
-        ckeq[idx] = np.diagonal(tmat)
+    is_ergodic = tests.is_ergodic(tmat)
+    for idx in range(ntimes):
+        # tmatpow = np.linalg.matrix_power(tmat, idx + 1)
+        tmatpow = tools.matrix_power(tmat, idx + 1)
+        ckeq[:, idx] = np.diagonal(tmatpow)
 
-    return ckeq, times
+    return {'ck': ckeq, 'time': times, 'is_ergodic': is_ergodic}
+
+
+def _chapman_kolmogorov_test_md(trajs, tmin, tmax, steps=30):
+    r"""Calculate the Chapman Kolmogorov equation $T(n\tau)$."""
+    times = np.around(np.geomspace(
+        start=tmin,
+        stop=tmax,
+        num=steps,
+    )).astype(np.int64)
+    # filter duplicated times (for small ranges)
+    times = np.unique(times)
+    ntimes = len(times)
+
+    ckeq = np.empty((trajs.nstates, ntimes))
+    is_ergodic = np.empty(ntimes, dtype=bool)
+
+    # estimate Markov model
+    for idx, time in enumerate(times):
+        tmat, _ = estimate_markov_model(trajs, lagtime=time)
+        ckeq[:, idx] = np.diagonal(tmat)
+        is_ergodic[idx] = tests.is_ergodic(tmat)
+
+    return {'ck': ckeq, 'time': times, 'is_ergodic': is_ergodic}
