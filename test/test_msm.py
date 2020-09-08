@@ -132,3 +132,52 @@ def test_implied_timescales(trajs, lagtimes, result):
 
     with pytest.raises(TypeError):
         impl = msmhelper.implied_timescales(trajs, [1, 2.3])
+
+
+@pytest.mark.parametrize('trajs, lagtimes, tmax', [
+    ([1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1], [1, 2], 5),
+])
+def test_chapman_kolmogorov_test(trajs, lagtimes, tmax):
+    """Test Chapman Kolmogorov test."""
+    # check float as lagtimes
+    with pytest.raises(TypeError):
+        _ = msmhelper.ck_test(trajs, lagtimes=[1.2], tmax=tmax)
+
+    # check negative lagtimes
+    with pytest.raises(TypeError):
+        _ = msmhelper.ck_test(trajs, lagtimes=[-1], tmax=tmax)
+
+    # check 2d lagtimes
+    with pytest.raises(TypeError):
+        _ = msmhelper.ck_test(trajs, lagtimes=[lagtimes], tmax=tmax)
+
+    # check tmax negative
+    with pytest.raises(TypeError):
+        _ = msmhelper.ck_test(trajs, lagtimes=lagtimes, tmax=-1)
+
+    # check tmax negative
+    with pytest.raises(TypeError):
+        _ = msmhelper.ck_test(trajs, lagtimes=lagtimes, tmax=5.7)
+
+    # check if all keys exists
+    cktest = msmhelper.ck_test(trajs, lagtimes=lagtimes, tmax=tmax)
+    assert 'md' in cktest
+    for lagtime in lagtimes:
+        assert lagtime in cktest
+
+
+@pytest.mark.parametrize('trajs, lagtime, tmax, result', [(
+    StateTraj([1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1]), 1, 2,
+    {
+        'ck': np.array([[0.8, 0.68], [0.8, 0.68]]),
+        'time': np.array([1, 2]),
+        'is_ergodic': True,
+    },
+)])
+def test__chapman_kolmogorov_test(trajs, lagtime, tmax, result):
+    """Test Chapman Kolmogorov test."""
+    cktest = msm._chapman_kolmogorov_test(trajs, lagtime, tmax)
+
+    np.testing.assert_array_equal(cktest.keys(), result.keys())
+    for key in cktest.keys():
+        np.testing.assert_array_almost_equal(cktest[key], result[key])
