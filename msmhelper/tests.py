@@ -89,6 +89,8 @@ def is_index_traj(trajs):
 def is_transition_matrix(matrix):
     """Check if transition matrix.
 
+    Rows and cols of zeros (non-visited states) are accepted.
+
     Parameters
     ----------
     matrix : ndarray
@@ -100,10 +102,14 @@ def is_transition_matrix(matrix):
 
     """
     matrix = np.atleast_2d(matrix)
-    nstates = matrix.shape[0]
+    visited = np.logical_or(matrix.sum(axis=-1), matrix.sum(axis=0))
+    atol = 1e-8  # tolerance
     return (
         is_quadratic(matrix) and
-        np.allclose(matrix.sum(axis=-1), np.ones(nstates))
+        np.logical_or(
+            np.abs(matrix.sum(axis=-1) - 1) <= atol,
+            ~visited,
+        ).all()
     )
 
 

@@ -56,6 +56,15 @@ def test_is_tmat():
     # check if no error is raised
     assert tests.is_tmat(mat)
 
+    # check if row and cols of zero is allowed
+    mat2 = np.zeros((3, 3))
+    mat2[:2, :2] = mat
+    assert tests.is_tmat(mat2)
+
+    # check if only row fails
+    mat2[0, 1:] = mat2[0, 2], mat2[0, 1]
+    assert not tests.is_tmat(mat2)
+
     mat[0, 0] = 0.8
     # check for non normalized matrices
     assert not tests.is_tmat(mat)
