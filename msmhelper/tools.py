@@ -437,5 +437,23 @@ def _unflatten_data(array, kwargs):
 
 @numba.njit
 def matrix_power(matrix, power):
-    """Calculate matrix power."""
+    """Calculate matrix power with np.linalg.matrix_power.
+
+    Same as numpy function, except only for float matrices. See
+    [np.linalg.matrix_power](NP_DOC/numpy.linalg.matrix_power.html).
+
+    Parameters
+    ----------
+    matrix : ndarray
+        2d matrix of type float.
+
+    power : int, float
+        Power of matrix.
+
+    Returns
+    -------
+    matpow : ndarray
+        Matrix power.
+
+    """
     return np.linalg.matrix_power(matrix, power)

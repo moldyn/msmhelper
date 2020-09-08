@@ -30,11 +30,9 @@ def test__row_normalize_matrix(mat, matref):
     mat = msm._row_normalize_matrix(mat)
     np.testing.assert_array_equal(mat, matref)
 
-    with pytest.raises(ValueError):
-        # set first row to 0
-        mat = np.array(mat)
-        mat[0] = 0
-        msm._row_normalize_matrix(mat)
+    # set first row to 0
+    mat[0] = 0
+    np.testing.assert_array_equal(mat[0], msm._row_normalize_matrix(mat)[0])
 
 
 @pytest.mark.parametrize('traj, lagtime, Tref, nstates', [

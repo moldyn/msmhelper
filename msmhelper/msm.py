@@ -125,7 +125,7 @@ def _row_normalize_matrix(matrix):
     """Row normalize the given 2d matrix."""
     row_sum = np.sum(matrix, axis=1)
     if not row_sum.all():
-        raise ValueError('Row sum of 0 can not be normalized.')
+        row_sum[row_sum == 0] = 1
 
     # due to missing np.newaxis row_sum[:, np.newaxis] becomes # noqa: SC100
     return matrix / row_sum.reshape(matrix.shape[0], 1)
@@ -266,8 +266,9 @@ def chapman_kolmogorov_test(trajs, lagtimes, tmax):
 
     Returns
     -------
-    T : ndarray
-        Transition rate matrix.
+    cktest : dict
+        Dictionary holding for each lagtime the ckequation and with 'md' the
+        reference.
 
     """
     # format input
@@ -302,26 +303,6 @@ def chapman_kolmogorov_test(trajs, lagtimes, tmax):
 
 def _chapman_kolmogorov_test(trajs, lagtime, tmax):
     r"""Calculate the Chapman Kolmogorov equation $T^n(\tau)$."""
-    # exponent = int(np.floor(np.log2(tmax / lagtime)))
-    # times = lagtime * np.logspace(
-    #     start=0,
-    #     stop=exponent,
-    #     num=exponent + 1,
-    #     base=2,
-    #     dtype=np.int64,
-    # )
-    # ntimes = len(times)
-    # ckeq = np.empty((trajs.nstates, ntimes))
-#
-    # # estimate Markov model
-    # tmat, _ = estimate_markov_model(trajs, lagtime=lagtime)
-    # ckeq[:, 0] = np.diagonal(tmat)
-#
-    # is_ergodic = tests.is_ergodic(tmat)
-#
-    # for idx in range(1, ntimes):
-    #     tmat = tmat @ tmat  # noqa: WPS350
-    #     ckeq[:, idx] = np.diagonal(tmat)
     steps = int(np.floor(tmax / lagtime))
     times = lagtime * np.arange(1, steps + 1)
     ntimes = len(times)
@@ -332,7 +313,6 @@ def _chapman_kolmogorov_test(trajs, lagtime, tmax):
 
     is_ergodic = tests.is_ergodic(tmat)
     for idx in range(ntimes):
-        # tmatpow = np.linalg.matrix_power(tmat, idx + 1)
         tmatpow = tools.matrix_power(tmat, idx + 1)
         ckeq[:, idx] = np.diagonal(tmatpow)
 

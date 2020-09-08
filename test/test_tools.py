@@ -178,3 +178,14 @@ def test_get_runtime_user_information():
     assert tools.get_runtime_user_information()['script_name'] != 'console'
     with change_main__file__():
         assert tools.get_runtime_user_information()['script_name'] == 'console'
+
+
+@pytest.mark.parametrize('mat, power', [
+    (np.arange(16, dtype=np.float64).reshape(4, 4), 2),
+])
+def test_matrix_power(mat, power):
+    """Test matrix power."""
+    np.testing.assert_array_equal(
+        tools.matrix_power(mat, power),
+        np.linalg.matrix_power(mat, power),
+    )
