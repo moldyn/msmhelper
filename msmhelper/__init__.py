@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """.. include:: ../README.md"""
 
+from .benchmark import *
 from .iotext import *
 from .msm import *
 from .statetraj import *
