@@ -139,23 +139,23 @@ def test_implied_timescales(trajs, lagtimes, result):
 ])
 def test_chapman_kolmogorov_test(trajs, lagtimes, tmax):
     """Test Chapman Kolmogorov test."""
-    # check float as lagtimes
+    # check float as lag times
     with pytest.raises(TypeError):
         _ = msmhelper.ck_test(trajs, lagtimes=[1.2], tmax=tmax)
 
-    # check negative lagtimes
+    # check negative lag times
     with pytest.raises(TypeError):
         _ = msmhelper.ck_test(trajs, lagtimes=[-1], tmax=tmax)
 
-    # check 2d lagtimes
+    # check 2d lag times
     with pytest.raises(TypeError):
         _ = msmhelper.ck_test(trajs, lagtimes=[lagtimes], tmax=tmax)
 
-    # check tmax negative
+    # check maximal time negative
     with pytest.raises(TypeError):
         _ = msmhelper.ck_test(trajs, lagtimes=lagtimes, tmax=-1)
 
-    # check tmax negative
+    # check maximal time negative
     with pytest.raises(TypeError):
         _ = msmhelper.ck_test(trajs, lagtimes=lagtimes, tmax=5.7)
 
