@@ -1,75 +1,67 @@
 # -*- coding: utf-8 -*-
-"""Benchmarking tests.
+"""
+Tests for the benchmark module.
 
 BSD 3-Clause License
 Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
 
+Author: Daniel Nagel
+
 """
 # ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import numpy as np
 import pytest
-from pyemma import msm as emsm
 
-import msmhelper as mh
-
-
-@pytest.fixture
-def state_traj():
-    """Define state trajectory."""
-    np.random.seed(137)
-    return mh.StateTraj(np.random.randint(low=1, high=11, size=int(1e6)))
-
-
-@pytest.fixture
-def lagtime():
-    """Define lag time."""
-    return 1
+from msmhelper import benchmark
+from msmhelper.statetraj import StateTraj
 
 
 # ~~~ TESTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def test_msm_msmhelper_statetraj(state_traj, lagtime, benchmark):
-    """Benchmark msmhelper with StateTraj class."""
-    benchmark(
-        mh.msm.estimate_markov_model,
-        state_traj,
-        lagtime=lagtime,
-    )
+@pytest.mark.parametrize('trajs, lagtimes, tmax', [
+    ([1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1], [1, 2], 5),
+])
+def test_chapman_kolmogorov_test(trajs, lagtimes, tmax):
+    """Test Chapman Kolmogorov test."""
+    # check float as lag times
+    with pytest.raises(TypeError):
+        _ = benchmark.ck_test(trajs, lagtimes=[1.2], tmax=tmax)
+
+    # check negative lag times
+    with pytest.raises(TypeError):
+        _ = benchmark.ck_test(trajs, lagtimes=[-1], tmax=tmax)
+
+    # check 2d lag times
+    with pytest.raises(TypeError):
+        _ = benchmark.ck_test(trajs, lagtimes=[lagtimes], tmax=tmax)
+
+    # check maximal time negative
+    with pytest.raises(TypeError):
+        _ = benchmark.ck_test(trajs, lagtimes=lagtimes, tmax=-1)
+
+    # check maximal time negative
+    with pytest.raises(TypeError):
+        _ = benchmark.ck_test(trajs, lagtimes=lagtimes, tmax=5.7)
+
+    # check if all keys exists
+    cktest = benchmark.ck_test(trajs, lagtimes=lagtimes, tmax=tmax)
+    assert 'md' in cktest
+    for lagtime in lagtimes:
+        assert lagtime in cktest
 
 
-def test_msm_msmhelper_list(state_traj, lagtime, benchmark):
-    """Benchmark msmhelper without StateTraj class."""
-    state_traj = state_traj.state_trajs
-    benchmark(
-        mh.msm.estimate_markov_model,
-        state_traj,
-        lagtime=lagtime,
-    )
+@pytest.mark.parametrize('trajs, lagtime, tmax, result', [(
+    StateTraj([1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1]), 1, 2,
+    {
+        'ck': np.array([[0.8, 0.68], [0.8, 0.68]]),
+        'time': np.array([1, 2]),
+        'is_ergodic': True,
+    },
+)])
+def test__chapman_kolmogorov_test(trajs, lagtime, tmax, result):
+    """Test Chapman Kolmogorov test."""
+    cktest = benchmark._chapman_kolmogorov_test(trajs, lagtime, tmax)
 
-
-def test_msm_pyemma(state_traj, lagtime, benchmark):
-    """Benchmark pyemma without reversibility."""
-    state_traj = state_traj.state_trajs
-    benchmark(
-        emsm.estimate_markov_model,
-        state_traj,
-        lagtime,
-        reversible=False,
-    )
-
-
-def test_msm_pyemma_reversible(state_traj, lagtime, benchmark):
-    """Benchmark pyemma with reversibility."""
-    state_traj = state_traj.state_trajs
-    benchmark(
-        emsm.estimate_markov_model,
-        state_traj,
-        lagtime,
-        reversible=True,
-    )
-
-
-def test_is_index_traj(state_traj, benchmark):
-    """Test row normalization."""
-    state_traj = state_traj.state_trajs
-    benchmark(mh.tests.is_index_traj, state_traj)
+    np.testing.assert_array_equal(cktest.keys(), result.keys())
+    for key in cktest.keys():
+        np.testing.assert_array_almost_equal(cktest[key], result[key])
