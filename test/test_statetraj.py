@@ -53,6 +53,14 @@ def test_nstates(state_traj):
         state_traj.nstates = 5
 
 
+def test_nframes(state_traj):
+    """Test nframes property."""
+    assert state_traj.nframes == len(state_traj[0])
+
+    with pytest.raises(AttributeError):
+        state_traj.nframes = 5
+
+
 def test_ntrajs(state_traj):
     """Test ntrajs property."""
     assert state_traj.ntrajs == len(state_traj.trajs)
@@ -76,6 +84,30 @@ def test_index_trajs(state_traj, index_traj):
         state_traj.trajs = 5
     with pytest.raises(AttributeError):
         state_traj.index_trajs = 5
+
+
+def test_trajs_flatten(state_traj, index_traj):
+    """Test flatten index trajectory."""
+    np.testing.assert_array_equal(
+        index_traj.trajs[0],
+        index_traj.trajs_flatten,
+    )
+    np.testing.assert_array_equal(
+        state_traj.trajs[0],
+        state_traj.trajs_flatten,
+    )
+
+
+def test_state_trajs_flatten(state_traj, index_traj):
+    """Test flatten state trajectory."""
+    np.testing.assert_array_equal(
+        index_traj.state_trajs[0],
+        index_traj.state_trajs_flatten,
+    )
+    np.testing.assert_array_equal(
+        state_traj.state_trajs[0],
+        state_traj.state_trajs_flatten,
+    )
 
 
 def test___eq__(state_traj, index_traj):

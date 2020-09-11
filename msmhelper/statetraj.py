@@ -81,6 +81,18 @@ class StateTraj:  # noqa: WPS214
         return len(self)
 
     @property
+    def nframes(self):
+        """Return cummulated length of all trajectories.
+
+        Returns
+        -------
+        nframes : int
+            Number of frames of all trajectories.
+
+        """
+        return self._nframes
+
+    @property
     def state_trajs(self):
         """Return state trajectory.
 
@@ -120,6 +132,21 @@ class StateTraj:  # noqa: WPS214
                 return_permutation=True,
             )
 
+        # set number of frames
+        self._nframes = np.sum((len(traj) for traj in self.trajs))
+
+    @property
+    def state_trajs_flatten(self):
+        """Return flattened state trajectory.
+
+        Returns
+        -------
+        trajs : ndarray
+            1D ndarrays representation of state trajectories.
+
+        """
+        return np.concatenate(self.state_trajs)
+
     @property
     def index_trajs(self):
         """Return index trajectory.
@@ -145,6 +172,18 @@ class StateTraj:  # noqa: WPS214
 
         """
         return self._trajs
+
+    @property
+    def trajs_flatten(self):
+        """Return flattened index trajectory.
+
+        Returns
+        -------
+        trajs : ndarray
+            1D ndarrays representation of index trajectories.
+
+        """
+        return np.concatenate(self._trajs)
 
     def __repr__(self):
         """Return representation of class."""
