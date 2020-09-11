@@ -2,6 +2,7 @@
 """.. include:: ../README.md"""
 
 from .benchmark import *
+from .compare import *
 from .iotext import *
 from .msm import *
 from .statetraj import *
