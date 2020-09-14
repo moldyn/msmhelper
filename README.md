@@ -27,7 +27,14 @@ import msmhelper
 
 # Changelog:
 - tba:
-  -
+- v0.4:
+  - Add `compare` module to compare two different state discretizations
+  - Upgrade pydoc to `0.9.1` with search option and change css style.
+- v0.3:
+  - Add `StateTraj` class to speed up calcualations by a factor of 50.
+  - Refactor code to use/be compatible with `StateTraj` class
+  - Add `benchmark` module with an numba optimized version of the Chapman
+    Kolmogorov test.
 - v0.2:
   - parts of msm module are rewritten in numba
 - v0.1:
