@@ -133,7 +133,7 @@ class StateTraj:  # noqa: WPS214
             )
 
         # set number of frames
-        self._nframes = np.sum((len(traj) for traj in self.trajs))
+        self._nframes = np.sum([len(traj) for traj in self.trajs])
 
     @property
     def state_trajs_flatten(self):
