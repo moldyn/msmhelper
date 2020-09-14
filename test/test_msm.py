@@ -91,24 +91,6 @@ def test_build_MSM(trajs, lagtime, Tref, statesref):
         np.testing.assert_array_equal(states, statesref)
 
 
-@pytest.mark.parametrize('matrix, eigenvaluesref, eigenvectorsref', [
-    (np.matrix([[1, 6, -1], [2, -1, -2], [1, 0, -1]]), np.array([3, 0, -4]),
-     [np.array([-2, -3, 2]) / np.sqrt(17),
-      np.array([-1, -6, 13]) / np.sqrt(206),
-      np.array([-1, 2, 1]) / np.sqrt(6)])])
-def test_left_eigenvectors(matrix, eigenvaluesref, eigenvectorsref):
-    """Test left eigenvectors estimate."""
-    eigenvalues, eigenvectors = msmhelper.left_eigenvectors(matrix)
-    np.testing.assert_array_almost_equal(eigenvalues, eigenvaluesref)
-    np.testing.assert_array_almost_equal(
-        np.abs(eigenvectors),
-        np.abs(eigenvectorsref),
-    )
-
-    with pytest.raises(TypeError):
-        msmhelper.left_eigenvectors(matrix[0])
-
-
 @pytest.mark.parametrize('transmat, lagtime, result', [
     ([[0.8, 0.2, 0.0], [0.2, 0.78, 0.02], [0.0, 0.2, 0.8]], 2,
      -2 / np.log([4 / 5, 29 / 50]))])
