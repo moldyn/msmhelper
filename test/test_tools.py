@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Tests for the tools module.
+"""Tests for the tools module.
 
 BSD 3-Clause License
 Copyright (c) 2019-2020, Daniel Nagel

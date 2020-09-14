@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
-"""
-Tests for the benchmark module.
+"""Tests for the benchmark module.
 
 BSD 3-Clause License
 Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
-
-Author: Daniel Nagel
 
 """
 # ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
