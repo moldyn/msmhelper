@@ -4,9 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.9.1" />
-<title>msmhelper API documentation</title>
-<meta name="description" content="![GitHub Workflow Status](https://img.shields.io/github/workflow/status/moldyn/msmhelper/Python%20package)
-![GitHub All …" />
+<title>msmhelper.benchmark API documentation</title>
+<meta name="description" content="Benchmark Markov State Model …" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/atom-one-dark.min.css" crossorigin>
@@ -21,108 +20,67 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Package <code>msmhelper</code></h1>
+<h1 class="title">Module <code>msmhelper.benchmark</code></h1>
 </header>
 <section id="section-intro">
-<p><img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/moldyn/msmhelper/Python%20package">
-<img alt="GitHub All Releases" src="https://img.shields.io/github/downloads/moldyn/msmhelper/total">
-<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/moldyn/msmhelper">
-<img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/moldyn/msmhelper">
-<img alt="LGTM Grade" src="https://img.shields.io/lgtm/grade/python/github/moldyn/msmhelper?label=code%20quality&amp;logo=lgtm">
-<img alt="wemake-python-styleguide" src="https://img.shields.io/badge/style-wemake-000000.svg"></p>
-<h1 id="msmhelper">msmhelper</h1>
-<p>This is a package with helper functions to work with state trajectories. Hence, it is mainly used for Markov State Models.</p>
-<h1 id="usage">Usage</h1>
-<p>This package is mainly based on numpy and numba.</p>
-<h2 id="usage_1">Usage</h2>
-<pre><code class="python">import msmhelper
-...
-</code></pre>
-<h2 id="known-bugs">Known Bugs</h2>
-<ul>
-<li>not known</li>
-</ul>
-<h2 id="requirements">Requirements:</h2>
-<ul>
-<li>Python 3.6+</li>
-<li>Numba 0.49.0+</li>
-<li>Numpy 1.16.2+</li>
-<li>Pyemma 2.5.7+</li>
-</ul>
-<h1 id="changelog">Changelog:</h1>
-<ul>
-<li>tba:</li>
-<li>v0.4:</li>
-<li>Add <code><a title="msmhelper.compare" href="compare.html">msmhelper.compare</a></code> module to compare two different state discretizations</li>
-<li>Upgrade pydoc to <code>0.9.1</code> with search option.</li>
-<li>v0.3:</li>
-<li>Add <code><a title="msmhelper.benchmark" href="benchmark.html">msmhelper.benchmark</a></code> module with an numba optimized version of the Chapman
-Kolmogorov test.</li>
-<li>v0.2:</li>
-<li>parts of msm module are rewritten in numba</li>
-<li>v0.1:</li>
-<li>initial release</li>
-</ul>
-<h1 id="roadmap">Roadmap:</h1>
-<ul>
-<li>write roadmap</li>
-</ul>
-<h1 id="development">Development</h1>
-<h2 id="additional-requirements">Additional Requirements:</h2>
-<ul>
-<li>wemake-python-styleguide</li>
-<li>flake8-spellcheck</li>
-</ul>
-<h2 id="pytest">Pytest</h2>
-<p>Running pytest with numba needs an additional flag</p>
-<pre><code>export NUMBA_DISABLE_JIT=1 &amp;&amp; pytest
-</code></pre>
-<h1 id="credits">Credits:</h1>
-<ul>
-<li><a href="https://docs.scipy.org/doc/numpy">numpy</a></li>
-<li><a href="https://realpython.com/">realpython</a></li>
-</ul>
+<p>Benchmark Markov State Model.</p>
+<p>BSD 3-Clause License
+Copyright (c) 2019-2020, Daniel Nagel
+All rights reserved.</p>
+<p>Authors: Daniel Nagel</p>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt><code class="name"><a title="msmhelper.benchmark" href="benchmark.html">msmhelper.benchmark</a></code></dt>
+<dt id="msmhelper.benchmark.chapman_kolmogorov_test"><code class="name flex">
+<span>def <span class="ident">chapman_kolmogorov_test</span></span>(<span>trajs, lagtimes, tmax)</span>
+</code></dt>
 <dd>
-<div class="desc"><p>Benchmark Markov State Model …</p></div>
+<div class="desc"><p>Calculate the Chapman Kolmogorov equation.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>trajs</code></strong> :&ensp;<code>StateTraj</code> or <code>list</code> or <code>ndarray</code> or <code>list</code> of <code>ndarray</code></dt>
+<dd>State trajectory/trajectories. The states should start from zero and
+need to be integers.</dd>
+<dt><strong><code>lagtimes</code></strong> :&ensp;<code>list</code> or <code>ndarray int</code></dt>
+<dd>Lagtimes for estimating the markov model given in [frames].</dd>
+<dt><strong><code>tmax</code></strong> :&ensp;<code>int</code></dt>
+<dd>Longest time to evaluate the CK equation given in [frames].</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>cktest</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Dictionary holding for each lagtime the ckequation and with 'md' the
+reference.</dd>
+</dl></div>
 </dd>
-<dt><code class="name"><a title="msmhelper.compare" href="compare.html">msmhelper.compare</a></code></dt>
+<dt id="msmhelper.benchmark.ck_test"><code class="name flex">
+<span>def <span class="ident">ck_test</span></span>(<span>trajs, lagtimes, tmax)</span>
+</code></dt>
 <dd>
-<div class="desc"><p>Set of helpful functions for comparing markov state models …</p></div>
-</dd>
-<dt><code class="name"><a title="msmhelper.decorators" href="decorators.html">msmhelper.decorators</a></code></dt>
-<dd>
-<div class="desc"><p>Decorators …</p></div>
-</dd>
-<dt><code class="name"><a title="msmhelper.iotext" href="iotext.html">msmhelper.iotext</a></code></dt>
-<dd>
-<div class="desc"><p>Input and output text files …</p></div>
-</dd>
-<dt><code class="name"><a title="msmhelper.msm" href="msm.html">msmhelper.msm</a></code></dt>
-<dd>
-<div class="desc"><p>Create Markov State Model …</p></div>
-</dd>
-<dt><code class="name"><a title="msmhelper.statetraj" href="statetraj.html">msmhelper.statetraj</a></code></dt>
-<dd>
-<div class="desc"><p>Class for handling discrete state trajectories …</p></div>
-</dd>
-<dt><code class="name"><a title="msmhelper.tests" href="tests.html">msmhelper.tests</a></code></dt>
-<dd>
-<div class="desc"><p>Set of helpful test functions …</p></div>
-</dd>
-<dt><code class="name"><a title="msmhelper.tools" href="tools.html">msmhelper.tools</a></code></dt>
-<dd>
-<div class="desc"><p>Set of helpful functions …</p></div>
+<div class="desc"><p>Calculate the Chapman Kolmogorov equation.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>trajs</code></strong> :&ensp;<code>StateTraj</code> or <code>list</code> or <code>ndarray</code> or <code>list</code> of <code>ndarray</code></dt>
+<dd>State trajectory/trajectories. The states should start from zero and
+need to be integers.</dd>
+<dt><strong><code>lagtimes</code></strong> :&ensp;<code>list</code> or <code>ndarray int</code></dt>
+<dd>Lagtimes for estimating the markov model given in [frames].</dd>
+<dt><strong><code>tmax</code></strong> :&ensp;<code>int</code></dt>
+<dd>Longest time to evaluate the CK equation given in [frames].</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>cktest</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Dictionary holding for each lagtime the ckequation and with 'md' the
+reference.</dd>
+</dl></div>
 </dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
 </section>
 <section>
 </section>
@@ -176,35 +134,18 @@ setTimeout(() => input.focus(), 100);
 </script>
 <h1>Index</h1>
 <div class="toc">
-<ul>
-<li><a href="#msmhelper">msmhelper</a></li>
-<li><a href="#usage">Usage</a><ul>
-<li><a href="#usage_1">Usage</a></li>
-<li><a href="#known-bugs">Known Bugs</a></li>
-<li><a href="#requirements">Requirements:</a></li>
-</ul>
-</li>
-<li><a href="#changelog">Changelog:</a></li>
-<li><a href="#roadmap">Roadmap:</a></li>
-<li><a href="#development">Development</a><ul>
-<li><a href="#additional-requirements">Additional Requirements:</a></li>
-<li><a href="#pytest">Pytest</a></li>
-</ul>
-</li>
-<li><a href="#credits">Credits:</a></li>
-</ul>
+<ul></ul>
 </div>
 <ul id="index">
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<li><h3>Super-module</h3>
 <ul>
-<li><code><a title="msmhelper.benchmark" href="benchmark.html">msmhelper.benchmark</a></code></li>
-<li><code><a title="msmhelper.compare" href="compare.html">msmhelper.compare</a></code></li>
-<li><code><a title="msmhelper.decorators" href="decorators.html">msmhelper.decorators</a></code></li>
-<li><code><a title="msmhelper.iotext" href="iotext.html">msmhelper.iotext</a></code></li>
-<li><code><a title="msmhelper.msm" href="msm.html">msmhelper.msm</a></code></li>
-<li><code><a title="msmhelper.statetraj" href="statetraj.html">msmhelper.statetraj</a></code></li>
-<li><code><a title="msmhelper.tests" href="tests.html">msmhelper.tests</a></code></li>
-<li><code><a title="msmhelper.tools" href="tools.html">msmhelper.tools</a></code></li>
+<li><code><a title="msmhelper" href="index.html">msmhelper</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="msmhelper.benchmark.chapman_kolmogorov_test" href="#msmhelper.benchmark.chapman_kolmogorov_test">chapman_kolmogorov_test</a></code></li>
+<li><code><a title="msmhelper.benchmark.ck_test" href="#msmhelper.benchmark.ck_test">ck_test</a></code></li>
 </ul>
 </li>
 </ul>
