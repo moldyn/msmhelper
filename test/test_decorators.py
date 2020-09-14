@@ -40,7 +40,8 @@ def test_deprecated():
 def test_shortcut():
     """Test shortcut warning."""
     # test for function
-    @decorators.shortcut('f')
+    name = 'f'
+    @decorators.shortcut(name)
     def func():
         pass
 
@@ -48,3 +49,6 @@ def test_shortcut():
         f()
     except NameError:
         raise AssertionError()
+
+    assert f.__doc__ != func.__doc__  # noqa: F821
+    assert f.__name__ == name  # noqa: F821

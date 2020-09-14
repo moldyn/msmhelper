@@ -8,6 +8,7 @@ All rights reserved.
 """
 # ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import functools
+import types
 import warnings
 
 
@@ -94,9 +95,30 @@ def shortcut(name):
     >>> tau(...)  # noqa
 
     """
+    def copy_func(func, name):
+        """Return deep copy of a function."""
+        func_copy = types.FunctionType(
+            func.__code__,  # noqa: WPS609
+            func.__globals__,  # noqa: WPS609
+            name=name,
+            argdefs=func.__defaults__,  # noqa: WPS609
+            closure=func.__closure__,  # noqa: WPS609
+        )
+        # Copy attributes of function
+        func_copy.__kwdefaults__ = func.__kwdefaults__  # noqa: WPS609
+        return func_copy
+
+    def decorated_doc(func):
+        return (
+            'This function is the shortcut of `{0}`.'.format(func.__name__) +
+            'See its docstring for further help.'
+        )
+
     def decorator_shortcut(func):
         # register function
-        func.__globals__[name] = func  # noqa: WPS609
+        func_copy = copy_func(func, name=name)
+        func_copy.__globals__[name] = func_copy  # noqa: WPS609
+        func_copy.__doc__ = decorated_doc(func)  # noqa: WPS609, WPS125
         return func
 
     return decorator_shortcut
