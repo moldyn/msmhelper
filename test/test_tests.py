@@ -86,3 +86,36 @@ def test_is_ergodic():
     # if is not a transition matrix
     mat[0, 0] = 0.8
     assert not tests.is_ergodic(mat)
+
+
+def test_is_fuzzy_ergodic():
+    """Test is_fuzzy_ergodic."""
+    # if not ergodic
+    mat = np.array([[0.9, 0.1, 0.0], [0.1, 0.9, 0.0], [0.2, 0.2, 0.6]])
+    assert not tests.is_fuzzy_ergodic(mat)
+
+    # if ergodic
+    mat = np.array([[0.9, 0.1, 0.0], [0.1, 0.8, 0.1], [0.2, 0.2, 0.6]])
+    assert tests.is_fuzzy_ergodic(mat)
+
+    # if ergodic with trap state
+    mat = np.array([
+        [0.9, 0.1, 0.0, 0.0],
+        [0.1, 0.8, 0.1, 0.0],
+        [0.2, 0.2, 0.6, 0.0],
+        [0.0, 0.0, 0.0, 1.0]
+    ])
+    assert tests.is_fuzzy_ergodic(mat)
+
+    # if ergodic with not visited state
+    mat = np.array([
+        [0.9, 0.1, 0.0, 0.0],
+        [0.1, 0.8, 0.1, 0.0],
+        [0.2, 0.2, 0.6, 0.0],
+        [0.0, 0.0, 0.0, 0.0]
+    ])
+    assert tests.is_fuzzy_ergodic(mat)
+
+    # if is not a transition matrix
+    mat[0, 0] = 0.8
+    assert not tests.is_fuzzy_ergodic(mat)

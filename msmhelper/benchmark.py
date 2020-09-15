@@ -90,11 +90,17 @@ def _chapman_kolmogorov_test(trajs, lagtime, tmax):
     tmat, _ = msm.estimate_markov_model(trajs, lagtime=lagtime)
 
     is_ergodic = tests.is_ergodic(tmat)
+    is_fuzzy_ergodic = tests.is_fuzzy_ergodic(tmat)
     for idx in range(ntimes):
         tmatpow = tools.matrix_power(tmat, idx + 1)
         ckeq[:, idx] = np.diagonal(tmatpow)
 
-    return {'ck': ckeq, 'time': times, 'is_ergodic': is_ergodic}
+    return {
+        'ck': ckeq,
+        'time': times,
+        'is_ergodic': is_ergodic,
+        'is_fuzzy_ergodic': is_fuzzy_ergodic,
+    }
 
 
 def _chapman_kolmogorov_test_md(trajs, tmin, tmax, steps=30):
@@ -110,14 +116,21 @@ def _chapman_kolmogorov_test_md(trajs, tmin, tmax, steps=30):
 
     ckeq = np.empty((trajs.nstates, ntimes))
     is_ergodic = np.empty(ntimes, dtype=bool)
+    is_fuzzy_ergodic = np.empty(ntimes, dtype=bool)
 
     # estimate Markov model
     for idx, time in enumerate(times):
         tmat, _ = msm.estimate_markov_model(trajs, lagtime=time)
         ckeq[:, idx] = np.diagonal(tmat)
         is_ergodic[idx] = tests.is_ergodic(tmat)
+        is_fuzzy_ergodic[idx] = tests.is_fuzzy_ergodic(tmat)
 
-    return {'ck': ckeq, 'time': times, 'is_ergodic': is_ergodic}
+    return {
+        'ck': ckeq,
+        'time': times,
+        'is_ergodic': is_ergodic,
+        'is_fuzzy_ergodic': is_fuzzy_ergodic,
+    }
 
 
 @shortcut('bh_test')

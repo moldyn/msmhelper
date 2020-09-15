@@ -127,7 +127,7 @@ def is_ergodic(matrix):
 
     Returns
     -------
-    is_tmat : bool
+    is_ergodic : bool
 
     """
     if not is_transition_matrix(matrix):
@@ -138,3 +138,45 @@ def is_ergodic(matrix):
 
     matrix = tools.matrix_power(matrix, exponent)
     return (matrix > 0).all()
+
+
+def is_fuzzy_ergodic(matrix):
+    """Check if matrix is ergodic, up to missing states or  trap states.
+
+    Parameters
+    ----------
+    matrix : ndarray
+        Transition matrix.
+
+    Returns
+    -------
+    is_fuzzy_ergodic : bool
+
+    """
+    if not is_transition_matrix(matrix):
+        return False
+
+    matrix = np.atleast_2d(matrix)
+    row_col_sum = matrix.sum(axis=-1) + matrix.sum(axis=0)
+
+    atol = 1e-8  # tolerance
+    is_trap_state = np.logical_or(
+        np.abs(row_col_sum - 2) <= atol,
+        np.abs(row_col_sum) <= atol,
+    )
+    is_trap_state = np.logical_or(
+        is_trap_state[:, np.newaxis],
+        is_trap_state[np.newaxis, :],
+    )
+
+    nstates = len(matrix)
+    exponent = (nstates - 1)**2 + 1
+    matrix = tools.matrix_power(matrix, exponent)
+
+    return (
+        is_quadratic(matrix) and
+        np.logical_or(
+            matrix > 0,
+            is_trap_state,
+        ).all()
+    )

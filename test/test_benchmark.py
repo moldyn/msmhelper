@@ -53,6 +53,7 @@ def test_chapman_kolmogorov_test(trajs, lagtimes, tmax):
         'ck': np.array([[0.8, 0.68], [0.8, 0.68]]),
         'time': np.array([1, 2]),
         'is_ergodic': True,
+        'is_fuzzy_ergodic': True,
     },
 )])
 def test__chapman_kolmogorov_test(trajs, lagtime, tmax, result):
