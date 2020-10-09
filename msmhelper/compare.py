@@ -56,25 +56,34 @@ def compare_discretization(traj1, traj2, method='symmetric'):
             'Trajectories are of different length: ' +
             '{0} vs {1}'.format(traj1.nframes, traj2.nframes),
         )
+
+    # check if only single state
+    if traj1.nstates == 1 or traj2.nstates == 1:
+        raise ValueError(
+            'Trajectories needs to have at least two states: ' +
+            '{0} and {1}'.format(traj1.nstates, traj2.nstates),
+        )
     return _compare_discretization(traj1, traj2, method)
 
 
 def _compare_discretization(traj1, traj2, method):
     """Compare similarity of two state discretizations."""
     traj1_flat, traj2_flat = traj1.trajs_flatten, traj2.trajs_flatten
+    idx1 = [
+        np.where(traj1_flat == state)[0] for state in range(traj1.nstates)
+    ]
+    idx2 = [
+        np.where(traj2_flat == state)[0] for state in range(traj2.nstates)
+    ]
 
-    # get index numbers for each states
-    idx_traj1 = {
-        state: np.where(traj1_flat == state)[0]
-        for state in range(traj1.nstates)
-    }
-    idx_traj2 = {
-        state: np.where(traj2_flat == state)[0]
-        for state in range(traj2.nstates)
-    }
-
-    intersect12 = _intersect_array(idx_traj1, idx_traj2)
-    intersect21 = _intersect_array(idx_traj2, idx_traj1)
+    # intersect arrays and normalize to length of lists
+    intersect = _intersect_array(idx1, idx2)
+    intersect12 = intersect / np.array(
+        [len(idx) for idx in idx1],
+    )[:, np.newaxis]
+    intersect21 = intersect.T / np.array(
+        [len(idx) for idx in idx2],
+    )[:, np.newaxis]
 
     similarity = 0
     for state1, state2 in zip(traj1_flat, traj2_flat):
@@ -91,14 +100,12 @@ def _compare_discretization(traj1, traj2, method):
 
 
 def _intersect_array(idx1, idx2):
-    """Intersect two dictionaries of arrays."""
+    """Intersect two list of arrays."""
     return np.frompyfunc(
-        lambda state1, state2: _intersect(idx1[state1], idx2[state2]),
+        _intersect,
         2,  # no. of input arguments
         1,  # no. if output arguments
-    ).outer(
-        list(idx1.keys()), list(idx2.keys()),
-    ).astype(np.float64)
+    ).outer(idx1, idx2).astype(np.float64)
 
 
 @numba.njit
@@ -118,4 +125,4 @@ def _intersect(ar1, ar2):
         else:
             idx1 += 1
 
-    return count / len1
+    return count
