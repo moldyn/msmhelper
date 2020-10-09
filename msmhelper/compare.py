@@ -8,6 +8,7 @@ All rights reserved.
 """
 # ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import numpy as np
+import numba
 
 from msmhelper.statetraj import StateTraj
 
@@ -100,6 +101,21 @@ def _intersect_array(idx1, idx2):
     ).astype(np.float64)
 
 
-def _intersect(array_a, array_b):
-    """Intersect list array_a with array_b."""
-    return len(np.intersect1d(array_a, array_b)) / len(array_a)
+@numba.njit
+def _intersect(ar1, ar2):
+    """Intersect unique sorted list ar1 with ar2."""
+    idx1, idx2 = 0, 0
+    len1, len2 = len(ar1), len(ar2)
+
+    count = 0
+    while idx1 < len1 and idx2 < len2:
+        if ar1[idx1] == ar2[idx2]:
+            count += 1
+            idx1 += 1
+            idx2 += 1
+        elif ar1[idx1] > ar2[idx2]:
+            idx2 += 1
+        else:
+            idx1 += 1
+
+    return count / len1
