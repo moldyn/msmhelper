@@ -62,7 +62,7 @@ def test__compare_discretization(traj1, traj2, kwargs, result):
 
 @pytest.mark.parametrize('arr1, arr2, result', [
     ([0, 1, 2, 3], [4, 5, 6, 7], 0),
-    ([0, 1, 2, 3], [4, 2, 3, 1], 0.75),
+    ([0, 1, 2, 3], [1, 2, 3, 4], 0.75),
     ([0, 1, 2, 3], [0, 1, 2, 3], 1),
 ])
 def test__intersect(arr1, arr2, result):
