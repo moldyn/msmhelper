@@ -92,8 +92,17 @@ def test_build_MSM(trajs, lagtime, Tref, statesref):
 
 
 @pytest.mark.parametrize('transmat, lagtime, result', [
-    ([[0.8, 0.2, 0.0], [0.2, 0.78, 0.02], [0.0, 0.2, 0.8]], 2,
-     -2 / np.log([4 / 5, 29 / 50]))])
+    (
+        [[0.8, 0.2, 0.0], [0.2, 0.78, 0.02], [0.0, 0.2, 0.8]],
+        2,
+        -2 / np.log([4 / 5, 29 / 50]),
+    ),
+    (
+        [[0.1, 0.9], [0.8, 0.2]],
+        1,
+        [np.nan],
+    ),
+])
 def test__implied_timescales(transmat, lagtime, result):
     """Test implied timescale."""
     impl = msm._implied_timescales(transmat, lagtime)

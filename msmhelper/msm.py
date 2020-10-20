@@ -154,7 +154,8 @@ def _implied_timescales(transmat, lagtime):
     transmat = np.asarray(transmat)
 
     eigenvalues, eigenvectors = linalg.left_eigenvectors(transmat)
-    eigenvalues = np.abs(eigenvalues)  # avoid numerical errors
+    # for negative eigenvalues no timescale is defined
+    eigenvalues[eigenvalues < 0] = np.nan
     return - lagtime / np.log(eigenvalues[1:])
 
 
