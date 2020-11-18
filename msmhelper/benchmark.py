@@ -87,7 +87,7 @@ def _chapman_kolmogorov_test(trajs, lagtime, tmax):
     ckeq = np.empty((trajs.nstates, ntimes))
 
     # estimate Markov model
-    tmat, _ = msm.estimate_markov_model(trajs, lagtime=lagtime)
+    tmat, _ = trajs.estimate_markov_model(lagtime=lagtime)
 
     is_ergodic = tests.is_ergodic(tmat)
     is_fuzzy_ergodic = tests.is_fuzzy_ergodic(tmat)
@@ -120,7 +120,7 @@ def _chapman_kolmogorov_test_md(trajs, tmin, tmax, steps=30):
 
     # estimate Markov model
     for idx, time in enumerate(times):
-        tmat, _ = msm.estimate_markov_model(trajs, lagtime=time)
+        tmat, _ = trajs.estimate_markov_model(lagtime=time)
         ckeq[:, idx] = np.diagonal(tmat)
         is_ergodic[idx] = tests.is_ergodic(tmat)
         is_fuzzy_ergodic[idx] = tests.is_fuzzy_ergodic(tmat)

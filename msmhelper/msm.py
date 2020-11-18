@@ -15,7 +15,7 @@ import numpy as np
 from pyemma import msm as emsm
 
 from msmhelper import linalg, tests
-from msmhelper.statetraj import StateTraj
+from msmhelper.statetraj import StateTraj, LumpedStateTraj
 from msmhelper.decorators import shortcut
 
 
@@ -86,6 +86,13 @@ def estimate_markov_model(trajs, lagtime):
     """
     trajs = StateTraj(trajs)
 
+    if isinstance(trajs, LumpedStateTraj):
+        return _estimate_markov_model(
+            trajs.trajs,
+            lagtime,
+            trajs.nmicrostates,
+            trajs.microstates,
+        )
     return _estimate_markov_model(
         trajs.trajs,
         lagtime,
