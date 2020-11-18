@@ -517,7 +517,7 @@ class LumpedStateTraj(StateTraj):
 
         msm_a = (
             id_a +
-            ones_a[np.newaxis:, ] * peq_a[:, np.newaxis] -
+            ones_a[:, np.newaxis] * peq_a[np.newaxis:, ] -
             m_twoprime @ d_a
         )
         msm_a = mh.msm._row_normalize_matrix(msm_a)
