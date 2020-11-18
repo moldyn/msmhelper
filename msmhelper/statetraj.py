@@ -413,7 +413,6 @@ class LumpedStateTraj(StateTraj):
         # set number of frames
         self._nframes = np.sum([len(traj) for traj in self.trajs])
 
-
     @property
     def state_trajs_flatten(self):
         """Return flattened macrostate trajectory.

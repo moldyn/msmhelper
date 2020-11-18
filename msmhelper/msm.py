@@ -232,5 +232,5 @@ def equilibrium_population(tmat):
     if not tests.is_ergodic(tmat):
         raise TypeError('tmat needs to be ergodic transition matrix.')
 
-    _, eigenvectors = linalg.right_eigenvectors(tmat)
+    _, eigenvectors = linalg.left_eigenvectors(tmat)
     return eigenvectors[0] / np.sum(eigenvectors[0])
