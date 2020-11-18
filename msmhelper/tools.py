@@ -457,3 +457,12 @@ def matrix_power(matrix, power):
 
     """
     return np.linalg.matrix_power(matrix, power)
+
+
+@numba.njit
+def find_first(search_val, array):
+    """Return first occurance of item in array."""
+    for idx, idx_val in enumerate(array):
+        if search_val == idx_val:
+            return idx
+    return -1

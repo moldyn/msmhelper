@@ -188,3 +188,11 @@ def test_matrix_power(mat, power):
         tools.matrix_power(mat, power),
         np.linalg.matrix_power(mat, power),
     )
+
+
+@pytest.mark.parametrize('array, val, pos', [
+    (np.arange(10), 3, 3), (np.arange(10), 10, -1),
+])
+def test_find_first(array, val, pos):
+    """Test find_first."""
+    assert(tools.find_first(val, array) == pos)
