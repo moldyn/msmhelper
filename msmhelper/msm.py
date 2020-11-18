@@ -14,8 +14,9 @@ import numba
 import numpy as np
 from pyemma import msm as emsm
 
-from msmhelper import linalg, tests, tools
+from msmhelper import linalg, tests
 from msmhelper.statetraj import StateTraj
+from msmhelper.decorators import shortcut
 
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -130,7 +131,7 @@ def _row_normalize_matrix(matrix):
     return matrix / row_sum.reshape(matrix.shape[0], 1)
 
 
-def _implied_timescales(transmat, lagtime):
+def _implied_timescales(tmat, lagtime):
     """
     Calculate implied timescales.
 
@@ -139,7 +140,7 @@ def _implied_timescales(transmat, lagtime):
 
     Parameters
     ----------
-    transmat : ndarray
+    tmat : ndarray
         Quadratic transition matrix.
 
     lagtime: int
@@ -151,9 +152,9 @@ def _implied_timescales(transmat, lagtime):
         Implied timescale given in frames.
 
     """
-    transmat = np.asarray(transmat)
+    tmat = np.asarray(tmat)
 
-    eigenvalues, eigenvectors = linalg.left_eigenvectors(transmat)
+    eigenvalues, eigenvectors = linalg.left_eigenvectors(tmat)
     # for negative eigenvalues no timescale is defined
     eigenvalues[eigenvalues < 0] = np.nan
     return - lagtime / np.log(eigenvalues[1:])
@@ -203,3 +204,26 @@ def implied_timescales(trajs, lagtimes, reversible=False):
         impl_timescales[idx] = _implied_timescales(transmat, lagtime)
 
     return impl_timescales
+
+
+@shortcut('peq')
+def equilibrium_population(tmat):
+    """Calculate equilibirum population.
+
+    Parameters
+    ----------
+    tmat : ndarray
+        Quadratic transition matrix, needs to be ergodic.
+
+    Returns
+    -------
+    peq : ndarray
+        Equilibrium population of input matrix.
+
+    """
+    tmat = np.asarray(tmat)
+    if not tests.is_ergodic(tmat):
+        raise TypeError('tmat needs to be ergodic transition matrix.')
+
+    _, eigenvectors = linalg.right_eigenvectors(tmat)
+    return eigenvectors[0] / np.sum(eigenvectors[0])
