@@ -509,7 +509,7 @@ class LumpedStateTraj(StateTraj):
         aggret[(np.arange(self.nmicrostates), self.state_assignment_idx)] = 1
 
         m_prime = np.linalg.inv(
-            id_i + ones_i[np.newaxis:, ] * peq_i[:, np.newaxis] - msm_i,
+            id_i + ones_i[:, np.newaxis] * peq_i[np.newaxis:, ] - msm_i,
         )
         m_twoprime = np.linalg.inv(
             np.linalg.multi_dot((aggret.T, d_i, m_prime, aggret)),
