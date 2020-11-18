@@ -9,6 +9,7 @@ All rights reserved.
 # ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import numpy as np
 
+import msmhelper as mh
 from msmhelper import tools
 
 
@@ -35,8 +36,7 @@ class StateTraj:  # noqa: WPS214
         Parameters
         ----------
         trajs : list or ndarray or list of ndarray
-            State trajectory/trajectories. The states should start from zero
-            and need to be integers.
+            State trajectory/trajectories. The states need to be integers.
 
         """
         if isinstance(trajs, StateTraj):
@@ -220,3 +220,226 @@ class StateTraj:  # noqa: WPS214
                 for idx in range(self.ntrajs)
             )
         )
+
+    def estimate_markov_model(self, lagtime):
+        """Estimates Markov State Model.
+
+        This method estimates the MSM based on the transition count matrix.
+
+        Parameters
+        ----------
+        lagtime : int
+            Lag time for estimating the markov model given in [frames].
+
+        Returns
+        -------
+        T : ndarray
+            Transition rate matrix.
+
+        permutation : ndarray
+            Array with corresponding states.
+
+        """
+        return mh.estimate_markov_model(self, lagtime)
+
+
+class LumpedStateTraj(StateTraj):
+    """Class for handling lumped discrete state trajectories."""
+
+    def __new__(cls, macrotrajs, microtrajs):
+        """Initialize new instance."""
+        return super().__new__(cls, None)
+
+    def __init__(self, macrotrajs, microtrajs=None):
+        """Initialize LumpedStateTraj and convert to index trajectories.
+
+        If called with LumpedStateTraj instance, it will be retuned instead.
+
+        Parameters
+        ----------
+        macrotrajs : list or ndarray or list of ndarray
+            Lumped state trajectory/trajectories. The states need to be
+            integers and all states needs to correspond to union of
+            microstates.
+
+        microtrajs : list or ndarray or list of ndarray
+            State trajectory/trajectories. EaThe states should start from zero
+            and need to be integers.
+
+        """
+        if isinstance(macrotrajs, LumpedStateTraj):
+            return
+
+        if microtrajs is None:
+            raise TypeError(
+                'microtrajs may only be None when macrotrajs is of type ' +
+                'LumpedStateTraj.',
+            )
+        # initialize base class
+        super().__init__(microtrajs)
+
+        # parse the microstate to macrostate lumping
+        self._parse_macrotrajs(macrotrajs)
+
+    def __repr__(self):
+        """Return representation of class."""
+        kw = {
+            'clname': self.__class__.__name__,
+            'trajs': self.macrostate_trajs,
+        }
+        return ('{clname}({trajs})'.format(**kw))
+
+    def __str__(self):
+        """Return string representation of class."""
+        return ('{trajs!s}'.format(trajs=self.macrostate_trajs))
+
+    def __iter__(self):
+        """Iterate over trajectories."""
+        return iter(self.macrostate_trajs)
+
+    def __len__(self):
+        """Return length of list of trajectories."""
+        return len(self.trajs)
+
+    def __getitem__(self, key):
+        """Get key value."""
+        return self.macrostate_trajs.__getitem__(key)  # noqa: WPS609
+
+    def __eq__(self, other):
+        """Compare two objects."""
+        if not isinstance(other, LumpedStateTraj):
+            return NotImplemented
+        return (
+            self.ntrajs == other.ntrajs and
+            all(
+                np.array_equal(self[idx], other[idx])
+                for idx in range(self.ntrajs)
+            ) and
+            np.array_equal(self.state_assignment, other.state_assignment)
+        )
+
+    @property
+    def macrostate_trajs(self):
+        """Return macrostate trajectory.
+
+        Returns
+        -------
+        trajs : list of ndarrays
+            List of ndarrays holding the input macrostate data.
+
+        """
+        return tools.shift_data(
+            self.trajs,
+            np.arange(self.nstates),
+            self.state_assignment,
+        )
+
+    @property
+    def macrostate_trajs_flatten(self):
+        """Return flattened macrostate trajectory.
+
+        Returns
+        -------
+        trajs : ndarray
+            1D ndarrays representation of macrostate trajectories.
+
+        """
+        return np.concatenate(self.macrostate_trajs)
+
+    @property
+    def macrostates(self):
+        """Return active set of states.
+
+        Returns
+        -------
+        states : ndarray
+            Numpy array holding active set of states.
+
+        """
+        return self._macrostates
+
+    @property
+    def nmacrostates(self):
+        """Return number of states.
+
+        Returns
+        -------
+        nstates : int
+            Number of states.
+
+        """
+        return len(self.macrostates)
+
+    def _parse_macrotrajs(self, macrotrajs):
+        """Parse the macrotrajs."""
+        # TODO: improve performance by not using StateTraj
+        macrotrajs = StateTraj(macrotrajs)
+        self._macrostates = macrotrajs.states.copy()
+
+        # cache flattened trajectories to speed up code for many states
+        macrotrajs_flatten = macrotrajs.state_trajs_flatten
+        microtrajs_flatten = self.state_trajs_flatten
+
+        self.state_assignment = np.zeros(self.nstates, dtype=np.int64)
+        for idx, microstate in enumerate(self.states):
+            idx_first = tools.find_first(microstate, microtrajs_flatten)
+            self.state_assignment[idx] = macrotrajs_flatten[idx_first]
+
+        self.state_assignment_idx = mh.shift_data(
+            self.state_assignment,
+            self.macrostates,
+            np.arange(self.nmacrostates),
+        )
+
+    def estimate_markov_model(self, lagtime):
+        """Estimates Markov State Model.
+
+        This method estimates the microstate MSM based on the transition count
+        matrix, followed by Szabo-Hummer projection formalism to macrostates.
+
+        Parameters
+        ----------
+        lagtime : int
+            Lag time for estimating the markov model given in [frames].
+
+        Returns
+        -------
+        T : ndarray
+            Transition rate matrix.
+
+        permutation : ndarray
+            Array with corresponding states.
+
+        """
+        # in the following corresponds i to micro and a to macro
+        msm_i, _ = mh.estimate_markov_model(self, lagtime)
+
+        ones_i = np.ones_like(self.states)
+        ones_a = np.ones_like(self.macrostates)
+        id_i = np.diag(ones_i)
+        id_a = np.diag(ones_a)
+
+        peq_i = mh.peq(msm_i)
+        peq_a = np.array([
+            np.sum(peq_i[self.state_assignment == state])
+            for state in self.macrostates
+        ])
+        d_i = np.diag(peq_i)
+        d_a = np.diag(peq_a)
+        aggret = np.zeros((self.nstates, self.nmacrostates))
+        aggret[(np.arange(self.nstates), self.state_assignment_idx)] = 1
+
+        m_prime = np.linalg.inv(
+            id_i + ones_i[np.newaxis:, ] * peq_i[:, np.newaxis] - msm_i,
+        )
+        m_twoprime = np.linalg.inv(
+            np.linalg.multi_dot((aggret.T, d_i, m_prime, aggret)),
+        )
+
+        msm_a = (
+            id_a +
+            ones_a[np.newaxis:, ] * peq_a[:, np.newaxis] -
+            m_twoprime @ d_a
+        )
+
+        return (msm_a, self.macrostates)
