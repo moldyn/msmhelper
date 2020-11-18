@@ -122,3 +122,24 @@ def shortcut(name):
         return func
 
     return decorator_shortcut
+
+
+def debug(func):
+    """Print each call with arguments."""
+    @functools.wraps(func)
+    def wrapper_debug(*args, **kwargs):
+        args_repr = ['{0!r}'.format(arg) for arg in args]
+        kwargs_repr = [
+            '{0}={1!r}'.format(key, itm) for key, itm in kwargs.items()
+        ]
+        print('Calling {0}({1})'.format(  # noqa: WPS421,T001
+            func.__name__, ', '.join(args_repr + kwargs_repr),
+        ))
+
+        return_val = func(*args, **kwargs)
+
+        print('{0!r} => {1!r}'.format(  # noqa: WPS421,T001
+            func.__name__, return_val,
+        ))
+        return return_val
+    return wrapper_debug

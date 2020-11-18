@@ -38,9 +38,10 @@ def test_deprecated():
 
 
 def test_shortcut():
-    """Test shortcut warning."""
+    """Test shortcut decorator."""
     # test for function
     name = 'f'
+
     @decorators.shortcut(name)
     def func():
         pass
@@ -52,3 +53,17 @@ def test_shortcut():
 
     assert f.__doc__ != func.__doc__  # noqa: F821
     assert f.__name__ == name  # noqa: F821
+
+
+def test_debug():
+    """Test debug decorator."""
+    # test for function
+    def func():
+        """Test docstring."""
+        return True
+
+    func_dec = decorators.debug(func)
+
+    assert func() == func_dec()
+    assert func.__doc__ == func_dec.__doc__  # noqa: F821
+    assert func.__name__ == func_dec.__name__  # noqa: F821
