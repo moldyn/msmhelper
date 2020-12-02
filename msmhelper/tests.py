@@ -141,7 +141,7 @@ def is_ergodic(matrix):
 
 
 def is_fuzzy_ergodic(matrix):
-    """Check if matrix is ergodic, up to missing states or  trap states.
+    """Check if matrix is ergodic, up to missing states or trap states.
 
     Parameters
     ----------

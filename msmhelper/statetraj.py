@@ -281,43 +281,6 @@ class LumpedStateTraj(StateTraj):
         # parse the microstate to macrostate lumping
         self._parse_macrotrajs(macrotrajs)
 
-    def __repr__(self):
-        """Return representation of class."""
-        kw = {
-            'clname': self.__class__.__name__,
-            'trajs': self.state_trajs,
-        }
-        return ('{clname}({trajs})'.format(**kw))
-
-    def __str__(self):
-        """Return string representation of class."""
-        return ('{trajs!s}'.format(trajs=self.state_trajs))
-
-    def __iter__(self):
-        """Iterate over trajectories."""
-        return iter(self.state_trajs)
-
-    def __len__(self):
-        """Return length of list of trajectories."""
-        return len(self.trajs)
-
-    def __getitem__(self, key):
-        """Get key value."""
-        return self.state_trajs.__getitem__(key)  # noqa: WPS609
-
-    def __eq__(self, other):
-        """Compare two objects."""
-        if not isinstance(other, LumpedStateTraj):
-            return NotImplemented
-        return (
-            self.ntrajs == other.ntrajs and
-            all(
-                np.array_equal(self[idx], other[idx])
-                for idx in range(self.ntrajs)
-            ) and
-            np.array_equal(self.state_assignment, other.state_assignment)
-        )
-
     @property
     def states(self):
         """Return active set of macrostates.
@@ -449,25 +412,41 @@ class LumpedStateTraj(StateTraj):
         """
         return len(self.microstates)
 
-    def _parse_macrotrajs(self, macrotrajs):
-        """Parse the macrotrajs."""
-        # TODO: improve performance by not using StateTraj
-        macrotrajs = StateTraj(macrotrajs)
-        self._macrostates = macrotrajs.states.copy()
+    def __repr__(self):
+        """Return representation of class."""
+        kw = {
+            'clname': self.__class__.__name__,
+            'trajs': self.state_trajs,
+        }
+        return ('{clname}({trajs})'.format(**kw))
 
-        # cache flattened trajectories to speed up code for many states
-        macrotrajs_flatten = macrotrajs.state_trajs_flatten
-        microtrajs_flatten = self.microstate_trajs_flatten
+    def __str__(self):
+        """Return string representation of class."""
+        return ('{trajs!s}'.format(trajs=self.state_trajs))
 
-        self.   state_assignment = np.zeros(self.nmicrostates, dtype=np.int64)
-        for idx, microstate in enumerate(self.microstates):
-            idx_first = tools.find_first(microstate, microtrajs_flatten)
-            self.state_assignment[idx] = macrotrajs_flatten[idx_first]
+    def __iter__(self):
+        """Iterate over trajectories."""
+        return iter(self.state_trajs)
 
-        self.state_assignment_idx = mh.shift_data(
-            self.state_assignment,
-            self.states,
-            np.arange(self.nstates),
+    def __len__(self):
+        """Return length of list of trajectories."""
+        return len(self.trajs)
+
+    def __getitem__(self, key):
+        """Get key value."""
+        return self.state_trajs.__getitem__(key)  # noqa: WPS609
+
+    def __eq__(self, other):
+        """Compare two objects."""
+        if not isinstance(other, LumpedStateTraj):
+            return NotImplemented
+        return (
+            self.ntrajs == other.ntrajs and
+            all(
+                np.array_equal(self[idx], other[idx])
+                for idx in range(self.ntrajs)
+            ) and
+            np.array_equal(self.state_assignment, other.state_assignment)
         )
 
     def estimate_markov_model(self, lagtime):
@@ -523,3 +502,24 @@ class LumpedStateTraj(StateTraj):
         msm_a = mh.msm._row_normalize_matrix(msm_a)
 
         return (msm_a, self.states)
+
+    def _parse_macrotrajs(self, macrotrajs):
+        """Parse the macrotrajs."""
+        # TODO: improve performance by not using StateTraj
+        macrotrajs = StateTraj(macrotrajs)
+        self._macrostates = macrotrajs.states.copy()
+
+        # cache flattened trajectories to speed up code for many states
+        macrotrajs_flatten = macrotrajs.state_trajs_flatten
+        microtrajs_flatten = self.microstate_trajs_flatten
+
+        self.   state_assignment = np.zeros(self.nmicrostates, dtype=np.int64)
+        for idx, microstate in enumerate(self.microstates):
+            idx_first = tools.find_first(microstate, microtrajs_flatten)
+            self.state_assignment[idx] = macrotrajs_flatten[idx_first]
+
+        self.state_assignment_idx = mh.shift_data(
+            self.state_assignment,
+            self.states,
+            np.arange(self.nstates),
+        )
