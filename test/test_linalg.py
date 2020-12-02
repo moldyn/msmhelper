@@ -31,6 +31,13 @@ def test_left_eigenvectors(matrix, eigenvaluesref, eigenvectorsref):
     with pytest.raises(TypeError):
         linalg.left_eigenvectors(matrix[0])
 
+    # test eigenvalues method
+    eigenvalues = linalg.left_eigenvalues(matrix)
+    np.testing.assert_array_almost_equal(eigenvalues, eigenvaluesref)
+
+    with pytest.raises(TypeError):
+        linalg.left_eigenvalues(matrix[0])
+
 
 @pytest.mark.parametrize('matrix, eigenvaluesref, eigenvectorsref', [
     (np.matrix([[1, 6, -1], [2, -1, -2], [1, 0, -1]]), np.array([3, 0, -4]),
@@ -48,3 +55,10 @@ def test_right_eigenvectors(matrix, eigenvaluesref, eigenvectorsref):
 
     with pytest.raises(TypeError):
         linalg.right_eigenvectors(matrix[0])
+
+    # test eigenvalues method
+    eigenvalues = linalg.right_eigenvalues(matrix)
+    np.testing.assert_array_almost_equal(eigenvalues, eigenvaluesref)
+
+    with pytest.raises(TypeError):
+        linalg.right_eigenvalues(matrix[0])

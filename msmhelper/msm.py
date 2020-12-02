@@ -161,7 +161,7 @@ def _implied_timescales(tmat, lagtime):
     """
     tmat = np.asarray(tmat)
 
-    eigenvalues, eigenvectors = linalg.left_eigenvectors(tmat)
+    eigenvalues = linalg.left_eigenvalues(tmat)
     # for negative eigenvalues no timescale is defined
     eigenvalues[eigenvalues < 0] = np.nan
     return - lagtime / np.log(eigenvalues[1:])
@@ -233,4 +233,4 @@ def equilibrium_population(tmat):
         raise TypeError('tmat needs to be ergodic transition matrix.')
 
     _, eigenvectors = linalg.left_eigenvectors(tmat)
-    return np.real_if_close(eigenvectors[0] / np.sum(eigenvectors[0]))
+    return eigenvectors[0] / np.sum(eigenvectors[0])
