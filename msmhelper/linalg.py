@@ -39,24 +39,8 @@ def left_eigenvectors(matrix):
     if not tests.is_quadratic(matrix):
         raise TypeError('Matrix needs to be quadratic {0}'.format(matrix))
 
-    eigenvalues, eigenvectors = _left_eigenvectors(matrix)
+    eigenvalues, eigenvectors = _eigenvectors(matrix.transpose())
     return np.real_if_close(eigenvalues), np.real_if_close(eigenvectors)
-
-
-def _left_eigenvectors(matrix):
-    """Estimate left eigenvectors."""
-    # Transpose matrix and therefore determine eigenvalues and left
-    # eigenvectors
-    matrix = matrix.transpose()
-    eigenvalues, eigenvectors = np.linalg.eig(matrix)
-
-    # Transpose eigenvectors, since v[:,i] is eigenvector
-    eigenvectors = eigenvectors.T
-
-    # Sort them by descending eigenvalues
-    idx_eigenvalues = eigenvalues.argsort()[::-1]
-
-    return eigenvalues[idx_eigenvalues], eigenvectors[idx_eigenvalues]
 
 
 @shortcut('eig')
@@ -84,12 +68,12 @@ def right_eigenvectors(matrix):
     if not tests.is_quadratic(matrix):
         raise TypeError('Matrix needs to be quadratic {0}'.format(matrix))
 
-    eigenvalues, eigenvectors = _right_eigenvectors(matrix)
+    eigenvalues, eigenvectors = _eigenvectors(matrix)
     return np.real_if_close(eigenvalues), np.real_if_close(eigenvectors)
 
 
-def _right_eigenvectors(matrix):
-    """Estimate right eigenvectors."""
+def _eigenvectors(matrix):
+    """Estimate eigenvectors."""
     eigenvalues, eigenvectors = np.linalg.eig(matrix)
 
     # Transpose eigenvectors, since v[:,i] is eigenvector
@@ -122,19 +106,7 @@ def left_eigenvalues(matrix):
     if not tests.is_quadratic(matrix):
         raise TypeError('Matrix needs to be quadratic {0}'.format(matrix))
 
-    return np.real_if_close(_left_eigenvalues(matrix))
-
-
-def _left_eigenvalues(matrix):
-    """Estimate left eigenvalues."""
-    # Transpose matrix and therefore determine eigenvalues
-    matrix = matrix.transpose()
-    eigenvalues = np.linalg.eigvals(matrix)
-
-    # Sort them by descending eigenvalues
-    idx_eigenvalues = eigenvalues.argsort()[::-1]
-
-    return eigenvalues[idx_eigenvalues]
+    return np.real_if_close(_eigenvalues(np.transpose(matrix)))
 
 
 @shortcut('eigvals')
@@ -158,11 +130,11 @@ def right_eigenvalues(matrix):
     if not tests.is_quadratic(matrix):
         raise TypeError('Matrix needs to be quadratic {0}'.format(matrix))
 
-    return np.real_if_close(_right_eigenvalues(matrix))
+    return np.real_if_close(_eigenvalues(matrix))
 
 
-def _right_eigenvalues(matrix):
-    """Estimate right eigenvalues."""
+def _eigenvalues(matrix):
+    """Estimate eigenvalues."""
     eigenvalues = np.linalg.eigvals(matrix)
 
     # Sort them by descending eigenvalues
