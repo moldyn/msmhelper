@@ -49,35 +49,29 @@ def tmat3():
 # ~~~ TESTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def test_linalg_eigvals_10states(tmat1, benchmark):
     """Benchmark msmhelper with StateTraj class."""
-    mh.linalg.eigvals(tmat1)
     benchmark(mh.linalg.eigvals, tmat1)
 
 
 def test_linalg_eigvals_100states(tmat2, benchmark):
     """Benchmark msmhelper with StateTraj class."""
-    mh.linalg.eigvals(tmat2)
     benchmark(mh.linalg.eigvals, tmat2)
 
 
 def test_linalg_eigvals_1000states(tmat3, benchmark):
     """Benchmark msmhelper with StateTraj class."""
-    mh.linalg.eigvals(tmat3)
     benchmark(mh.linalg.eigvals, tmat3)
 
 
 def test_linalg_eig_10states(tmat1, benchmark):
     """Benchmark msmhelper with StateTraj class."""
-    mh.linalg.eig(tmat1)
     benchmark(mh.linalg.eig, tmat1)
 
 
 def test_linalg_eig_100states(tmat2, benchmark):
     """Benchmark msmhelper with StateTraj class."""
-    mh.linalg.eig(tmat2)
     benchmark(mh.linalg.eig, tmat2)
 
 
 def test_linalg_eig_1000states(tmat3, benchmark):
     """Benchmark msmhelper with StateTraj class."""
-    mh.linalg.eig(tmat3)
     benchmark(mh.linalg.eig, tmat3)

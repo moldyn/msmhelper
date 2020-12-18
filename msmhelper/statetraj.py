@@ -10,7 +10,7 @@ All rights reserved.
 import numpy as np
 
 import msmhelper as mh
-from msmhelper import tools
+from msmhelper import tests, tools
 
 
 # ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -246,8 +246,10 @@ class StateTraj:  # noqa: WPS214
 class LumpedStateTraj(StateTraj):
     """Class for handling lumped discrete state trajectories."""
 
-    def __new__(cls, macrotrajs, microtrajs):
+    def __new__(cls, macrotrajs, microtrajs=None):
         """Initialize new instance."""
+        if isinstance(macrotrajs, LumpedStateTraj):
+            return macrotrajs
         return super().__new__(cls, None)
 
     def __init__(self, macrotrajs, microtrajs=None):
@@ -276,7 +278,7 @@ class LumpedStateTraj(StateTraj):
                 'LumpedStateTraj.',
             )
         # initialize base class
-        super().__init__(microtrajs)
+        self._parse_microtrajs(microtrajs)
 
         # parse the microstate to macrostate lumping
         self._parse_macrotrajs(macrotrajs)
@@ -316,7 +318,7 @@ class LumpedStateTraj(StateTraj):
 
         """
         if np.array_equal(self.microstates, np.arange(self.nmicrostates)):
-            return self.microtrajs
+            return self.trajs
         return tools.shift_data(
             self.trajs,
             np.arange(self.nmicrostates),
@@ -350,31 +352,6 @@ class LumpedStateTraj(StateTraj):
             np.arange(self.nmicrostates),
             self.state_assignment,
         )
-
-    @state_trajs.setter
-    def state_trajs(self, trajs):
-        """Set the state trajectory.
-
-        Parameters
-        ----------
-        trajs : list of ndarrays
-            List of ndarrays holding the input data.
-
-        """
-        self._trajs = tools.format_state_traj(trajs)
-
-        # get number of states
-        self._states = tools.unique(self._trajs)
-
-        # shift to indices
-        if not np.array_equal(self._states, np.arange(self.nmicrostates)):
-            self._trajs, self._states = tools.rename_by_index(  # noqa: WPS414
-                self._trajs,
-                return_permutation=True,
-            )
-
-        # set number of frames
-        self._nframes = np.sum([len(traj) for traj in self.trajs])
 
     @property
     def state_trajs_flatten(self):
@@ -417,8 +394,9 @@ class LumpedStateTraj(StateTraj):
         kw = {
             'clname': self.__class__.__name__,
             'trajs': self.state_trajs,
+            'microtrajs': self.microstate_trajs,
         }
-        return ('{clname}({trajs})'.format(**kw))
+        return ('{clname}({trajs}, {microtrajs})'.format(**kw))
 
     def __str__(self):
         """Return string representation of class."""
@@ -443,7 +421,7 @@ class LumpedStateTraj(StateTraj):
         return (
             self.ntrajs == other.ntrajs and
             all(
-                np.array_equal(self[idx], other[idx])
+                np.array_equal(self.trajs[idx], other.trajs[idx])
                 for idx in range(self.ntrajs)
             ) and
             np.array_equal(self.state_assignment, other.state_assignment)
@@ -471,6 +449,8 @@ class LumpedStateTraj(StateTraj):
         """
         # in the following corresponds i to micro and a to macro
         msm_i, _ = mh.estimate_markov_model(self, lagtime)
+        if not tests.is_ergodic(msm_i):
+            raise TypeError('tmat needs to be ergodic transition matrix.')
 
         ones_i = np.ones_like(self.microstates)
         ones_a = np.ones_like(self.states)
@@ -487,25 +467,19 @@ class LumpedStateTraj(StateTraj):
         aggret = np.zeros((self.nmicrostates, self.nstates))
         aggret[(np.arange(self.nmicrostates), self.state_assignment_idx)] = 1
 
-        print('Dn', d_i, 'DN', d_a)
-        print('aggret', aggret)
-        print('inner', id_i, ones_i[:, np.newaxis] * peq_i[np.newaxis:, ], msm_i)
-
         m_prime = np.linalg.inv(
             id_i + ones_i[:, np.newaxis] * peq_i[np.newaxis:, ] - msm_i,
         )
-        print('prime', m_prime)
         m_twoprime = np.linalg.inv(
             np.linalg.multi_dot((aggret.T, d_i, m_prime, aggret)),
         )
-        print('prime2', m_twoprime)
 
         msm_a = (
             id_a +
             ones_a[:, np.newaxis] * peq_a[np.newaxis:, ] -
             m_twoprime @ d_a
         )
-        msm_a = mh.msm._row_normalize_matrix(msm_a)
+        msm_a = mh.msm._row_normalize_matrix(msm_a)  # noqa: WPS437
 
         return (msm_a, self.states)
 
@@ -519,7 +493,7 @@ class LumpedStateTraj(StateTraj):
         macrotrajs_flatten = macrotrajs.state_trajs_flatten
         microtrajs_flatten = self.microstate_trajs_flatten
 
-        self.   state_assignment = np.zeros(self.nmicrostates, dtype=np.int64)
+        self.state_assignment = np.zeros(self.nmicrostates, dtype=np.int64)
         for idx, microstate in enumerate(self.microstates):
             idx_first = tools.find_first(microstate, microtrajs_flatten)
             self.state_assignment[idx] = macrotrajs_flatten[idx_first]
@@ -529,3 +503,20 @@ class LumpedStateTraj(StateTraj):
             self.states,
             np.arange(self.nstates),
         )
+
+    def _parse_microtrajs(self, trajs):
+        """Parse the microtrajs."""
+        self._trajs = tools.format_state_traj(trajs)
+
+        # get number of states
+        self._states = tools.unique(self._trajs)
+
+        # shift to indices
+        if not np.array_equal(self._states, np.arange(self.nmicrostates)):
+            self._trajs, self._states = tools.rename_by_index(  # noqa: WPS414
+                self._trajs,
+                return_permutation=True,
+            )
+
+        # set number of frames
+        self._nframes = np.sum([len(traj) for traj in self.trajs])

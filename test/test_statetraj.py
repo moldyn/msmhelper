@@ -11,7 +11,7 @@ import numpy as np
 import pytest
 from numpy import array, int32
 
-from msmhelper.statetraj import StateTraj
+from msmhelper.statetraj import LumpedStateTraj, StateTraj
 
 
 @pytest.fixture
@@ -25,6 +25,15 @@ def index_traj():
 
 
 @pytest.fixture
+def indextraj():
+    """Define index trajectory."""
+    return array(
+        [0, 0, 0, 1, 1, 1, 2, 2, 2, 1, 1, 1, 0, 2, 1, 2, 2, 2],
+        dtype=int32,
+    )
+
+
+@pytest.fixture
 def state_traj():
     """Define state trajectory."""
     traj = array(
@@ -34,14 +43,73 @@ def state_traj():
     return StateTraj(traj)
 
 
-# ~~~ TESTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def test_StateTraj_constructor(state_traj):
-    """Test construction of object."""
-    assert state_traj is StateTraj(state_traj)
-    np.testing.assert_array_equal(
-        state_traj.trajs,
-        StateTraj(state_traj.state_trajs).trajs,
+@pytest.fixture
+def statetraj():
+    """Define state trajectory."""
+    return array(
+        [0, 0, 0, 3, 3, 3, 2, 2, 2, 3, 3, 3, 0, 2, 3, 2, 2, 2],
+        dtype=int32,
     )
+
+
+@pytest.fixture
+def macrotraj():
+    """Define state trajectory."""
+    return array(
+        [1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2],
+        dtype=int32,
+    )
+
+
+@pytest.fixture
+def macro_traj():
+    """Define index trajectory."""
+    traj = array(
+        [1, 1, 1, 2, 2, 2, 3, 3, 3, 2, 2, 2, 1, 3, 2, 3, 3, 3],
+        dtype=int32,
+    )
+    macrotraj = array(
+        [1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2],
+        dtype=int32,
+    )
+    return LumpedStateTraj(macrotrajs=macrotraj, microtrajs=traj)
+
+
+# ~~~ TESTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+def test_StateTraj_constructor(statetraj):
+    """Test construction of object."""
+    traj = StateTraj(statetraj)
+    np.testing.assert_array_equal(
+        statetraj,
+        traj.state_trajs[0],
+    )
+
+    # check if passing StateTraj returns object
+    assert traj is StateTraj(traj)
+    # check if passing LumpedStateTraj returns object
+    lumpedTraj = LumpedStateTraj(statetraj, statetraj)
+    assert lumpedTraj is StateTraj(lumpedTraj)
+
+
+def test_LumpedStateTraj_constructor(macrotraj, statetraj):
+    """Test construction of object."""
+    traj = LumpedStateTraj(macrotraj, statetraj)
+    np.testing.assert_array_equal(
+        macrotraj,
+        traj.state_trajs[0],
+    )
+
+    np.testing.assert_array_equal(
+        statetraj,
+        traj.microstate_trajs[0],
+    )
+
+    # check if passing LumpedStateTraj returns object
+    assert traj is LumpedStateTraj(traj)
+    assert traj is StateTraj(traj)
+
+    with pytest.raises(TypeError):
+        LumpedStateTraj(macrotraj)
 
 
 def test_nstates(state_traj):
