@@ -25,9 +25,9 @@ def test_estimate_waiting_times(traj, start, final, reftimes):
     np.testing.assert_array_equal(times, reftimes)
 
     # check overlapping start and final states
-    with pytest.raises(TypeError):
+    with pytest.raises(ValueError):
         times = msmhelper.estimate_waiting_times(traj, start, start)
 
     # check state not contained in traj
-    with pytest.raises(TypeError):
+    with pytest.raises(ValueError):
         times = msmhelper.estimate_waiting_times(traj, start, np.max(traj) + 1)
