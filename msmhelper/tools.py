@@ -16,10 +16,10 @@ import os
 import platform  # get pc name with platform.node()
 import sys
 
+import numba
 import numpy as np
 
 import __main__ as main
-import numba
 from msmhelper.statetraj import StateTraj
 
 
