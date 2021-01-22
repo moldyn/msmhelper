@@ -17,16 +17,18 @@ import msmhelper
 ...
 ```
 ## Known Bugs
-- not known
+- Python 3.9 is not supported, because Pyemma and Numba do not support it yet
 
 ## Requirements:
-- Python 3.6+
+- Python 3.6-3.8
 - Numba 0.49.0+
 - Numpy 1.16.2+
 - Pyemma 2.5.7+
 
 # Changelog:
 - tba:
+  - Add `LumpedStateTraj` class which allows optimal projection of microstate dynamics to macrostates, method taken from Szabo and Hummer
+  - Add estimation of MD waiting times
 - v0.4:
   - Add `compare` module to compare two different state discretizations
   - Upgrade pydoc to `0.9.1` with search option and change css style.
