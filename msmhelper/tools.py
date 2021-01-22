@@ -16,10 +16,10 @@ import os
 import platform  # get pc name with platform.node()
 import sys
 
-import numba
 import numpy as np
 
 import __main__ as main
+import numba
 from msmhelper.statetraj import StateTraj
 
 
@@ -167,13 +167,13 @@ def unique(trajs, **kwargs):
     trajs : list or ndarray or list of ndarrays
         State trajectory or list of state trajectories.
 
-    kwargs :
+    kwargs
         Arguments of [numpy.unique()](NP_DOC.numpy.unique.html)
 
     Returns
     -------
-    unique :
-        Number of states, depending on kwargs more.
+    unique
+        Array containing all states, see numpy for more details.
 
     """
     # flatten data
