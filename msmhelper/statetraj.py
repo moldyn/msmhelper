@@ -6,14 +6,12 @@ Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
 
 """
-# ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import numpy as np
 
 import msmhelper as mh
 from msmhelper import tests, tools
 
 
-# ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 class StateTraj:  # noqa: WPS214
     """Class for handling discrete state trajectories."""
 
@@ -447,11 +445,14 @@ class LumpedStateTraj(StateTraj):
             Array with corresponding states.
 
         """
-        # in the following corresponds i to micro and a to macro
+        # in the following corresponds 'i' to micro and 'a' to macro
         msm_i, _ = mh.estimate_markov_model(self, lagtime)
         if not tests.is_ergodic(msm_i):
             raise TypeError('tmat needs to be ergodic transition matrix.')
+        return (self._estimate_markov_model(msm_i), self.states)
 
+    def _estimate_markov_model(self, msm_i):
+        """Estimates Markov State Model."""
         ones_i = np.ones_like(self.microstates)
         ones_a = np.ones_like(self.states)
         id_i = np.diag(ones_i)
@@ -468,7 +469,9 @@ class LumpedStateTraj(StateTraj):
         aggret[(np.arange(self.nmicrostates), self.state_assignment_idx)] = 1
 
         m_prime = np.linalg.inv(
-            id_i + ones_i[:, np.newaxis] * peq_i[np.newaxis:, ] - msm_i,
+            id_i +
+            ones_i[:, np.newaxis] * peq_i[np.newaxis:, ] -
+            msm_i,
         )
         m_twoprime = np.linalg.inv(
             np.linalg.multi_dot((aggret.T, d_i, m_prime, aggret)),
@@ -479,9 +482,7 @@ class LumpedStateTraj(StateTraj):
             ones_a[:, np.newaxis] * peq_a[np.newaxis:, ] -
             m_twoprime @ d_a
         )
-        msm_a = mh.msm._row_normalize_matrix(msm_a)  # noqa: WPS437
-
-        return (msm_a, self.states)
+        return mh.msm._row_normalize_matrix(msm_a)  # noqa: WPS437
 
     def _parse_macrotrajs(self, macrotrajs):
         """Parse the macrotrajs."""

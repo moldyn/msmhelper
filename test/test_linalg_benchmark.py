@@ -6,7 +6,6 @@ Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
 
 """
-# ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import numpy as np
 import pytest
 

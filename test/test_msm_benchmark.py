@@ -6,7 +6,6 @@ Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
 
 """
-# ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import numpy as np
 import pytest
 from pyemma import msm as emsm
@@ -27,7 +26,6 @@ def lagtime():
     return 1
 
 
-# ~~~ TESTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def test_msm_msmhelper_statetraj(state_traj, lagtime, benchmark):
     """Benchmark msmhelper with StateTraj class."""
     benchmark(

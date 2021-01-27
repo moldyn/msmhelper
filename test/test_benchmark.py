@@ -6,7 +6,6 @@ Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
 
 """
-# ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import numpy as np
 import pytest
 
@@ -14,7 +13,6 @@ from msmhelper import benchmark
 from msmhelper.statetraj import StateTraj
 
 
-# ~~~ TESTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @pytest.mark.parametrize('trajs, lagtimes, tmax', [
     ([1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1], [1, 2], 5),
 ])

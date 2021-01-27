@@ -6,7 +6,6 @@ Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
 
 """
-# ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import numba
 import numpy as np
 
@@ -15,7 +14,6 @@ from msmhelper.decorators import shortcut
 from msmhelper.statetraj import StateTraj
 
 
-# ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @shortcut('ck_test')
 def chapman_kolmogorov_test(trajs, lagtimes, tmax):
     r"""Calculate the Chapman Kolmogorov equation.

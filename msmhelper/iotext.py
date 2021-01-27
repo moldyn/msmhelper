@@ -6,7 +6,6 @@ Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
 
 """
-# ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import sys
 
 import numpy as np
@@ -15,12 +14,10 @@ import pandas as pd
 from msmhelper import tools
 
 
-# ~~~ ERROR CLASS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 class FileError(Exception):
     """An exception for wrongly formated input files."""
 
 
-# ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def opentxt(file_name, comment='#', nrows=None, **kwargs):
     r"""Open a text file.
 

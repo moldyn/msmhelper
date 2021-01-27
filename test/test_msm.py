@@ -9,7 +9,6 @@ Author: Daniel Nagel
         Georg Diez
 
 """
-# ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import numba
 import numpy as np
 import pytest
@@ -19,7 +18,6 @@ from msmhelper import msm
 from msmhelper.statetraj import StateTraj
 
 
-# ~~~ TESTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @pytest.mark.parametrize('mat, matref', [
     ([[1, 1], [3, 1]], [[0.5, 0.5], [0.75, 0.25]])])
 def test__row_normalize_matrix(mat, matref):

@@ -6,7 +6,6 @@ Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
 
 """
-# ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import numpy as np
 import pytest
 
@@ -14,7 +13,6 @@ from msmhelper import tests, tools
 from msmhelper.statetraj import StateTraj
 
 
-# ~~~ TESTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @pytest.mark.parametrize('mat', [(np.arange(9).reshape(3, 3))])
 def test_is_quadratic(mat):
     """Test is_quadratic."""

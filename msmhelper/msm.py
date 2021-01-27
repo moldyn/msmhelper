@@ -9,7 +9,6 @@ Authors: Daniel Nagel
          Georg Diez
 
 """
-# ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import numba
 import numpy as np
 from pyemma import msm as emsm
@@ -19,7 +18,6 @@ from msmhelper.statetraj import StateTraj, LumpedStateTraj
 from msmhelper.decorators import shortcut
 
 
-# ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def build_MSM(trajs, lagtime, reversible=False, **kwargs):
     """Wrapps pyemma.msm.estimate_markov_model.
 

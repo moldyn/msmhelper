@@ -6,7 +6,6 @@ Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
 
 """
-# ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 from importlib import reload
 
 import numpy as np
@@ -33,7 +32,6 @@ class change_main__file__:
         main.msmhelper = reload(msmhelper)
 
 
-# ~~~ TESTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @pytest.mark.parametrize('data, expected, val_old, val_new', [
     ([1, 1, 1, 3, 2, 2], [2, 2, 2, 3, 1, 1], [1, 2, 3], [2, 1, 3]),
     ([1, -1, 1, 3, 2, 2], [2, -1, 2, 3, 1, 1], [1, 2], [2, 1]),

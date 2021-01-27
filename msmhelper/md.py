@@ -6,7 +6,6 @@ Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
 
 """
-# ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import numba
 import numpy as np
 
@@ -15,7 +14,6 @@ from msmhelper.decorators import shortcut
 from msmhelper.statetraj import StateTraj
 
 
-# ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @shortcut('estimate_wt')
 def estimate_waiting_times(trajs, start, final):
     """Estimates waiting times between stated states.

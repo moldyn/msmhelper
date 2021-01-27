@@ -6,17 +6,16 @@ Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
 
 """
-# ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import warnings
 
 from msmhelper import decorators
 
 
-# ~~~ TESTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def test_deprecated():
     """Test deprecated warning."""
     # define function
     kwargs = {'msg': 'msg', 'since': '1.0.0', 'remove': '1.2.0'}
+
     @decorators.deprecated(**kwargs)
     def func():
         return True

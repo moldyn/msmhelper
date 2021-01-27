@@ -6,7 +6,6 @@ Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
 
 """
-# ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import os.path
 
 import numpy as np
@@ -24,7 +23,6 @@ def limits_file():
     return os.path.join(HERE, 'limits.dat')
 
 
-# ~~~ TESTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @pytest.mark.parametrize('traj_file, kwargs', [
     (os.path.join(HERE, 'data.dat'), {'comment': '#'}),
     (os.path.join(HERE, 'data.dat'), {'usecols': (1, 0)}),

@@ -6,7 +6,6 @@ Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
 
 """
-# ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import numpy as np
 import pytest
 from numpy import array, int32
@@ -75,7 +74,6 @@ def macro_traj():
     return LumpedStateTraj(macrotrajs=macrotraj, microtrajs=traj)
 
 
-# ~~~ TESTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def test_StateTraj_constructor(statetraj):
     """Test construction of object."""
     traj = StateTraj(statetraj)

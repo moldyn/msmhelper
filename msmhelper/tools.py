@@ -9,7 +9,6 @@ TODO:
     - Correct border effects of running mean
 
 """
-# ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import datetime
 import getpass  # noqa: SC100 # get user name with getpass.getuser()
 import os
@@ -23,7 +22,6 @@ import __main__ as main
 from msmhelper.statetraj import StateTraj
 
 
-# ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def shift_data(array, val_old, val_new, dtype=np.int32):
     """Shift integer array (data) from old to new values.
 

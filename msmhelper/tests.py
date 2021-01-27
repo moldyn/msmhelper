@@ -6,7 +6,6 @@ Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
 
 """
-# ~~~ IMPORT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import numpy as np
 
 from msmhelper import tools
@@ -14,7 +13,6 @@ from msmhelper.decorators import shortcut
 from msmhelper.statetraj import StateTraj
 
 
-# ~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def is_quadratic(matrix):
     """Check if matrix is quadratic.
 
@@ -102,7 +100,10 @@ def is_transition_matrix(matrix):
 
     """
     matrix = np.atleast_2d(matrix)
-    visited = np.logical_or(matrix.sum(axis=-1), matrix.sum(axis=0))
+    visited = np.logical_or(
+        matrix.sum(axis=-1),
+        matrix.sum(axis=0),
+    )
     atol = 1e-8  # tolerance
     return (
         is_quadratic(matrix) and
