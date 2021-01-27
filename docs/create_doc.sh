@@ -1,6 +1,6 @@
 # create doc
 echo 'create documentation'
-pdoc3 --html -o . --template-dir . --force ../
+pdoc --html -o . --template-dir ./config --force ../msmhelper
 
 mv msmhelper/* .
 rmdir msmhelper
