@@ -27,8 +27,10 @@ import msmhelper
 
 # Changelog:
 - tba:
+- v0.5:
   - Add `LumpedStateTraj` class which allows optimal projection of microstate dynamics to macrostates, method taken from Szabo and Hummer
   - Add estimation of MD waiting times
+  - Minor improvements and tweaks.
 - v0.4:
   - Add `compare` module to compare two different state discretizations
   - Upgrade pydoc to `0.9.1` with search option and change css style.
