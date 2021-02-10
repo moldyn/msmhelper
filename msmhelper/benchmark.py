@@ -290,10 +290,10 @@ def _autocorrelation(trajs, times):
         # autocorrelation function
         c_nn, norm = 0, 0
         for traj in trajs:
-            for val_from, val_to in zip(traj[: -time], traj[time:]):
+            for val_from, val_to in zip(  # noqa: WPS519
+                traj[: -time], traj[time:],
+            ):
                 c_nn += val_from * val_to
-
-            # c_nn += np.sum(traj_proj[: -time] * traj_proj[time:])
             norm += len(traj[time:])
 
         bheq[idx] = c_nn / norm
@@ -304,5 +304,4 @@ def _autocorrelation(trajs, times):
 def _calc_times(lagtime, tmax):
     """Return time array."""
     steps = int(np.floor(tmax / lagtime))
-    times = lagtime * np.arange(1, steps + 1)
-    return times
+    return lagtime * np.arange(1, steps + 1)

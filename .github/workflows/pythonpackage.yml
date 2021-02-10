@@ -29,8 +29,8 @@ jobs:
         pip install -q -e .
     - name: Lint with flake8
       run: |
-        pip install -q flake8
-        python -m flake8
+        pip install -q flake8 flake8-isort
+        python -m flake8 --config flake8-CI.cfg
     - name: Test with pytest
       run: |
         pip install -q pytest pytest-cov pytest-rerunfailures pytest-benchmark
