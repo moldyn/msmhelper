@@ -29,7 +29,7 @@ jobs:
         pip install -q -e .
     - name: Lint with flake8
       run: |
-        pip install -q flake8 wemake-python-styleguide
+        pip install -q flake8
         python -m flake8
     - name: Test with pytest
       run: |
