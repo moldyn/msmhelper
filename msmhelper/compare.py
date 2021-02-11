@@ -6,8 +6,8 @@ Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
 
 """
-import numpy as np
 import numba
+import numpy as np
 
 from msmhelper.statetraj import StateTraj
 

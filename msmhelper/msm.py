@@ -14,8 +14,8 @@ import numpy as np
 from pyemma import msm as emsm
 
 from msmhelper import linalg, tests
-from msmhelper.statetraj import StateTraj, LumpedStateTraj
 from msmhelper.decorators import shortcut
+from msmhelper.statetraj import StateTraj, LumpedStateTraj
 
 
 def build_MSM(trajs, lagtime, reversible=False, **kwargs):
