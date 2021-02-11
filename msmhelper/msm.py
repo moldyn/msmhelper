@@ -102,7 +102,7 @@ def estimate_markov_model(trajs, lagtime):
 def _estimate_markov_model(trajs, lagtime, nstates, perm=None):
     """Estimate MSM based on the transition count matrix."""
     # convert trajs to numba list # noqa: SC100
-    if not numba.config.DISABLE_JIT:
+    if not numba.config.DISABLE_JIT:  # pragma: no cover
         trajs = numba.typed.List(trajs)
 
     if perm is None:

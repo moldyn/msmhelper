@@ -255,7 +255,7 @@ def _buchete_hummer_test(trajs, lagtime, tmax):
     for idx, evec in enumerate(evecs):
         trajs_proj = _project_states_onto_vector(trajs, evec)
 
-        if not numba.config.DISABLE_JIT:
+        if not numba.config.DISABLE_JIT:  # pragma: no cover
             trajs_proj = numba.typed.List(trajs_proj)
 
         bheq[idx] = _autocorrelation(trajs_proj, times)

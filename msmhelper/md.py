@@ -54,7 +54,7 @@ def estimate_waiting_times(trajs, start, final):
             )
 
     # do not convert for pytest coverage
-    if numba.config.DISABLE_JIT:
+    if numba.config.DISABLE_JIT:  # pragma: no cover
         return _estimate_waiting_times(trajs, states_start, states_final)
     return _estimate_waiting_times(
         numba.typed.List(trajs),

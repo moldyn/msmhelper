@@ -281,7 +281,7 @@ def get_runtime_user_information():
         script_dir, script_name = os.path.split(
             os.path.abspath(main.__file__),  # noqa: WPS609
         )
-    except AttributeError:
+    except AttributeError:  # pragma: no cover
         script_dir, script_name = '', 'console'
 
     # get time without microseconds
