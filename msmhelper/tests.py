@@ -6,10 +6,10 @@ Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
 
 """
+import decorit
 import numpy as np
 
 from msmhelper import tools
-from msmhelper.decorators import shortcut
 from msmhelper.statetraj import StateTraj
 
 
@@ -83,7 +83,7 @@ def is_index_traj(trajs):
     return False
 
 
-@shortcut('is_tmat')
+@decorit.alias('is_tmat')
 def is_transition_matrix(matrix):
     """Check if transition matrix.
 

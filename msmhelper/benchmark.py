@@ -6,15 +6,15 @@ Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
 
 """
+import decorit
 import numba
 import numpy as np
 
 from msmhelper import linalg, msm, tests, tools
-from msmhelper.decorators import shortcut
 from msmhelper.statetraj import StateTraj
 
 
-@shortcut('ck_test')
+@decorit.alias('ck_test')
 def chapman_kolmogorov_test(trajs, lagtimes, tmax):
     r"""Calculate the Chapman Kolmogorov equation.
 
@@ -131,7 +131,7 @@ def _chapman_kolmogorov_test_md(trajs, tmin, tmax, steps=30):
     }
 
 
-@shortcut('bh_test')
+@decorit.alias('bh_test')
 def buchete_hummer_test(trajs, lagtime, tmax):
     r"""Calculate the Buchete Hummer test.
 

@@ -6,13 +6,13 @@ Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
 
 """
+import decorit
 import numpy as np
 
 from msmhelper import tests
-from msmhelper.decorators import shortcut
 
 
-@shortcut('eigl')
+@decorit.alias('eigl')
 def left_eigenvectors(matrix):
     """Estimate left eigenvectors.
 
@@ -41,7 +41,7 @@ def left_eigenvectors(matrix):
     return np.real_if_close(eigenvalues), np.real_if_close(eigenvectors)
 
 
-@shortcut('eig')
+@decorit.alias('eig')
 def right_eigenvectors(matrix):
     """Estimate right eigenvectors.
 
@@ -83,7 +83,7 @@ def _eigenvectors(matrix):
     return eigenvalues[idx_eigenvalues], eigenvectors[idx_eigenvalues]
 
 
-@shortcut('eiglvals')
+@decorit.alias('eiglvals')
 def left_eigenvalues(matrix):
     """Estimate left eigenvalues.
 
@@ -107,7 +107,7 @@ def left_eigenvalues(matrix):
     return np.real_if_close(_eigenvalues(np.transpose(matrix)))
 
 
-@shortcut('eigvals')
+@decorit.alias('eigvals')
 def right_eigenvalues(matrix):
     """Estimate right eigenvalues.
 

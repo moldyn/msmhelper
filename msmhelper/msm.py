@@ -9,12 +9,12 @@ Authors: Daniel Nagel
          Georg Diez
 
 """
+import decorit
 import numba
 import numpy as np
 from pyemma import msm as emsm
 
 from msmhelper import linalg, tests
-from msmhelper.decorators import shortcut
 from msmhelper.statetraj import StateTraj, LumpedStateTraj
 
 
@@ -211,7 +211,7 @@ def implied_timescales(trajs, lagtimes, reversible=False):
     return impl_timescales
 
 
-@shortcut('peq')
+@decorit.alias('peq')
 def equilibrium_population(tmat):
     """Calculate equilibirum population.
 

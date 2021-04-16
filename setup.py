@@ -34,5 +34,5 @@ setuptools.setup(
     ],
     packages=setuptools.find_packages(exclude=('tests', 'docs')),
     include_package_data=True,
-    install_requires=['numpy', 'numba', 'pandas', 'pyemma'],
+    install_requires=['numpy', 'numba', 'pandas', 'pyemma', 'decorit'],
 )

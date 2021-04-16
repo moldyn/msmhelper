@@ -8,15 +8,15 @@ All rights reserved.
 """
 from collections import defaultdict
 
+import decorit
 import numba
 import numpy as np
 
 from msmhelper.compare import _intersect as intersect
-from msmhelper.decorators import shortcut
 from msmhelper.statetraj import StateTraj
 
 
-@shortcut('estimate_wt')
+@decorit.alias('estimate_wt')
 def estimate_waiting_times(trajs, start, final):
     """Estimates waiting times between stated states.
 
