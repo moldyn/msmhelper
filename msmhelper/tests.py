@@ -174,10 +174,4 @@ def is_fuzzy_ergodic(matrix):
     exponent = (nstates - 1)**2 + 1
     matrix = tools.matrix_power(matrix, exponent)
 
-    return (
-        is_quadratic(matrix) and
-        np.logical_or(
-            matrix > 0,
-            is_trap_state,
-        ).all()
-    )
+    return np.logical_or(matrix > 0, is_trap_state).all()
