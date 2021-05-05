@@ -12,51 +12,9 @@ Authors: Daniel Nagel
 import decorit
 import numba
 import numpy as np
-from pyemma import msm as emsm
 
 from msmhelper import linalg, tests
 from msmhelper.statetraj import StateTraj, LumpedStateTraj
-
-
-def build_MSM(trajs, lagtime, reversible=False, **kwargs):
-    """Wrapps pyemma.msm.estimate_markov_model.
-
-    Based on the choice of reversibility it either calls pyemma for a
-    reversible matrix or it creates a transition count matrix.
-
-    Parameters
-    ----------
-    trajs : list or ndarray or list of ndarray
-        State trajectory/trajectories. The states should start from zero and
-        need to be integers.
-
-    lagtime : int
-        Lag time for estimating the markov model given in [frames].
-
-    reversible : bool, optional
-        If `True` it will uses pyemma.msm.estimate_markov_model which does not
-        guarantee that the matrix is of full dimension. In case of `False` or
-        if not statedm the local function based on a simple transitition count
-        matrix will be used instead.
-
-    kwargs
-        For passing values to `pyemma.msm.estimate_markov_model`.
-
-    Returns
-    -------
-    transmat : ndarray
-        Transition rate matrix.
-
-    """
-    if reversible:
-        if isinstance(trajs, StateTraj):
-            trajs = trajs.state_trajs
-        MSM = emsm.estimate_markov_model(trajs, lagtime, **kwargs)
-        transmat, states = MSM.transition_matrix, MSM.active_set
-    else:
-        transmat, states = estimate_markov_model(trajs, lagtime)
-
-    return transmat, states
 
 
 def estimate_markov_model(trajs, lagtime):
@@ -179,6 +137,7 @@ def implied_timescales(trajs, lagtimes, reversible=False):
 
     lagtimes : list or ndarray int
         Lagtimes for estimating the markov model given in [frames].
+        This is not implemented yet!
 
     reversible : bool
         If reversibility should be enforced for the markov state model.
@@ -200,12 +159,14 @@ def implied_timescales(trajs, lagtimes, reversible=False):
         )
     if not (lagtimes > 0).all():
         raise TypeError('Lagtimes needs to be positive integers')
+    if reversible:
+        raise TypeError('Reversible matrices are not anymore supported.')
 
     # initialize result
     impl_timescales = np.zeros((len(lagtimes), trajs.nstates - 1))
 
     for idx, lagtime in enumerate(lagtimes):
-        transmat, _ = build_MSM(trajs, lagtime, reversible=reversible)
+        transmat, _ = estimate_markov_model(trajs, lagtime)
         impl_timescales[idx] = _implied_timescales(transmat, lagtime)
 
     return impl_timescales

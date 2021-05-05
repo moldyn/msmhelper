@@ -31,8 +31,9 @@ setuptools.setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
     ],
     packages=setuptools.find_packages(exclude=('tests', 'docs')),
     include_package_data=True,
-    install_requires=['numpy', 'numba', 'pandas', 'pyemma', 'decorit'],
+    install_requires=['numpy', 'numba', 'pandas', 'decorit'],
 )

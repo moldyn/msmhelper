@@ -72,23 +72,6 @@ def test__estimate_markov_model(traj, lagtime, Tref, statesref):
     np.testing.assert_array_equal(states, statesref)
 
 
-@pytest.mark.parametrize('trajs, lagtime, Tref, statesref', [
-    ([1, 1, 1, 1, 1, 2, 2, 1, 2, 0, 2, 2, 0], 1,
-     [[0., 0., 1.], [0., 2 / 3, 1 / 3], [0.4, 0.2, 0.4]], [0, 1, 2])])
-def test_build_MSM(trajs, lagtime, Tref, statesref):
-    """Test estimate markov model."""
-    for traj in [trajs, StateTraj(trajs)]:
-        # non reversible
-        T, states = msmhelper.build_MSM(traj, lagtime, reversible=False)
-        np.testing.assert_array_almost_equal(T, Tref)
-        np.testing.assert_array_equal(states, statesref)
-
-        #  reversible
-        T, states = msmhelper.build_MSM(traj, lagtime, reversible=True)
-        np.testing.assert_array_almost_equal(T, Tref)
-        np.testing.assert_array_equal(states, statesref)
-
-
 @pytest.mark.parametrize('transmat, lagtime, result', [
     (
         [[0.8, 0.2, 0.0], [0.2, 0.78, 0.02], [0.0, 0.2, 0.8]],
@@ -120,3 +103,6 @@ def test_implied_timescales(trajs, lagtimes, result):
 
     with pytest.raises(TypeError):
         impl = msmhelper.implied_timescales(trajs, [1, 2.3])
+
+    with pytest.raises(TypeError):
+        impl = msmhelper.implied_timescales(trajs, [1, 2.3], reversible=True)
