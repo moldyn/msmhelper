@@ -15,7 +15,7 @@ from msmhelper import linalg
 
 # ~~~ TESTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @pytest.mark.parametrize('matrix, eigenvaluesref, eigenvectorsref', [
-    (np.matrix([[1, 6, -1], [2, -1, -2], [1, 0, -1]]), np.array([3, 0, -4]),
+    (np.array([[1, 6, -1], [2, -1, -2], [1, 0, -1]]), np.array([3, 0, -4]),
      [np.array([-2, -3, 2]) / np.sqrt(17),
       np.array([-1, -6, 13]) / np.sqrt(206),
       np.array([-1, 2, 1]) / np.sqrt(6)])])
@@ -40,7 +40,7 @@ def test_left_eigenvectors(matrix, eigenvaluesref, eigenvectorsref):
 
 
 @pytest.mark.parametrize('matrix, eigenvaluesref, eigenvectorsref', [
-    (np.matrix([[1, 6, -1], [2, -1, -2], [1, 0, -1]]), np.array([3, 0, -4]),
+    (np.array([[1, 6, -1], [2, -1, -2], [1, 0, -1]]), np.array([3, 0, -4]),
      [np.array([8, 3, 2]) / np.sqrt(77),
       np.array([1, 0, 1]) / np.sqrt(2),
       np.array([-9, 8, 3]) / np.sqrt(154)])])
