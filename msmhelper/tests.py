@@ -84,7 +84,7 @@ def is_index_traj(trajs):
 
 
 @decorit.alias('is_tmat')
-def is_transition_matrix(matrix):
+def is_transition_matrix(matrix, atol=1e-8):
     """Check if transition matrix.
 
     Rows and cols of zeros (non-visited states) are accepted.
@@ -93,6 +93,8 @@ def is_transition_matrix(matrix):
     ----------
     matrix : ndarray
         Transition matrix.
+    atol : float, optional
+        Absolute tolerance.
 
     Returns
     -------
@@ -104,7 +106,6 @@ def is_transition_matrix(matrix):
         matrix.sum(axis=-1),
         matrix.sum(axis=0),
     )
-    atol = 1e-8  # tolerance
     return (
         is_quadratic(matrix) and
         np.logical_or(
@@ -114,7 +115,7 @@ def is_transition_matrix(matrix):
     )
 
 
-def is_ergodic(matrix):
+def is_ergodic(matrix, atol=1e-8):
     """Check if matrix is ergodic.
 
     Taken from:
@@ -125,6 +126,8 @@ def is_ergodic(matrix):
     ----------
     matrix : ndarray
         Transition matrix.
+    atol : float, optional
+        Absolute tolerance.
 
     Returns
     -------
@@ -134,20 +137,26 @@ def is_ergodic(matrix):
     if not is_transition_matrix(matrix):
         return False
 
+    matrix = np.atleast_2d(matrix)
+
     nstates = len(matrix)
     exponent = (nstates - 1)**2 + 1
 
     matrix = tools.matrix_power(matrix, exponent)
-    return (matrix > 0).all()
+    return (matrix > atol).all()
 
 
-def is_fuzzy_ergodic(matrix):
+def is_fuzzy_ergodic(matrix, atol=1e-8):
     """Check if matrix is ergodic, up to missing states or trap states.
+
+    If there are two or more disjoint
 
     Parameters
     ----------
     matrix : ndarray
         Transition matrix.
+    atol : float, optional
+        Absolute tolerance.
 
     Returns
     -------
@@ -160,7 +169,6 @@ def is_fuzzy_ergodic(matrix):
     matrix = np.atleast_2d(matrix)
     row_col_sum = matrix.sum(axis=-1) + matrix.sum(axis=0)
 
-    atol = 1e-8  # tolerance
     is_trap_state = np.logical_or(
         np.abs(row_col_sum - 2) <= atol,
         np.abs(row_col_sum) <= atol,
