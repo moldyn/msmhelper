@@ -67,7 +67,7 @@ def _estimate_markov_model(trajs, lagtime, nstates, perm=None):
         perm = np.arange(nstates)
 
     Tcount = _generate_transition_count_matrix(trajs, lagtime, nstates)
-    return _row_normalize_matrix(Tcount), perm
+    return row_normalize_matrix(Tcount), perm
 
 
 @numba.njit
@@ -84,14 +84,26 @@ def _generate_transition_count_matrix(trajs, lagtime, nstates):
 
 
 @numba.njit
-def _row_normalize_matrix(matrix):
-    """Row normalize the given 2d matrix."""
-    row_sum = np.sum(matrix, axis=1)
+def row_normalize_matrix(mat):
+    """Row normalize the given 2d matrix.
+
+    Parameters
+    ----------
+    mat : ndarray
+        Matrix to be row normalized.
+
+    Returns
+    -------
+    mat : ndarray
+        Normalized matrix.
+
+    """
+    row_sum = np.sum(mat, axis=1)
     if not row_sum.all():
         row_sum[row_sum == 0] = 1
 
     # due to missing np.newaxis row_sum[:, np.newaxis] becomes # noqa: SC100
-    return matrix / row_sum.reshape(matrix.shape[0], 1)
+    return mat / row_sum.reshape(mat.shape[0], 1)
 
 
 def _implied_timescales(tmat, lagtime):
@@ -173,13 +185,19 @@ def implied_timescales(trajs, lagtimes, reversible=False):
 
 
 @decorit.alias('peq')
-def equilibrium_population(tmat):
+def equilibrium_population(tmat, allow_non_ergodic=True):
     """Calculate equilibirum population.
+
+    If there are non ergodic states, their population is set to zero.
 
     Parameters
     ----------
     tmat : ndarray
         Quadratic transition matrix, needs to be ergodic.
+
+    allow_non_ergodic : bool
+        If True only the largest ergodic subset will be used. Otherwise it will
+        throw an error if not ergodic.
 
     Returns
     -------
@@ -188,8 +206,23 @@ def equilibrium_population(tmat):
 
     """
     tmat = np.asarray(tmat)
-    if not tests.is_ergodic(tmat):
-        raise TypeError('tmat needs to be ergodic transition matrix.')
+    is_ergodic = tests.is_ergodic(tmat)
+    if not allow_non_ergodic and not is_ergodic:
+        raise ValueError('tmat needs to be ergodic transition matrix.')
 
-    _, eigenvectors = linalg.left_eigenvectors(tmat)
-    return eigenvectors[0] / np.sum(eigenvectors[0])
+    # calculate ev for ergodic subset
+    if is_ergodic:
+        _, eigenvectors = linalg.left_eigenvectors(tmat)
+        eigenvectors = eigenvectors[0]
+    else:
+        mask = tests.ergodic_mask(tmat)
+        _, evs_mask = linalg.left_eigenvectors(
+            row_normalize_matrix(
+                tmat[np.ix_(mask, mask)],
+            )
+        )
+
+        eigenvectors = np.zeros(len(tmat), dtype=tmat.dtype)
+        eigenvectors[mask] = evs_mask[0]
+
+    return eigenvectors / np.sum(eigenvectors)

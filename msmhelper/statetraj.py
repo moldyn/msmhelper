@@ -482,7 +482,7 @@ class LumpedStateTraj(StateTraj):
             ones_a[:, np.newaxis] * peq_a[np.newaxis:, ] -
             m_twoprime @ d_a
         )
-        return mh.msm._row_normalize_matrix(msm_a)  # noqa: WPS437
+        return mh.msm.row_normalize_matrix(msm_a)
 
     def _parse_macrotrajs(self, macrotrajs):
         """Parse the macrotrajs."""
