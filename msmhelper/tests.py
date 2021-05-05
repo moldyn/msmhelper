@@ -183,3 +183,33 @@ def is_fuzzy_ergodic(matrix, atol=1e-8):
     matrix = tools.matrix_power(matrix, exponent)
 
     return np.logical_or(matrix > 0, is_trap_state).all()
+
+
+def ergodic_mask(matrix, atol=1e-8):
+    """Create mask for filtering ergodic submatrix.
+
+    Parameters
+    ----------
+    matrix : ndarray
+        Transition matrix.
+    atol : float, optional
+        Absolute tolerance.
+
+    Returns
+    -------
+    mask : bool ndarray
+
+    """
+    if not is_transition_matrix(matrix):
+        raise ValueError("Input matrix needs to be of kind transition matrix.")
+
+    matrix = np.atleast_2d(matrix)
+    nstates = len(matrix)
+    exponent = (nstates - 1)**2 + 1
+
+    matrix = tools.matrix_power(matrix, exponent) > atol
+    matrix = np.logical_and(matrix, matrix.T)
+
+    # find minimum row counts to identify largest connected block
+    maxstates = np.max(matrix.sum(axis=-1))
+    return matrix.sum(axis=-1) == maxstates

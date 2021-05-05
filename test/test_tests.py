@@ -117,3 +117,35 @@ def test_is_fuzzy_ergodic():
     # if is not a transition matrix
     mat[0, 0] = 0.8
     assert not tests.is_fuzzy_ergodic(mat)
+
+
+def test_ergodic_mask():
+    """Test ergodic_mask."""
+    # if ergodic
+    mat = np.array([
+        [0.9, 0.1, 0.0, 0.0, 0.0, 0.0],
+        [0.0, 0.8, 0.1, 0.1, 0.0, 0.0],
+        [0.0, 0.1, 0.8, 0.1, 0.0, 0.0],
+        [0.0, 0.0, 0.0, 0.8, 0.1, 0.1],
+        [0.0, 0.2, 0.0, 0.0, 0.8, 0.0],
+        [0.1, 0.0, 0.0, 0.0, 0.0, 0.9],
+    ])
+    mask = np.array([True, True, True, True, True, True])
+    np.testing.assert_array_equal(tests.ergodic_mask(mat), mask)
+
+    mat = np.array([
+        [1.0, 0.0, 0.0, 0.0, 0.0, 0.0],  # nevver left
+        [0.0, 0.8, 0.1, 0.1, 0.0, 0.0],
+        [0.0, 0.1, 0.8, 0.1, 0.0, 0.0],
+        [0.0, 0.0, 0.0, 1.0, 0.0, 0.0],  # nevver left
+        [0.0, 0.2, 0.0, 0.0, 0.8, 0.0],  # never entered
+        [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],  # never visited
+    ])
+    mask = np.array([False, True, True, False, False, False])
+    np.testing.assert_array_equal(tests.ergodic_mask(mat), mask)
+
+    # if is not a transition matrix
+    mat[0, 0] = 0.8
+
+    with pytest.raises(ValueError):
+        tests.ergodic_mask(mat)
