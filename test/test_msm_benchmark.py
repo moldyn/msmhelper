@@ -8,7 +8,6 @@ All rights reserved.
 """
 import numpy as np
 import pytest
-from pyemma import msm as emsm
 
 import msmhelper as mh
 
@@ -47,6 +46,8 @@ def test_msm_msmhelper_list(state_traj, lagtime, benchmark):
 
 def test_msm_pyemma(state_traj, lagtime, benchmark):
     """Benchmark pyemma without reversibility."""
+    from pyemma import msm as emsm
+
     state_traj = state_traj.state_trajs
     benchmark(
         emsm.estimate_markov_model,
@@ -58,6 +59,8 @@ def test_msm_pyemma(state_traj, lagtime, benchmark):
 
 def test_msm_pyemma_reversible(state_traj, lagtime, benchmark):
     """Benchmark pyemma with reversibility."""
+    from pyemma import msm as emsm
+
     state_traj = state_traj.state_trajs
     benchmark(
         emsm.estimate_markov_model,
