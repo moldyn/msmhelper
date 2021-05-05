@@ -73,6 +73,9 @@ def _compare_discretization(traj1, traj2, method):
     idx2 = [
         np.where(traj2_flat == state)[0] for state in range(traj2.nstates)
     ]
+    if not numba.config.DISABLE_JIT:  # pragma: no cover
+        idx1 = numba.typed.List(idx1)
+        idx2 = numba.typed.List(idx2)
 
     # intersect arrays and normalize to length of lists
     intersect = _intersect_array(idx1, idx2)
@@ -83,27 +86,50 @@ def _compare_discretization(traj1, traj2, method):
         [len(idx) for idx in idx2],
     )[:, np.newaxis]
 
+    if method == 'symmetric':
+        return _compare_trajs_symmetric(
+            traj1_flat, traj2_flat, intersect12, intersect21,
+        )
+    elif method == 'directed':
+        return _compare_trajs_directed(
+            traj1_flat, traj2_flat, intersect12, intersect21,
+        )
+    raise ValueError('This should never be reached')
+
+
+@numba.njit(parallel=True)
+def _compare_trajs_symmetric(traj1, traj2, intersect12, intersect21):
+    nframes = len(traj1)
     similarity = 0
-    for state1, state2 in zip(traj1_flat, traj2_flat):
-        # use optimal assignment direction
-        if method == 'symmetric':
-            similarity += np.max([
-                intersect12[state1, state2], intersect21[state2, state1],
-            ])
-        elif method == 'directed':
-            similarity += intersect21[state2, state1]
-
-    # normalize to be in range [0, 1]
-    return similarity / traj1.nframes
+    for idx in numba.prange(nframes):
+        state1, state2 = traj1[idx], traj2[idx]
+        similarity += max([
+            intersect12[state1, state2], intersect21[state2, state1],
+        ])
+    return similarity / nframes
 
 
+@numba.njit(parallel=True)
+def _compare_trajs_directed(traj1, traj2, intersect12, intersect21):
+    nframes = len(traj1)
+    similarity = 0
+    for idx in numba.prange(nframes):
+        state1, state2 = traj1[idx], traj2[idx]
+        similarity += intersect21[state2, state1]
+    return similarity / nframes
+
+
+@numba.njit(parallel=True)
 def _intersect_array(idx1, idx2):
     """Intersect two list of arrays."""
-    return np.frompyfunc(
-        _intersect,
-        2,  # no. of input arguments
-        1,  # no. if output arguments
-    ).outer(idx1, idx2).astype(np.float64)
+    len1, len2 = len(idx1), len(idx2)
+    intersect = np.empty((len1, len2), dtype=np.float64)
+
+    for i in range(len1):
+        for j in numba.prange(len2):
+            intersect[i, j] = _intersect(idx1[i], idx2[j])
+
+    return intersect
 
 
 @numba.njit

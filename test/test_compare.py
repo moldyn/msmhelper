@@ -10,6 +10,7 @@ import numpy as np
 import pytest
 
 from msmhelper import compare
+from msmhelper.statetraj import StateTraj
 
 
 @pytest.mark.parametrize('arr1, arr2, result', [
@@ -35,7 +36,6 @@ def test__intersect_array(arr1, arr2, result):
 
 
 @pytest.mark.parametrize('traj1, traj2, kwargs, result', [
-    ([0, 0, 0, 0, 0, 1, 1, 1], [0, 0, 1, 1, 1, 2, 2, 2], {}, 1),
     (
         [0, 0, 0, 0, 0, 1, 1, 1], [0, 0, 1, 1, 1, 2, 2, 2],
         {'method': 'directed'}, 1.0,
@@ -44,7 +44,6 @@ def test__intersect_array(arr1, arr2, result):
         [0, 0, 1, 1, 1, 2, 2, 2], [0, 0, 0, 0, 0, 1, 1, 1],
         {'method': 'directed'}, 0.7,
     ),
-    ([0, 0, 0, 0, 0, 1, 1, 1], [0, 0, 1, 1, 2, 2, 2, 2], {}, 0.90625),
     (
         [0, 0, 0, 0, 0, 1, 1, 1], [0, 0, 1, 1, 2, 2, 2, 2],
         {'method': 'symmetric'}, 0.90625,
@@ -60,7 +59,11 @@ def test__intersect_array(arr1, arr2, result):
 ])
 def test__compare_discretization(traj1, traj2, kwargs, result):
     """Test compare diescretitzation."""
-    assert compare.compare_discretization(traj1, traj2, **kwargs) == result
+    traj1, traj2 = StateTraj(traj1), StateTraj(traj2)
+    assert compare._compare_discretization(traj1, traj2, **kwargs) == result
+
+    with pytest.raises(ValueError):
+        compare._compare_discretization(traj1, traj2, method='NotAMethod')
 
 
 @pytest.mark.parametrize('traj1, traj2, kwargs, error', [
