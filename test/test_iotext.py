@@ -69,11 +69,11 @@ def test_open_limits(limits_file, wrong_limit):
 @pytest.mark.parametrize('traj_file, kwargs', [
     (os.path.join(HERE, 'traj1.dat'), {}),
     (os.path.join(HERE, 'traj1.dat'), {'dtype': np.int32}),
-    (os.path.join(HERE, 'traj1.dat'), {'dtype': np.float}),
+    (os.path.join(HERE, 'traj1.dat'), {'dtype': np.float64}),
     (os.path.join(HERE, 'data.dat'), {'no_traj': True})])
 def test_openmicrostates(limits_file, traj_file, kwargs):
     """Test that the trajectory is split correctly."""
-    if 'dtype' in kwargs and kwargs['dtype'] == np.float:
+    if 'dtype' in kwargs and kwargs['dtype'] == np.float64:
         with pytest.raises(TypeError):
             msmhelper.openmicrostates(limits_file=limits_file,
                                       file_name=traj_file, **kwargs)

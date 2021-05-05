@@ -117,7 +117,7 @@ def test_format_state_traj(traj):
 
     # as ndarray of floats
     with pytest.raises(TypeError):
-        tools.format_state_traj(traj.astype(np.float))
+        tools.format_state_traj(traj.astype(np.float64))
 
     # as list of ndarrays
     assert (tools.format_state_traj([traj])[0] == traj).all()
