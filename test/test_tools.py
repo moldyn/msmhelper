@@ -46,7 +46,7 @@ def test_shift_data(data, expected, val_old, val_new):
         assert (row == expected[i]).all()
 
     with pytest.raises(TypeError):
-        msmhelper.shift_data(data, val_old, val_new, dtype=np.float)
+        msmhelper.shift_data(data, val_old, val_new, dtype=np.float64)
 
 
 @pytest.mark.parametrize('data, expected, perm_expected', [
