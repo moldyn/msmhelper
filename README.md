@@ -7,26 +7,32 @@
 
 # msmhelper
 
-This is a package with helper functions to work with state trajectories. Hence, it is mainly used for Markov State Models.
+This is a package with helper functions to work with discrete state trajectories and Markov state models. In contrast to `pyemma` and `msmbuilder` it features a very limited set of functionality. But using `numba`, it offers a solid performance and having many raise condition it enforces the correct usage.
 
 # Usage
-This package is mainly based on numpy and numba.
+This package is mainly based on `numpy` and `numba` for all computational complex tasks.
 ## Usage
 ```python
-import msmhelper
+import msmhelper as mh
 ...
 ```
 ## Known Bugs
 - Python 3.9 is not supported, because Pyemma and Numba do not support it yet
 
 ## Requirements:
-- Python 3.6-3.8
+- Python 3.6-3.9
 - Numba 0.49.0+
 - Numpy 1.16.2+
-- Pyemma 2.5.7+
 
 # Changelog:
 - tba:
+  - Remove `pyemma` to ensure better pip support
+  - Remove `build_MSM` use instead `estimate_markov_model`
+  - Add new function `ergodic_mask`
+  - Parallelize and refactor `compare_discretization`
+  - Fix deprecated warnings of `numpy` and `pytest`
+  - replaced decorators with `decorit` package
+  - Add gh-pages
 - v0.5:
   - Add `LumpedStateTraj` class which allows optimal projection of microstate dynamics to macrostates, method taken from Szabo and Hummer
   - Add estimation of MD waiting times
