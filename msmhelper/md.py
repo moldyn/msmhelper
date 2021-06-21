@@ -273,10 +273,12 @@ def estimate_msm_waiting_times(
 
 
 @numba.njit
-def _propagate_MCMC_step(cummat, idx_from, rand):
+def _propagate_MCMC_step(cummat, idx_from):
     """Propagate a single step Markov chain Monte Carlo."""
+    rand = random.random()
     cummat_perm, state_perm = cummat
     cummat_perm, state_perm = cummat_perm[idx_from], state_perm[idx_from]
+
     for idx in range(len(cummat_perm)):
         # strict less to ensure that rand=0 does not jump along unconnected
         # states with Tij=0.
@@ -300,14 +302,12 @@ def _estimate_msm_waiting_times_single(
     cummat, state_start, states_start, states_final, steps,
 ):
     wts = []
-    rndg = random.Random()
 
     idx_start = 0
     propagates_forwards = False
     state = state_start
     for idx in range(steps):
-        rand = rndg.random()
-        state = _propagate_MCMC_step(cummat=cummat, idx_from=state, rand=rand)
+        state = _propagate_MCMC_step(cummat=cummat, idx_from=state)
 
         if not propagates_forwards and state in states_start:
             propagates_forwards = True
@@ -375,14 +375,13 @@ def propagate_MCMC(
 
 @numba.njit
 def _propagate_MCMC(cummat, start, steps):
-    rndg = random.Random()
     mcmc = np.empty(steps, dtype=np.int32)
 
     state = start
     mcmc[0] = state
     for idx in range(steps - 1):
         state = _propagate_MCMC_step(
-            cummat=cummat, idx_from=state, rand=rndg.random(),
+            cummat=cummat, idx_from=state, rand=random.random(),
         )
         mcmc[idx + 1] = state
 
