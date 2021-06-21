@@ -257,17 +257,20 @@ def estimate_msm_waiting_times(
     cummat = _get_cummat(trajs=trajs, lagtime=lagtime)
 
     # do not convert for pytest coverage
+    start = np.random.choice(final)
     if numba.config.DISABLE_JIT:
         return _estimate_msm_waiting_times(
             cummat=cummat,
-            start=idxs_start,
-            final=idxs_final,
+            start=start,
+            states_from=idxs_start,
+            states_to=idxs_final,
             steps=steps,
         )
     return _estimate_msm_waiting_times(  # pragma: no cover
         cummat=cummat,
-        start=numba.typed.List(idxs_start),
-        final=numba.typed.List(idxs_final),
+        start=start,
+        states_from=numba.typed.List(idxs_start),
+        states_to=numba.typed.List(idxs_final),
         steps=steps,
     )
 
@@ -285,36 +288,31 @@ def _propagate_MCMC_step(cummat, idx_from):
         if rand < cummat_perm[idx]:
             return state_perm[idx]
     # this should never be reached, but needed for numba to ensure int return
-    return len(cummat) - 1
+    return len(cummat_perm) - 1
 
 
 @numba.njit
-def _estimate_msm_waiting_times(cummat, start, final, steps):
-    """Run MCMC runs in parallel."""
-    idx_start = random.choice(final)
-    return _estimate_msm_waiting_times_single(
-        cummat, idx_start, start, final, steps,
-    )
-
-
-@numba.njit
-def _estimate_msm_waiting_times_single(
-    cummat, state_start, states_start, states_final, steps,
+def _estimate_msm_waiting_times(
+    cummat, start, states_from, states_to, steps,
 ):
-    wts = []
+    wts = {}
 
     idx_start = 0
     propagates_forwards = False
-    state = state_start
+    state = start
     for idx in range(steps):
         state = _propagate_MCMC_step(cummat=cummat, idx_from=state)
 
-        if not propagates_forwards and state in states_start:
+        if not propagates_forwards and state in states_from:
             propagates_forwards = True
             idx_start = idx
-        elif propagates_forwards and state in states_final:
+        elif propagates_forwards and state in states_to:
             propagates_forwards = False
-            wts.append(idx - idx_start)
+            wt = idx - idx_start
+            if wt in wts:
+                wts[wt] += 1
+            else:
+                wts[wt] = 1
 
     return wts
 
