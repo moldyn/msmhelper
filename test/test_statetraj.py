@@ -276,3 +276,23 @@ def test_LumpedStateTraj_estimate_markov_model(macro_traj):
         microtraj[-1] = np.max(microtraj) + 1
         trap_traj = LumpedStateTraj(macrotraj, microtraj)
         trap_traj.estimate_markov_model(tlag)
+
+
+@pytest.mark.parametrize('traj, state, idx, error', [
+    ([1, 2, 4], 1, 0, None),
+    ([1, 2, 4], 0, None, ValueError),
+    ([1, 8, 3], 8, 2, None),
+    ([1, 8, 3, 1], 3, 1, None),
+])
+def test_state_to_idx(traj, state, idx, error):
+    """Check state to idx conversion."""
+    statetraj = StateTraj(traj)
+    for straj in (
+        statetraj,
+        LumpedStateTraj(statetraj, np.arange(statetraj.nframes)),
+    ):
+        if error is not None:
+            with pytest.raises(error):
+                straj.state_to_idx(state)
+        else:
+            assert straj.state_to_idx(state) == idx

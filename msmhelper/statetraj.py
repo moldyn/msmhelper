@@ -240,6 +240,29 @@ class StateTraj:  # noqa: WPS214
         """
         return mh.estimate_markov_model(self, lagtime)
 
+    def state_to_idx(self, state):
+        """Get idx corresponding to state.
+
+        Parameters
+        ----------
+        state : int
+            State to get idx of.
+
+        Returns
+        -------
+        idx : int
+            Idx corresponding to state.
+
+        """
+        idx = np.where(self.states == state)[0]
+        if not idx.size:
+            raise ValueError(
+                'State "{state}" does not exists in trajectory.'.format(
+                    state=state,
+                ),
+            )
+        return idx[0]
+
 
 class LumpedStateTraj(StateTraj):
     """Class for handling lumped discrete state trajectories."""
