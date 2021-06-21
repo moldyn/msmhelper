@@ -380,9 +380,7 @@ def _propagate_MCMC(cummat, start, steps):
     state = start
     mcmc[0] = state
     for idx in range(steps - 1):
-        state = _propagate_MCMC_step(
-            cummat=cummat, idx_from=state, rand=random.random(),
-        )
+        state = _propagate_MCMC_step(cummat=cummat, idx_from=state)
         mcmc[idx + 1] = state
 
     return mcmc
