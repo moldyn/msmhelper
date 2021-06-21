@@ -6,6 +6,7 @@ Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
 
 """
+import random
 from collections import defaultdict
 
 import decorit
@@ -188,3 +189,218 @@ def _estimate_paths_singletraj(traj, states_start, states_final):
 
         paths.append((path, idx_end - idx_start))
     return paths
+
+
+@decorit.alias('estimate_msm_wt')
+def estimate_msm_waiting_times(
+    *,
+    trajs,
+    lagtime,
+    start,
+    final,
+    steps,
+):
+    """Estimates waiting times between stated states.
+
+    The stated states (from/to) will be treated as a basin. The function
+    calculates all transitions from first entering the start-basin until first
+    reaching the final-basin.
+
+    Parameters
+    ----------
+    trajs : statetraj or list or ndarray or list of ndarray
+        State trajectory/trajectories. The states should start from zero and
+        need to be integers.
+
+    lagtime : int
+        Lag time for estimating the markov model given in [frames].
+
+    start : int or list of
+        States to start counting.
+
+    final : int or list of
+        States to start counting.
+
+    steps : int
+        Number of MCMC propagation steps of MCMC run.
+
+    Returns
+    -------
+    wt : ndarray
+        List of waiting times, given in frames.
+
+    """
+    # check correct input format
+    trajs = StateTraj(trajs)
+
+    states_start, states_final = np.unique(start), np.unique(final)
+
+    if intersect(states_start, states_final):
+        raise ValueError('States `start` and `final` do overlap.')
+
+    # check that all states exist in trajectory
+    for states in (states_start, states_final):
+        if intersect(states, trajs.states) != len(states):
+            raise ValueError(
+                'Selected states does not exist in state trajectoty.',
+            )
+
+    # convert states to idx
+    idxs_start = np.array(
+        [trajs.state_to_idx(state) for state in states_start],
+    )
+    idxs_final = np.array(
+        [trajs.state_to_idx(state) for state in states_final],
+    )
+
+    # estimate cummulative transition matrix
+    cummat = _get_cummat(trajs=trajs, lagtime=lagtime)
+
+    # do not convert for pytest coverage
+    if numba.config.DISABLE_JIT:
+        return _estimate_msm_waiting_times(
+            cummat=cummat,
+            start=idxs_start,
+            final=idxs_final,
+            steps=steps,
+        )
+    return _estimate_msm_waiting_times(  # pragma: no cover
+        cummat=cummat,
+        start=numba.typed.List(idxs_start),
+        final=numba.typed.List(idxs_final),
+        steps=steps,
+    )
+
+
+@numba.njit
+def _propagate_MCMC_step(cummat, idx_from, rand):
+    """Propagate a single step Markov chain Monte Carlo."""
+    cummat_perm, state_perm = cummat
+    cummat_perm, state_perm = cummat_perm[idx_from], state_perm[idx_from]
+    for idx in range(len(cummat_perm)):
+        # strict less to ensure that rand=0 does not jump along unconnected
+        # states with Tij=0.
+        if rand < cummat_perm[idx]:
+            return state_perm[idx]
+    # this should never be reached, but needed for numba to ensure int return
+    return len(cummat) - 1
+
+
+@numba.njit
+def _estimate_msm_waiting_times(cummat, start, final, steps):
+    """Run MCMC runs in parallel."""
+    idx_start = random.choice(final)
+    return _estimate_msm_waiting_times_single(
+        cummat, idx_start, start, final, steps,
+    )
+
+
+@numba.njit
+def _estimate_msm_waiting_times_single(
+    cummat, state_start, states_start, states_final, steps,
+):
+    wts = []
+    rndg = random.Random()
+
+    idx_start = 0
+    propagates_forwards = False
+    state = state_start
+    for idx in range(steps):
+        rand = rndg.random()
+        state = _propagate_MCMC_step(cummat=cummat, idx_from=state, rand=rand)
+
+        if not propagates_forwards and state in states_start:
+            propagates_forwards = True
+            idx_start = idx
+        elif propagates_forwards and state in states_final:
+            propagates_forwards = False
+            wts.append(idx - idx_start)
+
+    return wts
+
+
+def propagate_MCMC(
+    trajs,
+    lagtime,
+    steps,
+    start=-1,
+):
+    """Propagate MCMC trajectory.
+
+    Parameters
+    ----------
+    trajs : statetraj or list or ndarray or list of ndarray
+        State trajectory/trajectories. The states should start from zero and
+        need to be integers.
+
+    lagtime : int
+        Lag time for estimating the markov model given in [frames].
+
+    steps : int
+        Number of MCMC propagation steps.
+
+    start : int or list of, optional
+        State to start propagating. Default (-1) is random state.
+
+    Returns
+    -------
+    mcmc : ndarray
+        MCMC trajecory.
+
+    """
+    # check correct input format
+    trajs = StateTraj(trajs)
+
+    # check that all states exist in trajectory
+    if start == -1:
+        start = np.random.choice(trajs.states)
+    elif start not in trajs.states:
+        raise ValueError(
+            'Selected starting state does not exist in state trajectoty.',
+        )
+
+    # convert states to idx
+    idx_start = trajs.state_to_idx(start)
+
+    # estimate permuted cummulative transition matrix
+    cummat = _get_cummat(trajs=trajs, lagtime=lagtime)
+
+    # do not convert for pytest coverage
+    return _propagate_MCMC(  # pragma: no cover
+        cummat=cummat,
+        start=idx_start,
+        steps=steps,
+    )
+
+
+@numba.njit
+def _propagate_MCMC(cummat, start, steps):
+    rndg = random.Random()
+    mcmc = np.empty(steps, dtype=np.int32)
+
+    state = start
+    mcmc[0] = state
+    for idx in range(steps - 1):
+        state = _propagate_MCMC_step(
+            cummat=cummat, idx_from=state, rand=rndg.random(),
+        )
+        mcmc[idx + 1] = state
+
+    return mcmc
+
+
+def _get_cummat(trajs, lagtime):
+    # estimate cummulative transition matrix
+    msm, _ = StateTraj(trajs).estimate_markov_model(lagtime)
+
+    cummat_perm = np.empty_like(msm)
+    state_perm = np.empty_like(msm, dtype=np.int64)
+
+    for idx, row in enumerate(msm):
+        idx_sort = np.argsort(row)[::-1]
+
+        cummat_perm[idx] = np.cumsum(row[idx_sort])
+        state_perm[idx] = idx_sort
+
+    cummat_perm[:, -1] = 1  # enforce that probability sums up to 1
+    return cummat_perm, state_perm
