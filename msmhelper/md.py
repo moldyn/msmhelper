@@ -199,6 +199,7 @@ def estimate_msm_waiting_times(
     start,
     final,
     steps,
+    return_list=False,
 ):
     """Estimates waiting times between stated states.
 
@@ -223,6 +224,9 @@ def estimate_msm_waiting_times(
 
     steps : int
         Number of MCMC propagation steps of MCMC run.
+
+    return_list : bool
+        If true a list of all events is returned, else a dictionary is returned.
 
     Returns
     -------
@@ -252,28 +256,29 @@ def estimate_msm_waiting_times(
     idxs_final = np.array(
         [trajs.state_to_idx(state) for state in states_final],
     )
+    start = np.random.choice(idxs_final)
+
+    # do not convert for pytest coverage
+    if not numba.config.DISABLE_JIT:
+        idxs_start = numba.typed.List(idxs_start)
+        idxs_final = numba.typed.List(idxs_final)
 
     # estimate cummulative transition matrix
     cummat = _get_cummat(trajs=trajs, lagtime=lagtime)
 
-    # do not convert for pytest coverage
-    start = np.random.choice(final)
-    if numba.config.DISABLE_JIT:
-        return _estimate_msm_waiting_times(
-            cummat=cummat,
-            start=start,
-            states_from=idxs_start,
-            states_to=idxs_final,
-            steps=steps,
-        )
-    return _estimate_msm_waiting_times(  # pragma: no cover
+    wts = _estimate_msm_waiting_times(
         cummat=cummat,
         start=start,
-        states_from=numba.typed.List(idxs_start),
-        states_to=numba.typed.List(idxs_final),
+        states_from=idxs_start,
+        states_to=idxs_final,
         steps=steps,
     )
-
+    # multiply wts by lagtime
+    if return_list:
+        return np.repeat(
+            list(wts.keys()), list(wts.values())
+        ) * lagtime
+    return {wt * lagtime: count for wt, count in wts.items()}
 
 @numba.njit
 def _propagate_MCMC_step(cummat, idx_from):

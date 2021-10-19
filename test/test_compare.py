@@ -8,6 +8,7 @@ All rights reserved.
 """
 import numpy as np
 import pytest
+from numba.typed import List
 
 from msmhelper import compare
 from msmhelper.statetraj import StateTraj
@@ -20,7 +21,7 @@ from msmhelper.statetraj import StateTraj
 ])
 def test__intersect(arr1, arr2, result):
     """Test intersect method."""
-    assert compare._intersect(arr1, arr2) == result
+    assert compare._intersect(List(arr1), List(arr2)) == result
 
 
 @pytest.mark.parametrize('arr1, arr2, result', [(
@@ -31,7 +32,7 @@ def test__intersect(arr1, arr2, result):
 def test__intersect_array(arr1, arr2, result):
     """Test intersect method."""
     np.testing.assert_array_almost_equal(
-        compare._intersect_array(arr1, arr2), result,
+        compare._intersect_array(List(arr1), List(arr2)), result,
     )
 
 
