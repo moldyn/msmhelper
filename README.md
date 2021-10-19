@@ -16,9 +16,6 @@ This package is mainly based on `numpy` and `numba` for all computational comple
 import msmhelper as mh
 ...
 ```
-## Known Bugs
-- Python 3.9 is not supported, because Pyemma and Numba do not support it yet
-
 ## Requirements:
 - Python 3.6-3.9
 - Numba 0.49.0+
@@ -26,6 +23,7 @@ import msmhelper as mh
 
 # Changelog:
 - tba:
+  - Added `beartype` dependency for adding dynamic type checking
   - Remove `pyemma` to ensure better pip support
   - Remove `build_MSM` use instead `estimate_markov_model`
   - Add new function `ergodic_mask`
@@ -33,6 +31,7 @@ import msmhelper as mh
   - Fix deprecated warnings of `numpy` and `pytest`
   - replaced decorators with `decorit` package
   - Add gh-pages
+  - Add module `md` with functions for estimating timescales and pathways
 - v0.5:
   - Add `LumpedStateTraj` class which allows optimal projection of microstate dynamics to macrostates, method taken from Szabo and Hummer
   - Add estimation of MD waiting times
