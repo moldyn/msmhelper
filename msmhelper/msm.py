@@ -14,7 +14,7 @@ import numba
 import numpy as np
 
 from msmhelper import linalg, tests
-from msmhelper.statetraj import StateTraj, LumpedStateTraj
+from msmhelper.statetraj import LumpedStateTraj, StateTraj
 
 
 def estimate_markov_model(trajs, lagtime):
@@ -219,7 +219,7 @@ def equilibrium_population(tmat, allow_non_ergodic=True):
         _, evs_mask = linalg.left_eigenvectors(
             row_normalize_matrix(
                 tmat[np.ix_(mask, mask)],
-            )
+            ),
         )
 
         eigenvectors = np.zeros(len(tmat), dtype=tmat.dtype)

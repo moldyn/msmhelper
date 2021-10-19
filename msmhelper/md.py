@@ -226,7 +226,8 @@ def estimate_msm_waiting_times(
         Number of MCMC propagation steps of MCMC run.
 
     return_list : bool
-        If true a list of all events is returned, else a dictionary is returned.
+        If true a list of all events is returned, else a dictionary is
+        returned.
 
     Returns
     -------
@@ -276,21 +277,22 @@ def estimate_msm_waiting_times(
     # multiply wts by lagtime
     if return_list:
         return np.repeat(
-            list(wts.keys()), list(wts.values())
+            list(wts.keys()), list(wts.values()),
         ) * lagtime
     return {wt * lagtime: count for wt, count in wts.items()}
+
 
 @numba.njit
 def _propagate_MCMC_step(cummat, idx_from):
     """Propagate a single step Markov chain Monte Carlo."""
-    rand = random.random()
+    rand = random.random()  # noqa: S311
     cummat_perm, state_perm = cummat
     cummat_perm, state_perm = cummat_perm[idx_from], state_perm[idx_from]
 
-    for idx in range(len(cummat_perm)):
+    for idx, cummat_idx in enumerate(cummat_perm):
         # strict less to ensure that rand=0 does not jump along unconnected
         # states with Tij=0.
-        if rand < cummat_perm[idx]:
+        if rand < cummat_idx:
             return state_perm[idx]
     # this should never be reached, but needed for numba to ensure int return
     return len(cummat_perm) - 1
