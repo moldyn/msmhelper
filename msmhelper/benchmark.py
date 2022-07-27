@@ -11,7 +11,7 @@ import numba
 import numpy as np
 
 from msmhelper import linalg, msm, tests, tools
-from msmhelper.statetraj import StateTraj
+from msmhelper.statetraj import LumpedStateTraj, StateTraj
 
 
 @decorit.alias('ck_test')
@@ -116,9 +116,15 @@ def _chapman_kolmogorov_test_md(trajs, tmin, tmax, steps=30):
     is_ergodic = np.empty(ntimes, dtype=bool)
     is_fuzzy_ergodic = np.empty(ntimes, dtype=bool)
 
+    # enforce using non-lumped trajectory
+    if isinstance(trajs, LumpedStateTraj):
+        macrotrajs = StateTraj(trajs.state_trajs)
+    else:
+        macrotrajs = trajs
+
     # estimate Markov model
     for idx, time in enumerate(times):
-        tmat, _ = trajs.estimate_markov_model(lagtime=time)
+        tmat, _ = macrotrajs.estimate_markov_model(lagtime=time)
         ckeq[:, idx] = np.diagonal(tmat)
         is_ergodic[idx] = tests.is_ergodic(tmat)
         is_fuzzy_ergodic[idx] = tests.is_fuzzy_ergodic(tmat)
