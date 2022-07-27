@@ -22,7 +22,7 @@ import __main__ as main
 from msmhelper.statetraj import StateTraj
 
 
-def shift_data(array, val_old, val_new, dtype=np.int32):
+def shift_data(array, val_old, val_new, dtype=np.int64):
     """Shift integer array (data) from old to new values.
 
     > **CAUTION:**
