@@ -178,7 +178,7 @@ def implied_timescales(trajs, lagtimes, reversible=False):
     impl_timescales = np.zeros((len(lagtimes), trajs.nstates - 1))
 
     for idx, lagtime in enumerate(lagtimes):
-        transmat, _ = estimate_markov_model(trajs, lagtime)
+        transmat, _ = trajs.estimate_markov_model(lagtime)
         impl_timescales[idx] = _implied_timescales(transmat, lagtime)
 
     return impl_timescales
