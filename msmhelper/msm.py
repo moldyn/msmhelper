@@ -132,7 +132,7 @@ def _implied_timescales(tmat, lagtime):
     eigenvalues = linalg.left_eigenvalues(tmat)
     # for negative eigenvalues no timescale is defined
     eigenvalues[eigenvalues < 0] = np.nan
-    return - lagtime / np.log(eigenvalues[1:])
+    return np.ma.divide(- lagtime, np.log(eigenvalues[1:]))
 
 
 def implied_timescales(trajs, lagtimes, reversible=False):
