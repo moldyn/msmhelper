@@ -1,7 +1,5 @@
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/moldyn/msmhelper/Python%20package)
-![GitHub All Releases](https://img.shields.io/github/downloads/moldyn/msmhelper/total)
 ![GitHub last commit](https://img.shields.io/github/last-commit/moldyn/msmhelper)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/moldyn/msmhelper)
 ![LGTM Grade](https://img.shields.io/lgtm/grade/python/github/moldyn/msmhelper?label=code%20quality&logo=lgtm)
 ![wemake-python-styleguide](https://img.shields.io/badge/style-wemake-000000.svg)
 
@@ -21,36 +19,10 @@ import msmhelper as mh
 - Numba 0.49.0+
 - Numpy 1.16.2+
 
-# Changelog:
-- tba:
-  - Added `beartype` dependency for adding dynamic type checking
-  - Remove `pyemma` to ensure better pip support
-  - Remove `build_MSM` use instead `estimate_markov_model`
-  - Add new function `ergodic_mask`
-  - Parallelize and refactor `compare_discretization`
-  - Fix deprecated warnings of `numpy` and `pytest`
-  - replaced decorators with `decorit` package
-  - Add gh-pages
-  - Add module `md` with functions for estimating timescales and pathways
-- v0.5:
-  - Add `LumpedStateTraj` class which allows optimal projection of microstate dynamics to macrostates, method taken from Szabo and Hummer
-  - Add estimation of MD waiting times
-  - Minor improvements and tweaks.
-- v0.4:
-  - Add `compare` module to compare two different state discretizations
-  - Upgrade pydoc to `0.9.1` with search option and change css style.
-- v0.3:
-  - Add `StateTraj` class to speed up calcualations by a factor of 50.
-  - Refactor code to use/be compatible with `StateTraj` class
-  - Add `benchmark` module with an numba optimized version of the Chapman
-    Kolmogorov test.
-- v0.2:
-  - parts of msm module are rewritten in numba
-- v0.1:
-  - initial release
-
 # Roadmap:
-- write roadmap
+- Add unit tests for all functions
+- Add examples usage scripts
+- Create typing module
 
 # Development
 ## Additional Requirements:
