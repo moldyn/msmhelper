@@ -130,12 +130,12 @@ def test_swapcols(data):
     # for same indices
     data_swap = tools.swapcols(data, (0, 1), (0, 1))
     for row in range(len(data)):
-        assert(data[row] == data_swap[row]).all()
+        assert (data[row] == data_swap[row]).all()
 
     data_swap = tools.swapcols(data, (0, 1), (1, 0))
     for row in range(len(data)):
-        assert(data[row][0] == data_swap[row][1]).all()
-        assert(data[row][1] == data_swap[row][0]).all()
+        assert (data[row][0] == data_swap[row][1]).all()
+        assert (data[row][1] == data_swap[row][0]).all()
 
     # wrong shape
     with pytest.raises(ValueError):
@@ -193,4 +193,4 @@ def test_matrix_power(mat, power):
 ])
 def test_find_first(array, val, pos):
     """Test find_first."""
-    assert(tools.find_first(val, array) == pos)
+    assert (tools.find_first(val, array) == pos)
