@@ -28,7 +28,8 @@ def limits_file():
     (os.path.join(HERE, 'data.dat'), {'usecols': (1, 0)}),
     (os.path.join(HERE, 'traj1.dat'), {}),
     (os.path.join(HERE, 'traj1.dat'), {'comment': ['#']}),
-    (os.path.join(HERE, 'traj2.dat'), {'comment': ['#', '@']})])
+    (os.path.join(HERE, 'traj2.dat'), {'comment': ['#', '@']}),
+])
 def test_opentxt(traj_file, kwargs):
     """Test that a file is opened correctly."""
     expected = np.array([[1, 2], [1, 3], [1, 2], [1, 1], [1, 2], [2, 1],
@@ -46,7 +47,8 @@ def test_opentxt(traj_file, kwargs):
 
 @pytest.mark.parametrize('traj_file, header', [
     (os.path.join(HERE, 'traj1.dat'), None),
-    (os.path.join(HERE, 'traj1.dat'), 'Test header comment.')])
+    (os.path.join(HERE, 'traj1.dat'), 'Test header comment.'),
+])
 def test_savetxt(traj_file, header, tmpdir):
     """Test that a file is opened correctly."""
     expected = [1, 1, 1, 1, 1, 2, 2, 1, 2, 3, 2, 2, 3]
@@ -70,38 +72,56 @@ def test_open_limits(limits_file, wrong_limit):
     (os.path.join(HERE, 'traj1.dat'), {}),
     (os.path.join(HERE, 'traj1.dat'), {'dtype': np.int32}),
     (os.path.join(HERE, 'traj1.dat'), {'dtype': np.float64}),
-    (os.path.join(HERE, 'data.dat'), {'no_traj': True})])
+    (os.path.join(HERE, 'data.dat'), {'no_traj': True}),
+])
 def test_openmicrostates(limits_file, traj_file, kwargs):
     """Test that the trajectory is split correctly."""
     if 'dtype' in kwargs and kwargs['dtype'] == np.float64:
         with pytest.raises(TypeError):
-            iotext.openmicrostates(limits_file=limits_file,
-                                      file_name=traj_file, **kwargs)
+            iotext.openmicrostates(
+                limits_file=limits_file,
+                file_name=traj_file,
+                **kwargs,
+            )
     elif 'no_traj' in kwargs:
         with pytest.raises(iotext.FileError):
-            iotext.openmicrostates(limits_file=limits_file,
-                                      file_name=traj_file)
+            iotext.openmicrostates(
+                limits_file=limits_file,
+                file_name=traj_file,
+            )
     else:
         # check with limits file
         expected = [[1, 1, 1, 1, 1], [2, 2, 1, 2, 3], [2, 2, 3]]
-        trajs = iotext.openmicrostates(limits_file=limits_file,
-                                          file_name=traj_file, **kwargs)
+        trajs = iotext.openmicrostates(
+            limits_file=limits_file,
+            file_name=traj_file,
+            **kwargs,
+        )
         for i, traj in enumerate(trajs):
             assert (traj == expected[i]).all()
 
 
 @pytest.mark.parametrize('traj_file, expected', [
-    (os.path.join(HERE, 'traj1.dat'),
-     [[1, 1, 1, 1, 1], [2, 2, 1, 2, 3], [2, 2, 3]]),
-    (os.path.join(HERE, 'data.dat'),
-     [[[1, 2], [1, 3], [1, 2], [1, 1], [1, 2]],
-      [[2, 1], [2, 5], [1, 4], [2, 3], [3, 2]],
-      [[2, 1], [2, 2], [3, 3]]])])
+    (
+        os.path.join(HERE, 'traj1.dat'),
+        [[1, 1, 1, 1, 1], [2, 2, 1, 2, 3], [2, 2, 3]],
+    ),
+    (
+        os.path.join(HERE, 'data.dat'),
+        [
+            [[1, 2], [1, 3], [1, 2], [1, 1], [1, 2]],
+            [[2, 1], [2, 5], [1, 4], [2, 3], [3, 2]],
+            [[2, 1], [2, 2], [3, 3]],
+        ],
+    ),
+])
 def test_opentxt_limits(limits_file, traj_file, expected):
     """Test that the trajectory is split correctly."""
     # check with limits file
-    trajs = iotext.opentxt_limits(limits_file=limits_file,
-                                     file_name=traj_file)
+    trajs = iotext.opentxt_limits(
+        limits_file=limits_file,
+        file_name=traj_file,
+    )
     for i, traj in enumerate(trajs):
         assert (traj == expected[i]).all()
 

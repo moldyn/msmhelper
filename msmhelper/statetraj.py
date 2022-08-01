@@ -124,7 +124,7 @@ class StateTraj:  # noqa: WPS214
 
         # shift to indices
         if not np.array_equal(self._states, np.arange(self.nstates)):
-            self._trajs, self._states = mh.tools.rename_by_index(  # noqa: WPS414
+            self._trajs, self._states = mh.tools.rename_by_index(
                 self._trajs,
                 return_permutation=True,
             )
@@ -536,7 +536,7 @@ class LumpedStateTraj(StateTraj):
 
         # shift to indices
         if not np.array_equal(self._states, np.arange(self.nmicrostates)):
-            self._trajs, self._states = mh.tools.rename_by_index(  # noqa: WPS414
+            self._trajs, self._states = mh.tools.rename_by_index(
                 self._trajs,
                 return_permutation=True,
             )
