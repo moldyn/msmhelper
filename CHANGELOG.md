@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and [Element](https://github.com/vector-im/element-android)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
 [//]: # (Available sections in changelog)
 [//]: # (### API changes warning ⚠️:)
 [//]: # (### Added Features and Improvements 🙌:)
@@ -13,15 +14,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
-- Added `beartype` dependency for adding dynamic type checking
+
+
+## [0.6.0] - 2022-08-01
+### API changes warning ⚠️:
 - Remove `pyemma` to ensure better pip support
 - Remove `build_MSM` use instead `estimate_markov_model`
-- Add new function `ergodic_mask`
-- Parallelize and refactor `compare_discretization`
-- Fix deprecated warnings of `numpy` and `pytest`
-- replaced decorators with `decorit` package
-- Add gh-pages
+
+### Added Features and Improvements 🙌:
+- Upload test coverage to Codecov
+- Add extra-requirements to pip installation
+- Added Changelog file :tada:
+- Add new parameter `allow_non_ergodic` to `mh.equilibrium_population`
+- Upload docs to gh-pages :rocket:
 - Add module `md` with functions for estimating timescales and pathways
+
+### Other changes:
+- Added `beartype` dependency for adding dynamic type checking
+- Parallelize and refactor `compare_discretization`
+- replaced decorators with `decorit` package
+
+### Bugfix 🐛:
+- Fix source code rendering in documentation
+- Fix deprecated warnings of `numpy` and `pytest`
+- Fix most LGTM warnings
+- Many more minor fixes
+- Add parameter `atol` to tests functions to make them more robust
 
 
 ## [0.5.0] - 2021-07-22
@@ -73,7 +91,8 @@ Chapman-Kolmogorov test
 - Initial release
 
 
-[Unreleased]: https://github.com/moldyn/msmhelper/compare/v0.5.0...main
+[Unreleased]: https://github.com/moldyn/msmhelper/compare/v0.6.0...main
+[0.6.0]: https://github.com/moldyn/msmhelper/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/moldyn/msmhelper/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/moldyn/msmhelper/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/moldyn/msmhelper/compare/v0.2.0...v0.3.0
