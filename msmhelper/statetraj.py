@@ -9,7 +9,6 @@ All rights reserved.
 import numpy as np
 
 import msmhelper as mh
-from msmhelper import tests, tools
 
 
 class StateTraj:  # noqa: WPS214
@@ -102,7 +101,7 @@ class StateTraj:  # noqa: WPS214
         """
         if np.array_equal(self.states, np.arange(self.nstates)):
             return self.trajs
-        return tools.shift_data(
+        return mh.shift_data(
             self.trajs,
             np.arange(self.nstates),
             self.states,
@@ -118,14 +117,14 @@ class StateTraj:  # noqa: WPS214
             List of ndarrays holding the input data.
 
         """
-        self._trajs = tools.format_state_traj(trajs)
+        self._trajs = mh.tools.format_state_traj(trajs)
 
         # get number of states
-        self._states = tools.unique(self._trajs)
+        self._states = mh.tools.unique(self._trajs)
 
         # shift to indices
         if not np.array_equal(self._states, np.arange(self.nstates)):
-            self._trajs, self._states = tools.rename_by_index(  # noqa: WPS414
+            self._trajs, self._states = mh.tools.rename_by_index(  # noqa: WPS414
                 self._trajs,
                 return_permutation=True,
             )
@@ -340,7 +339,7 @@ class LumpedStateTraj(StateTraj):
         """
         if np.array_equal(self.microstates, np.arange(self.nmicrostates)):
             return self.trajs
-        return tools.shift_data(
+        return mh.shift_data(
             self.trajs,
             np.arange(self.nmicrostates),
             self.microstates,
@@ -368,7 +367,7 @@ class LumpedStateTraj(StateTraj):
             List of ndarrays holding the input macrostate data.
 
         """
-        return tools.shift_data(
+        return mh.shift_data(
             self.trajs,
             np.arange(self.nmicrostates),
             self.state_assignment,
@@ -470,7 +469,7 @@ class LumpedStateTraj(StateTraj):
         """
         # in the following corresponds 'i' to micro and 'a' to macro
         msm_i, _ = mh.estimate_markov_model(self, lagtime)
-        if not tests.is_ergodic(msm_i):
+        if not mh.tests.is_ergodic(msm_i):
             raise TypeError('tmat needs to be ergodic transition matrix.')
         return (self._estimate_markov_model(msm_i), self.states)
 
@@ -505,7 +504,7 @@ class LumpedStateTraj(StateTraj):
             ones_a[:, np.newaxis] * peq_a[np.newaxis:, ] -
             m_twoprime @ d_a
         )
-        return mh.msm.row_normalize_matrix(msm_a)
+        return mh.row_normalize_matrix(msm_a)
 
     def _parse_macrotrajs(self, macrotrajs):
         """Parse the macrotrajs."""
@@ -519,7 +518,7 @@ class LumpedStateTraj(StateTraj):
 
         self.state_assignment = np.zeros(self.nmicrostates, dtype=np.int64)
         for idx, microstate in enumerate(self.microstates):
-            idx_first = tools.find_first(microstate, microtrajs_flatten)
+            idx_first = mh.tools.find_first(microstate, microtrajs_flatten)
             self.state_assignment[idx] = macrotrajs_flatten[idx_first]
 
         self.state_assignment_idx = mh.shift_data(
@@ -530,14 +529,14 @@ class LumpedStateTraj(StateTraj):
 
     def _parse_microtrajs(self, trajs):
         """Parse the microtrajs."""
-        self._trajs = tools.format_state_traj(trajs)
+        self._trajs = mh.tools.format_state_traj(trajs)
 
         # get number of states
-        self._states = tools.unique(self._trajs)
+        self._states = mh.tools.unique(self._trajs)
 
         # shift to indices
         if not np.array_equal(self._states, np.arange(self.nmicrostates)):
-            self._trajs, self._states = tools.rename_by_index(  # noqa: WPS414
+            self._trajs, self._states = mh.tools.rename_by_index(  # noqa: WPS414
                 self._trajs,
                 return_permutation=True,
             )
