@@ -70,9 +70,9 @@ setuptools.setup(
     ],
     author='braniii',
     url='https://github.com/moldyn/msmhelper',
-    license='MIT License',
+    license='BSD-3-Clause License',
     classifiers=[
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: BSD License',
         'Intended Audience :: Science/Research',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
