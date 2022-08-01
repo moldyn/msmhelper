@@ -14,7 +14,7 @@
     <a href="https://pepy.tech/project/msmhelper" alt="Downloads">
         <img src="https://pepy.tech/badge/msmhelper" /></a>
     <a href="https://github.com/moldyn/msmhelper/actions/workflows/pytest.yml" alt="GitHub Workflow Status">
-        <img src="https://img.shields.io/github/workflow/status/moldyn/msmhelper/Pytest"></a>
+        <img src="https://img.shields.io/github/workflow/status/moldyn/msmhelper/Pytest%20with%20Codecov"></a>
     <a href="https://codecov.io/gh/moldyn/msmhelper" alt="Code coverage">
         <img src="https://codecov.io/gh/moldyn/msmhelper/branch/main/graph/badge.svg?token=Ce2eW5JICI" /></a>
     <a href="https://lgtm.com/projects/g/moldyn/msmhelper" alt="LGTM">
