@@ -74,3 +74,26 @@ def test_is_index_traj(state_traj, benchmark):
     """Test row normalization."""
     state_traj = state_traj.state_trajs
     benchmark(mh.tests.is_index_traj, state_traj)
+
+
+def test_msm_wt(benchmark):
+    np.random.seed(42)
+    N = 50
+    trajs = mh.StateTraj(np.random.randint(N, size=100))
+    benchmark(
+        mh.estimate_msm_waiting_times,
+        trajs=trajs,
+        lagtime=1,
+        start=trajs.states.min(),
+        final=trajs.states.max(),
+        steps=int(1e8),
+    )
+
+
+def test_mcmc(benchmark):
+    N = 50
+    trajs = mh.StateTraj(np.random.randint(N, size=100))
+    benchmark(
+        mh.propagate_MCMC,
+        trajs, 1, steps=int(1e7),
+    )
