@@ -20,7 +20,10 @@ from msmhelper.statetraj import StateTraj
 ])
 def test__intersect(arr1, arr2, result):
     """Test intersect method."""
-    assert compare._intersect(arr1, arr2) == result
+    np.testing.assert_almost_equal(
+        compare._intersect(arr1, arr2),
+        result,
+    )
 
 
 @pytest.mark.parametrize('arr1, arr2, result', [(
@@ -60,7 +63,10 @@ def test__intersect_array(arr1, arr2, result):
 def test__compare_discretization(traj1, traj2, kwargs, result):
     """Test compare diescretitzation."""
     traj1, traj2 = StateTraj(traj1), StateTraj(traj2)
-    assert compare._compare_discretization(traj1, traj2, **kwargs) == result
+    np.testing.assert_almost_equal(
+        compare._compare_discretization(traj1, traj2, **kwargs),
+        result,
+    )
 
     with pytest.raises(ValueError):
         compare._compare_discretization(traj1, traj2, method='NotAMethod')
