@@ -16,7 +16,7 @@
     <a href="https://github.com/moldyn/msmhelper/actions/workflows/pytest.yml" alt="GitHub Workflow Status">
         <img src="https://img.shields.io/github/workflow/status/moldyn/msmhelper/Pytest"></a>
     <a href="https://codecov.io/gh/moldyn/msmhelper" alt="Code coverage">
-        <img src="https://codecov.io/gh/moldyn/msmhelper/branch/main/graph/badge.svg?token=KNWDAUXIGI" /></a>
+        <img src="https://codecov.io/gh/moldyn/msmhelper/branch/main/graph/badge.svg?token=Ce2eW5JICI" /></a>
     <a href="https://lgtm.com/projects/g/moldyn/msmhelper" alt="LGTM">
 	<img src="https://img.shields.io/lgtm/grade/python/github/moldyn/msmhelper" alt="LGTM Grade" /></a>
     <a href="https://img.shields.io/pypi/pyversions/msmhelper" alt="PyPI - Python Version">
