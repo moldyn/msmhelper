@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+### Other changes:
+- moved to package to src directory
 
 ## [0.6.1] - 2022-08-01
 ### Bugfix 🐛:
