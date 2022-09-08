@@ -90,8 +90,10 @@ setuptools.setup(
         'Source Code': 'https://github.com/moldyn/msmhelper',
         'Bug Tracker': 'https://github.com/moldyn/msmhelper/issues',
     },
+    package_dir={'': 'src'},
     packages=setuptools.find_packages(where='src'),
     include_package_data=True,
+    python_requires='>=3.6',
     install_requires=[
         'numpy',
         'numba',
