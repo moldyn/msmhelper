@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-""".. include:: ../README.md"""
+""".. include:: ../../README.md"""
 
 from .benchmark import (
     bh_test,
