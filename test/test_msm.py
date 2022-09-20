@@ -103,7 +103,7 @@ def test__implied_timescales(transmat, lagtime, result):
         [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1],
         [1, 2],
         {'ntimescales': 1},
-        [-1 / np.log([2 / 3])],
+        [-1 / np.log([2 / 3]), -2 / np.log([7 / 15])],
         None,
     ),
     (
