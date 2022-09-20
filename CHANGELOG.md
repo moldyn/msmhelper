@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+
+
+## [0.6.2] - 2022-09-20
 ### Other changes:
 - Moved to package to src directory
 - Add `nvals` parameter to all eigenvalues/-vectors functions
@@ -23,9 +26,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Bugfix 🐛:
 - Fix complex matrices for LumpedStateTraj due to complex eigenvalues
 
+
 ## [0.6.1] - 2022-08-01
 ### Bugfix 🐛:
 - Include extra-requirements via MANIFEST.in
+
 
 ## [0.6.0] - 2022-08-01
 ### API changes warning ⚠️:
@@ -102,7 +107,9 @@ Chapman-Kolmogorov test
 - Initial release
 
 
-[Unreleased]: https://github.com/moldyn/msmhelper/compare/v0.6.0...main
+[Unreleased]: https://github.com/moldyn/msmhelper/compare/v0.6.2...main
+[0.6.2]: https://github.com/moldyn/msmhelper/compare/v0.6.1...v0.6.2
+[0.6.1]: https://github.com/moldyn/msmhelper/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/moldyn/msmhelper/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/moldyn/msmhelper/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/moldyn/msmhelper/compare/v0.3.0...v0.4.0
