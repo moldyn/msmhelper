@@ -15,7 +15,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Other changes:
-- moved to package to src directory
+- Moved to package to src directory
+- Add `nvals` parameter to all eigenvalues/-vectors functions
+- Add `ntimescales` parameter to `implied_timescales`
+- Improved tests for `implied_timescales`
+
+### Bugfix 🐛:
+- Fix complex matrices for LumpedStateTraj due to complex eigenvalues
 
 ## [0.6.1] - 2022-08-01
 ### Bugfix 🐛:

@@ -86,26 +86,56 @@ def test__estimate_markov_model(traj, lagtime, Tref, statesref):
 ])
 def test__implied_timescales(transmat, lagtime, result):
     """Test implied timescale."""
-    impl = msm._implied_timescales(transmat, lagtime)
+    ntimescales = len(result)
+    impl = msm._implied_timescales(transmat, lagtime, ntimescales=ntimescales)
     np.testing.assert_array_almost_equal(impl, result)
 
 
-@pytest.mark.parametrize('trajs, lagtimes, result', [
-    ([1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1], [1, 2],
-     [-1 / np.log([2 / 3]), -2 / np.log([7 / 15])])])
-def test_implied_timescales(trajs, lagtimes, result):
+@pytest.mark.parametrize('trajs, lagtimes, kwargs, result, error', [
+    (
+        [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 2],
+        {},
+        [-1 / np.log([2 / 3]), -2 / np.log([7 / 15])],
+        None,
+    ),
+    (
+        [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 2],
+        {'ntimescales': 1},
+        [-1 / np.log([2 / 3]), -2 / np.log([7 / 15])],
+        None,
+    ),
+    (
+        [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1],
+        [-1, 2],
+        {},
+        None,
+        TypeError,
+    ),
+    (
+        [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 2.3],
+        {},
+        None,
+        TypeError,
+    ),
+    (
+        [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 2],
+        {'reversible': True},
+        None,
+        NotImplementedError,
+    ),
+])
+def test_implied_timescales(trajs, lagtimes, kwargs, result, error):
     """Test implied timescale."""
-    impl = msmhelper.implied_timescales(trajs, lagtimes)
-    np.testing.assert_array_almost_equal(impl, result)
-
-    with pytest.raises(TypeError):
-        impl = msmhelper.implied_timescales(trajs, [-1, 2])
-
-    with pytest.raises(TypeError):
-        impl = msmhelper.implied_timescales(trajs, [1, 2.3])
-
-    with pytest.raises(TypeError):
-        impl = msmhelper.implied_timescales(trajs, lagtimes, reversible=True)
+    if error is None:
+        impl = msmhelper.implied_timescales(trajs, lagtimes, **kwargs)
+        np.testing.assert_array_almost_equal(impl, result)
+    else:
+        with pytest.raises(error):
+            impl = msmhelper.implied_timescales(trajs, lagtimes, **kwargs)
 
 
 @pytest.mark.parametrize('tmat, peqref, kwargs, error', [
