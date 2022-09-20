@@ -13,7 +13,7 @@ from msmhelper import tests
 
 
 @decorit.alias('eigl')
-def left_eigenvectors(matrix):
+def left_eigenvectors(matrix, nvals=None):
     """Estimate left eigenvectors.
 
     Estimates the left eigenvectors and corresponding eigenvalues of a
@@ -24,6 +24,10 @@ def left_eigenvectors(matrix):
     matrix : ndarray
         Quadratic 2d matrix eigenvectors and eigenvalues or determined of.
 
+    nvals : int, optional
+        Number of returned eigenvalues and -vectors. Using ensures probability
+        of real valued matrices.
+
     Returns
     -------
     eigenvalues : ndarray
@@ -34,15 +38,11 @@ def left_eigenvectors(matrix):
 
     """
     matrix = np.asarray(matrix)
-    if not tests.is_quadratic(matrix):
-        raise TypeError('Matrix needs to be quadratic {0}'.format(matrix))
-
-    eigenvalues, eigenvectors = _eigenvectors(matrix.transpose())
-    return np.real_if_close(eigenvalues), np.real_if_close(eigenvectors)
+    return _eigenvectors(matrix.transpose(), nvals)
 
 
 @decorit.alias('eig')
-def right_eigenvectors(matrix):
+def right_eigenvectors(matrix, nvals=None):
     """Estimate right eigenvectors.
 
     Estimates the right eigenvectors and corresponding eigenvalues of a
@@ -53,6 +53,10 @@ def right_eigenvectors(matrix):
     matrix : ndarray
         Quadratic 2d matrix eigenvectors and eigenvalues or determined of.
 
+    nvals : int, optional
+        Number of returned eigenvalues and -vectors. Using ensures probability
+        of real valued matrices.
+
     Returns
     -------
     eigenvalues : ndarray
@@ -63,28 +67,38 @@ def right_eigenvectors(matrix):
 
     """
     matrix = np.asarray(matrix)
+    return _eigenvectors(matrix, nvals)
+
+
+def _eigenvectors(matrix, nvals):
+    """Estimate eigenvectors."""
     if not tests.is_quadratic(matrix):
         raise TypeError('Matrix needs to be quadratic {0}'.format(matrix))
 
-    eigenvalues, eigenvectors = _eigenvectors(matrix)
-    return np.real_if_close(eigenvalues), np.real_if_close(eigenvectors)
+    if nvals is None:
+        nvals = len(matrix)
+    elif nvals > len(matrix):
+        raise TypeError(
+            '{nvals} eigenvalues requested but '.format(nvals=nvals) +
+            'matrix of dimension {dim}'.format(dim=len(matrix))
+        )
 
-
-def _eigenvectors(matrix):
-    """Estimate eigenvectors."""
     eigenvalues, eigenvectors = np.linalg.eig(matrix)
 
-    # Transpose eigenvectors, since v[:,i] is eigenvector
+    # Transpose eigenvectors, since v[:, i] is eigenvector
     eigenvectors = eigenvectors.T
 
     # Sort them by descending eigenvalues
     idx_eigenvalues = eigenvalues.argsort()[::-1]
 
-    return eigenvalues[idx_eigenvalues], eigenvectors[idx_eigenvalues]
+    return (
+        np.real_if_close(eigenvalues[idx_eigenvalues][:nvals]),
+        np.real_if_close(eigenvectors[idx_eigenvalues][:nvals]),
+    )
 
 
 @decorit.alias('eiglvals')
-def left_eigenvalues(matrix):
+def left_eigenvalues(matrix, nvals=None):
     """Estimate left eigenvalues.
 
     Estimates the left eigenvalues of a quadratic matrix.
@@ -94,6 +108,10 @@ def left_eigenvalues(matrix):
     matrix : ndarray
         Quadratic 2d matrix eigenvalues or determined of.
 
+    nvals : int, optional
+        Number of returned eigenvalues and -vectors. Using ensures probability
+        of real valued matrices.
+
     Returns
     -------
     eigenvalues : ndarray
@@ -101,14 +119,11 @@ def left_eigenvalues(matrix):
 
     """
     matrix = np.asarray(matrix)
-    if not tests.is_quadratic(matrix):
-        raise TypeError('Matrix needs to be quadratic {0}'.format(matrix))
-
-    return np.real_if_close(_eigenvalues(np.transpose(matrix)))
+    return _eigenvalues(np.transpose(matrix), nvals)
 
 
 @decorit.alias('eigvals')
-def right_eigenvalues(matrix):
+def right_eigenvalues(matrix, nvals=None):
     """Estimate right eigenvalues.
 
     Estimates the right eigenvalues of a quadratic matrix.
@@ -118,6 +133,10 @@ def right_eigenvalues(matrix):
     matrix : ndarray
         Quadratic 2d matrix eigenvalues or determined of.
 
+    nvals : int, optional
+        Number of returned eigenvalues and -vectors. Using ensures probability
+        of real valued matrices.
+
     Returns
     -------
     eigenvalues : ndarray
@@ -125,17 +144,9 @@ def right_eigenvalues(matrix):
 
     """
     matrix = np.asarray(matrix)
-    if not tests.is_quadratic(matrix):
-        raise TypeError('Matrix needs to be quadratic {0}'.format(matrix))
-
-    return np.real_if_close(_eigenvalues(matrix))
+    return _eigenvalues(matrix, nvals)
 
 
-def _eigenvalues(matrix):
+def _eigenvalues(matrix, nvals):
     """Estimate eigenvalues."""
-    eigenvalues = np.linalg.eigvals(matrix)
-
-    # Sort them by descending eigenvalues
-    idx_eigenvalues = eigenvalues.argsort()[::-1]
-
-    return eigenvalues[idx_eigenvalues]
+    return _eigenvectors(matrix, nvals)[0]
