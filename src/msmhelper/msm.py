@@ -106,7 +106,7 @@ def row_normalize_matrix(mat):
     return mat / row_sum.reshape(mat.shape[0], 1)
 
 
-def _implied_timescales(tmat, lagtime):
+def _implied_timescales(tmat, lagtime, ntimescales):
     """
     Calculate implied timescales.
 
@@ -121,6 +121,9 @@ def _implied_timescales(tmat, lagtime):
     lagtime: int
         Lagtime for estimating the markov model given in [frames].
 
+    ntimescales : int, optional
+        Number of returned timescales.
+
     Returns
     -------
     timescales: ndarray
@@ -129,13 +132,13 @@ def _implied_timescales(tmat, lagtime):
     """
     tmat = np.asarray(tmat)
 
-    eigenvalues = linalg.left_eigenvalues(tmat)
+    eigenvalues = linalg.left_eigenvalues(tmat, nvals=ntimescales + 1)
     # for negative eigenvalues no timescale is defined
     eigenvalues[eigenvalues < 0] = np.nan
     return np.ma.divide(- lagtime, np.log(eigenvalues[1:]))
 
 
-def implied_timescales(trajs, lagtimes, reversible=False):
+def implied_timescales(trajs, lagtimes, ntimescales=None, reversible=False):
     """Calculate the implied timescales.
 
     Calculate the implied timescales for the given values.
@@ -150,6 +153,9 @@ def implied_timescales(trajs, lagtimes, reversible=False):
     lagtimes : list or ndarray int
         Lagtimes for estimating the markov model given in [frames].
         This is not implemented yet!
+
+    ntimescales : int, optional
+        Number of returned lagtimes.
 
     reversible : bool
         If reversibility should be enforced for the markov state model.
@@ -174,12 +180,17 @@ def implied_timescales(trajs, lagtimes, reversible=False):
     if reversible:
         raise TypeError('Reversible matrices are not anymore supported.')
 
+    if ntimescales is None:
+        ntimescales = trajs.nstates - 1
+
     # initialize result
-    impl_timescales = np.zeros((len(lagtimes), trajs.nstates - 1))
+    impl_timescales = np.zeros((len(lagtimes), ntimescales))
 
     for idx, lagtime in enumerate(lagtimes):
         transmat, _ = trajs.estimate_markov_model(lagtime)
-        impl_timescales[idx] = _implied_timescales(transmat, lagtime)
+        impl_timescales[idx] = _implied_timescales(
+            transmat, lagtime, ntimescales=ntimescales,
+        )
 
     return impl_timescales
 
@@ -212,7 +223,7 @@ def equilibrium_population(tmat, allow_non_ergodic=True):
 
     # calculate ev for ergodic subset
     if is_ergodic:
-        _, eigenvectors = linalg.left_eigenvectors(tmat)
+        _, eigenvectors = linalg.left_eigenvectors(tmat, nvals=1)
         eigenvectors = eigenvectors[0]
     else:
         mask = tests.ergodic_mask(tmat)
@@ -220,6 +231,7 @@ def equilibrium_population(tmat, allow_non_ergodic=True):
             row_normalize_matrix(
                 tmat[np.ix_(mask, mask)],
             ),
+            nvals=1,
         )
 
         eigenvectors = np.zeros(len(tmat), dtype=tmat.dtype)
