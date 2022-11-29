@@ -31,7 +31,7 @@ jobs:
         pytest --benchmark-skip --no-cov
         export NUMBA_DISABLE_JIT=1 && pytest --cov-report=xml --benchmark-skip
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v2
+      uses: codecov/codecov-action@v3
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: ./coverage.xml
