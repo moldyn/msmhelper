@@ -233,8 +233,8 @@ def test_LumpedStateTraj__eq__(macro_traj):
 def test___repr__(state_traj, index_traj, macro_traj):
     """Test repr method."""
     # used implicitly for repr evaluation
-    array = np.array
-    int32 = np.int32
+    array = np.array  # noqa: F841
+    int32 = np.int32  # noqa: F841
     for traj in [state_traj, index_traj, macro_traj]:
         assert eval(traj.__repr__()) == traj  # noqa: S307
 
