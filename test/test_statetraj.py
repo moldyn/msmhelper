@@ -8,8 +8,6 @@ All rights reserved.
 """
 import numpy as np
 import pytest
-# used implicitly for repr evaluation
-from numpy import array  # noqa: F401
 
 from msmhelper.statetraj import LumpedStateTraj, StateTraj
 
@@ -234,6 +232,9 @@ def test_LumpedStateTraj__eq__(macro_traj):
 
 def test___repr__(state_traj, index_traj, macro_traj):
     """Test repr method."""
+    # used implicitly for repr evaluation
+    array = np.array
+    int32 = np.int32
     for traj in [state_traj, index_traj, macro_traj]:
         assert eval(traj.__repr__()) == traj  # noqa: S307
 
