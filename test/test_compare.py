@@ -21,6 +21,10 @@ from msmhelper.statetraj import StateTraj
 ])
 def test__intersect(arr1, arr2, result):
     """Test intersect method."""
+    if not numba.config.DISABLE_JIT:
+        arr1 = numba.typed.List(arr1)
+        arr2 = numba.typed.List(arr2)
+
     np.testing.assert_almost_equal(
         compare._intersect(arr1, arr2),
         result,
