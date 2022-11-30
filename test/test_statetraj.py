@@ -8,7 +8,6 @@ All rights reserved.
 """
 import numpy as np
 import pytest
-from numpy import array, int32
 
 from msmhelper.statetraj import LumpedStateTraj, StateTraj
 
@@ -16,9 +15,9 @@ from msmhelper.statetraj import LumpedStateTraj, StateTraj
 @pytest.fixture
 def index_traj():
     """Define index trajectory."""
-    traj = array(
+    traj = np.array(
         [0, 0, 0, 1, 1, 1, 2, 2, 2, 1, 1, 1, 0, 2, 1, 2, 2, 2],
-        dtype=int32,
+        dtype=np.int32,
     )
     return StateTraj(traj)
 
@@ -26,18 +25,18 @@ def index_traj():
 @pytest.fixture
 def indextraj():
     """Define index trajectory."""
-    return array(
+    return np.array(
         [0, 0, 0, 1, 1, 1, 2, 2, 2, 1, 1, 1, 0, 2, 1, 2, 2, 2],
-        dtype=int32,
+        dtype=np.int32,
     )
 
 
 @pytest.fixture
 def state_traj():
     """Define state trajectory."""
-    traj = array(
+    traj = np.array(
         [0, 0, 0, 3, 3, 3, 2, 2, 2, 3, 3, 3, 0, 2, 3, 2, 2, 2],
-        dtype=int32,
+        dtype=np.int32,
     )
     return StateTraj(traj)
 
@@ -45,31 +44,31 @@ def state_traj():
 @pytest.fixture
 def statetraj():
     """Define state trajectory."""
-    return array(
+    return np.array(
         [0, 0, 0, 3, 3, 3, 2, 2, 2, 3, 3, 3, 0, 2, 3, 2, 2, 2],
-        dtype=int32,
+        dtype=np.int32,
     )
 
 
 @pytest.fixture
 def macrotraj():
     """Define state trajectory."""
-    return array(
+    return np.array(
         [1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2],
-        dtype=int32,
+        dtype=np.int32,
     )
 
 
 @pytest.fixture
 def macro_traj():
     """Define index trajectory."""
-    traj = array(
+    traj = np.array(
         [1, 1, 1, 2, 2, 2, 3, 3, 3, 2, 2, 2, 1, 3, 2, 3, 3, 3],
-        dtype=int32,
+        dtype=np.int32,
     )
-    macrotraj = array(
+    macrotraj = np.array(
         [1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2],
-        dtype=int32,
+        dtype=np.int32,
     )
     return LumpedStateTraj(macrotrajs=macrotraj, microtrajs=traj)
 
