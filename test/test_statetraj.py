@@ -8,7 +8,8 @@ All rights reserved.
 """
 import numpy as np
 import pytest
-from numpy import array  # used for repr evaluation
+# used implicitly for repr evaluation
+from numpy import array  # noqa: F401
 
 from msmhelper.statetraj import LumpedStateTraj, StateTraj
 
@@ -241,6 +242,7 @@ def test___str__(state_traj, index_traj, macro_traj):
     """Test str method."""
     for traj in [state_traj, index_traj, macro_traj]:
         assert traj.__str__().startswith('[')
+        assert traj.__str__().endswith(']')
 
 
 def test_as_list(state_traj, index_traj):
