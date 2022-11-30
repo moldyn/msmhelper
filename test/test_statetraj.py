@@ -8,6 +8,7 @@ All rights reserved.
 """
 import numpy as np
 import pytest
+from numpy import array  # used for repr evaluation
 
 from msmhelper.statetraj import LumpedStateTraj, StateTraj
 
