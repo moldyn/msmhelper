@@ -13,7 +13,6 @@ import numba
 import numpy as np
 import pytest
 
-import msmhelper
 from msmhelper import msm
 from msmhelper.statetraj import StateTraj
 
@@ -55,7 +54,7 @@ def test__generate_transition_count_matrix(traj, lagtime, Tref, nstates):
 ])
 def test_estimate_markov_model(traj, lagtime, Tref, statesref):
     """Test estimate markov model."""
-    T, states = msmhelper.estimate_markov_model(traj, lagtime)
+    T, states = msm.estimate_markov_model(traj, lagtime)
     np.testing.assert_array_equal(T, Tref)
     np.testing.assert_array_equal(states, statesref)
 
@@ -131,11 +130,11 @@ def test__implied_timescales(transmat, lagtime, result):
 def test_implied_timescales(trajs, lagtimes, kwargs, result, error):
     """Test implied timescale."""
     if error is None:
-        impl = msmhelper.implied_timescales(trajs, lagtimes, **kwargs)
+        impl = msm.implied_timescales(trajs, lagtimes, **kwargs)
         np.testing.assert_array_almost_equal(impl, result)
     else:
         with pytest.raises(error):
-            impl = msmhelper.implied_timescales(trajs, lagtimes, **kwargs)
+            msm.implied_timescales(trajs, lagtimes, **kwargs)
 
 
 @pytest.mark.parametrize('tmat, peqref, kwargs, error', [
