@@ -158,7 +158,7 @@ def unique(trajs, **kwargs):
     trajs : list or ndarray or list of ndarrays
         State trajectory or list of state trajectories.
     **kwargs
-        Arguments of [np.unique](https://numpy.org/devdocs/reference/generated/numpy.unique.html)
+        Arguments of [np.unique](https://numpy.org/devdocs/reference/generated/numpy.unique.html)# noqa: E501
 
     Returns
     -------

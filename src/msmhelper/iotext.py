@@ -103,7 +103,7 @@ def savetxt(file_name, array, header=None, fmt='%.5f'):  # noqa: WPS323
     header : str, optional
         Comment written into the header of the output file.
     fmt : str or sequence of strs, optional
-        See [np.savetxt](https://numpy.org/devdocs/reference/generated/numpy.savetxt.html) fmt.
+        See [np.savetxt](https://numpy.org/devdocs/reference/generated/numpy.savetxt.html) fmt. # noqa: E501
 
     """
     # prepare header comments
