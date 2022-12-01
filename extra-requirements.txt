@@ -5,4 +5,8 @@ pytest:                testing
 pytest-cov:            testing
 pytest-benchmark:      testing
 pytest-rerunfailures:  testing
-pdoc3:                 docs
+mkdocs-material:       docs
+mkdocstrings:          docs
+mkdocstrings-python:   docs
+mkdocs-docstrings:     docs
+mkdocs-gen-files:      docs

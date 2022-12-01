@@ -3,8 +3,9 @@ name: github pages
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
+
+permissions:
+  contents: write
 
 jobs:
   deploy:
@@ -18,19 +19,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install -q --upgrade pip
-        # pip install -r requirements.txt
-        pip install -q numpy
-        pip install -q pandas
-        pip install -q pyemma
-        pip install -q numba
-        pip install -q pdoc3
-        pip install -q -e .
+        python -m pip install .[docs]
     - name: Create doc
       run: |
-        cd docs; bash create_doc.sh; cd ..
-        mv docs public
-    - name: Deploy
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./public
+        python -m mkdocs gh-deploy --force
