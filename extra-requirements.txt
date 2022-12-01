@@ -8,5 +8,5 @@ pytest-rerunfailures:  testing
 mkdocs-material:       docs
 mkdocstrings:          docs
 mkdocstrings-python:   docs
-mkdocs-docstrings:     docs
+mkdocs-literate-nav:   docs
 mkdocs-gen-files:      docs

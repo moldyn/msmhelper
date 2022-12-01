@@ -5,6 +5,7 @@ repo_url: "https://github.com/moldyn/msmhelper"
 edit_uri: "blob/main/docs/"
 repo_name: "moldyn/msmhelper"
 site_dir: "site"
+copyright: Copyright &copy; 2022 Daniel Nagel
 watch: [src/msmhelper]
 
 nav:
@@ -79,7 +80,6 @@ markdown_extensions:
   - pymdownx.tilde
 
 plugins:
-- callouts
 - search
 - gen-files:
     scripts:
@@ -98,7 +98,6 @@ plugins:
           docstring_section_style: "list"
           merge_init_into_class: True
           filters: ["!^_"]
-copyright: Copyright &copy; 2022 Daniel Nagel
 
 extra_css:
   - css/extra.css
