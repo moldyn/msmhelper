@@ -118,10 +118,6 @@ def is_transition_matrix(matrix, atol=1e-8):
 def is_ergodic(matrix, atol=1e-8):
     """Check if matrix is ergodic.
 
-    Taken from:
-    Wielandt, H. "Unzerlegbare, Nicht Negativen Matrizen."
-    Mathematische Zeitschrift. Vol. 52, 1950, pp. 642–648.
-
     Parameters
     ----------
     matrix : ndarray
@@ -132,6 +128,11 @@ def is_ergodic(matrix, atol=1e-8):
     Returns
     -------
     is_ergodic : bool
+
+    References
+    ----------
+    Wielandt, **Unzerlegbare, Nicht Negativen Matrizen.**
+        *Mathematische Zeitschrift* Vol. 52, 1950, pp. 642–648.
 
     """
     if not is_transition_matrix(matrix):

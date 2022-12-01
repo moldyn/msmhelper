@@ -27,7 +27,6 @@ def estimate_markov_model(trajs, lagtime):
     trajs : statetraj or list or ndarray or list of ndarray
         State trajectory/trajectories. The states should start from zero and
         need to be integers.
-
     lagtime : int
         Lag time for estimating the markov model given in [frames].
 
@@ -35,7 +34,6 @@ def estimate_markov_model(trajs, lagtime):
     -------
     T : ndarray
         Transition rate matrix.
-
     permutation : ndarray
         Array with corresponding states.
 
@@ -110,17 +108,15 @@ def _implied_timescales(tmat, lagtime, ntimescales):
     """
     Calculate implied timescales.
 
-    .. todo::
-        - Clearify usage. Better passing trajs to calculate matrix?
+    !!! note
+        Clearify usage. Better passing trajs to calculate matrix?
 
     Parameters
     ----------
     tmat : ndarray
         Quadratic transition matrix.
-
     lagtime: int
         Lagtime for estimating the markov model given in [frames].
-
     ntimescales : int, optional
         Number of returned timescales.
 
@@ -142,21 +138,19 @@ def implied_timescales(trajs, lagtimes, ntimescales=None, reversible=False):
     """Calculate the implied timescales.
 
     Calculate the implied timescales for the given values.
-    .. todo:: catch if for higher lagtimes the dimensionality changes
+    !!! note
+        It is not checked if for higher lagtimes the dimensionality changes.
 
     Parameters
     ----------
     trajs : StateTraj or list or ndarray or list of ndarray
         State trajectory/trajectories. The states should start from zero and
         need to be integers.
-
     lagtimes : list or ndarray int
         Lagtimes for estimating the markov model given in [frames].
         This is not implemented yet!
-
     ntimescales : int, optional
         Number of returned lagtimes.
-
     reversible : bool
         If reversibility should be enforced for the markov state model.
 
@@ -207,7 +201,6 @@ def equilibrium_population(tmat, allow_non_ergodic=True):
     ----------
     tmat : ndarray
         Quadratic transition matrix, needs to be ergodic.
-
     allow_non_ergodic : bool
         If True only the largest ergodic subset will be used. Otherwise it will
         throw an error if not ergodic.

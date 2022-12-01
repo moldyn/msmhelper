@@ -23,7 +23,6 @@ def left_eigenvectors(matrix, nvals=None):
     ----------
     matrix : ndarray
         Quadratic 2d matrix eigenvectors and eigenvalues or determined of.
-
     nvals : int, optional
         Number of returned eigenvalues and -vectors. Using ensures probability
         of real valued matrices.
@@ -32,7 +31,6 @@ def left_eigenvectors(matrix, nvals=None):
     -------
     eigenvalues : ndarray
         N eigenvalues sorted by their value (descending).
-
     eigenvectors : ndarray
         N eigenvectors sorted by descending eigenvalues.
 
@@ -52,7 +50,6 @@ def right_eigenvectors(matrix, nvals=None):
     ----------
     matrix : ndarray
         Quadratic 2d matrix eigenvectors and eigenvalues or determined of.
-
     nvals : int, optional
         Number of returned eigenvalues and -vectors. Using ensures probability
         of real valued matrices.
@@ -61,7 +58,6 @@ def right_eigenvectors(matrix, nvals=None):
     -------
     eigenvalues : ndarray
         N eigenvalues sorted by their value (descending).
-
     eigenvectors : ndarray
         N eigenvectors sorted by descending eigenvalues.
 
@@ -107,7 +103,6 @@ def left_eigenvalues(matrix, nvals=None):
     ----------
     matrix : ndarray
         Quadratic 2d matrix eigenvalues or determined of.
-
     nvals : int, optional
         Number of returned eigenvalues and -vectors. Using ensures probability
         of real valued matrices.
@@ -132,7 +127,6 @@ def right_eigenvalues(matrix, nvals=None):
     ----------
     matrix : ndarray
         Quadratic 2d matrix eigenvalues or determined of.
-
     nvals : int, optional
         Number of returned eigenvalues and -vectors. Using ensures probability
         of real valued matrices.

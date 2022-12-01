@@ -25,8 +25,8 @@ from msmhelper.statetraj import StateTraj
 def shift_data(array, val_old, val_new, dtype=np.int64):
     """Shift integer array (data) from old to new values.
 
-    > **CAUTION:**
-    > The values of `val_old`, `val_new` and `data` needs to be integers.
+    !!! warning
+        The values of `val_old`, `val_new` and `data` needs to be integers.
 
     The basic function is based on Ashwini_Chaudhary solution:
     https://stackoverflow.com/a/29408060
@@ -35,14 +35,11 @@ def shift_data(array, val_old, val_new, dtype=np.int64):
     ----------
     array : StateTraj or ndarray or list or list of ndarrays
         1D data or a list of data.
-
     val_old : ndarray or list
         Values in data which should be replaced. All values needs to be within
         the range of `[data.min(), data.max()]`
-
     val_new : ndarray or list
         Values which will be used instead of old ones.
-
     dtype : data-type, optional
         The desired data-type. Needs to be of type unsigned integer.
 
@@ -88,7 +85,6 @@ def rename_by_population(trajs, return_permutation=False):
     ----------
     trajs : list or ndarray or list of ndarrays
         State trajectory or list of state trajectories.
-
     return_permutation : bool
         Return additionaly the permutation to achieve performed renaming.
         Default is False.
@@ -97,7 +93,6 @@ def rename_by_population(trajs, return_permutation=False):
     -------
     trajs : ndarray
         Renamed data.
-
     permutation : ndarray
         Permutation going from old to new state nameing. So the `i`th state
         of the new naming corresponds to the old state `permutation[i-1]`.
@@ -128,7 +123,6 @@ def rename_by_index(trajs, return_permutation=False):
     ----------
     trajs : list or ndarray or list of ndarrays
         State trajectory or list of state trajectories.
-
     return_permutation : bool
         Return additionaly the permutation to achieve performed renaming.
         Default is False.
@@ -137,7 +131,6 @@ def rename_by_index(trajs, return_permutation=False):
     -------
     trajs : ndarray
         Renamed data.
-
     permutation : ndarray
         Permutation going from old to new state nameing. So the `i`th state
         of the new naming corresponds to the old state `permutation[i-1]`.
@@ -164,9 +157,8 @@ def unique(trajs, **kwargs):
     ----------
     trajs : list or ndarray or list of ndarrays
         State trajectory or list of state trajectories.
-
-    kwargs
-        Arguments of [numpy.unique()](NP_DOC.numpy.unique.html)
+    **kwargs
+        Arguments of [np.unique](https://numpy.org/devdocs/reference/generated/numpy.unique.html)# noqa: E501
 
     Returns
     -------
@@ -189,11 +181,11 @@ def runningmean(array, window):
     by assuming that the given data is zero before and after the given
     series. Hence, there are border affects which are not corrected.
 
-    > **CAUTION:**
-    > If the given window is even (not symmetric) it will be shifted towards
-    > the beginning of the current value. So for `window=4`, it will consider
-    > the current position \(i\), the two to the left \(i-2\) and \(i-1\) and
-    > one to the right \(i+1\).
+    !!! warning
+        If the given window is even (not symmetric) it will be shifted towards
+        the beginning of the current value. So for `window=4`, it will consider
+        the current position \(i\), the two to the left \(i-2\) and \(i-1\) and
+        one to the right \(i+1\).
 
     Function is taken from lapis:
     https://stackoverflow.com/questions/13728392/moving-average-or-running-mean
@@ -202,7 +194,6 @@ def runningmean(array, window):
     ----------
     array : ndarray
         One dimensional numpy array.
-
     window : int
         Integer which specifies window-width.
 
@@ -224,7 +215,6 @@ def swapcols(array, indicesold, indicesnew):
     r"""Interchange cols of an ndarray.
 
     This method swaps the specified columns.
-    .. todo:: Optimize memory usage
 
     Parameters
     ----------
@@ -265,9 +255,9 @@ def swapcols(array, indicesold, indicesnew):
 def get_runtime_user_information():
     r"""Get user runtime information.
 
-    > **CAUTION:**
-    > For python 3.5 or lower the date is not formatted and contains
-    > microscends.
+    !!! warning
+        For python 3.5 or lower the date is not formatted and contains
+        microscends.
 
     Returns
     -------
@@ -375,7 +365,6 @@ def _flatten_data(array):
     -------
     data : ndarray
         Flattened data.
-
     kwargs : dict
         Dictionary with information to restore shape.
 
@@ -409,7 +398,6 @@ def _unflatten_data(array, kwargs):
     ----------
     array : ndarray
         Flattened data.
-
     kwargs : dict
         Dictionary with information to restore shape. Provided by
         _flatten_data().
@@ -438,13 +426,12 @@ def matrix_power(matrix, power):
     """Calculate matrix power with np.linalg.matrix_power.
 
     Same as numpy function, except only for float matrices. See
-    [np.linalg.matrix_power](NP_DOC/numpy.linalg.matrix_power.html).
+    [np.linalg.matrix_power](https://numpy.org/devdocs/reference/generated/numpy.linalg.matrix_power.html).
 
     Parameters
     ----------
     matrix : ndarray
         2d matrix of type float.
-
     power : int, float
         Power of matrix.
 
