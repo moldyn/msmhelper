@@ -19,13 +19,14 @@ def chapman_kolmogorov_test(trajs, lagtimes, tmax):
     r"""Calculate the Chapman Kolmogorov equation.
 
     This method estimates the Chapman Kolmogorov equation
+
     $$T(\tau n) = T^n(\tau)\;.$$
+
     Projected onto the diagonal this is known as the Chapman Kolmogorov test.
     For more details see, e.g., the review Prinz et al.[^1].
 
-    [^1]: Prinz et al.
-        **Markov models of molecular kinetics: Generation and validation**,
-        *J. Chem. Phys.*, 134, 174105 (2011),
+    [^1]: Prinz et al., **Markov models of molecular kinetics: Generation and
+        validation**, *J. Chem. Phys.*, 134, 174105 (2011),
         doi:[10.1063/1.3565032](https://doi.org/10.1063/1.3565032)
 
     Parameters
@@ -33,10 +34,8 @@ def chapman_kolmogorov_test(trajs, lagtimes, tmax):
     trajs : StateTraj or list or ndarray or list of ndarray
         State trajectory/trajectories. The states should start from zero and
         need to be integers.
-
     lagtimes : list or ndarray int
         Lagtimes for estimating the markov model given in [frames].
-
     tmax : int
         Longest time to evaluate the CK equation given in [frames].
 
@@ -144,16 +143,19 @@ def buchete_hummer_test(trajs, lagtime, tmax):
     This method estimates the Buchete Hummer autocorrelation test. Projecting
     the state trajectory onto the right eigenvectors of the row normalized
     transition matrix
+
     $$C_{lm} (t) = \langle \phi_l[s(\tau +t)] \phi_m[S(\tau)]\rangle$$
+
     where \(\phi_i\) is the \(i\)-th right eigenvector. Buchete and Hummer[^2]
     showed that for a Markovian system it obeys an exponentil decay,
     corresponds to
+
     $$C_{lm} (t) = \delta_{lm} \exp(-t / t_k)$$
+
     with the implied timescale \(t_k = - \tau_\text{lag} / \ln \lambda_k\).
 
-    [^2]: Buchete and Hummer
-        **Coarse master equations for peptide folding dynamics**,
-        *J. Phys. Chem.*, 112, 6057-6069 (2008),
+    [^2]: Buchete and Hummer, **Coarse master equations for peptide folding
+        dynamics**, *J. Phys. Chem.*, 112, 6057-6069 (2008),
         doi:[10.1021/jp0761665](https://doi.org/10.1021/jp0761665)
 
     Parameters
@@ -161,10 +163,8 @@ def buchete_hummer_test(trajs, lagtime, tmax):
     trajs : StateTraj or list or ndarray or list of ndarray
         State trajectory/trajectories. The states should start from zero and
         need to be integers.
-
     lagtime : int
         Lagtimes for estimating the markov model given in [frames].
-
     tmax : int
         Longest time to evaluate the CK equation given in [frames].
 
@@ -199,7 +199,6 @@ def _project_states_onto_vector(trajs, vector):
     ----------
     trajs : StateTraj or ndarray or list or list of ndarrays
         1D data or a list of data.
-
     vector : ndarray or list
         Values which will be used instead of states.
 

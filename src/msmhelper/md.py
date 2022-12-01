@@ -212,19 +212,14 @@ def estimate_msm_waiting_times(
     trajs : statetraj or list or ndarray or list of ndarray
         State trajectory/trajectories. The states should start from zero and
         need to be integers.
-
     lagtime : int
         Lag time for estimating the markov model given in [frames].
-
     start : int or list of
         States to start counting.
-
     final : int or list of
         States to start counting.
-
     steps : int
         Number of MCMC propagation steps of MCMC run.
-
     return_list : bool
         If true a list of all events is returned, else a dictionary is
         returned.
@@ -337,13 +332,10 @@ def propagate_MCMC(
     trajs : statetraj or list or ndarray or list of ndarray
         State trajectory/trajectories. The states should start from zero and
         need to be integers.
-
     lagtime : int
         Lag time for estimating the markov model given in [frames].
-
     steps : int
         Number of MCMC propagation steps.
-
     start : int or list of, optional
         State to start propagating. Default (-1) is random state.
 

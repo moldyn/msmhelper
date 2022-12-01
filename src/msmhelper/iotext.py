@@ -25,7 +25,8 @@ def opentxt(file_name, comment='#', nrows=None, **kwargs):
     either pandas read_csv for a single comment or as fallback the slower numpy
     laodtxt for multiple comments.
 
-    .. warning:: In contrast to pandas the order of usecols will be used. So if
+    !!! warning
+        In contrast to pandas the order of usecols will be used. So if
         using ´data = opentxt(..., uscols=[1, 0])´ you acces the first column
         by `data[:, 0]` and the second one by `data[:, 1]`.
 
@@ -33,19 +34,14 @@ def opentxt(file_name, comment='#', nrows=None, **kwargs):
     ----------
     file_name : string
         Name of file to be opened.
-
     comment : str or array of str, optional
         Characters with which a comment starts.
-
     nrows : int, optional
         The maximum number of lines to be read
-
     usecols : int-array, optional
         Columns to be read from the file (zero indexed).
-
     skiprows : int, optional
         The number of leading rows which will be skipped.
-
     dtype : data-type, optional
         Data-type of the resulting array. Default: float.
 
@@ -102,15 +98,12 @@ def savetxt(file_name, array, header=None, fmt='%.5f'):  # noqa: WPS323
     ----------
     file_name : string
         File name to store data.
-
     array : ndarray
         Data to be stored.
-
     header : str, optional
         Comment written into the header of the output file.
-
     fmt : str or sequence of strs, optional
-        See numpy.savetxt fmt.
+        See [np.savetxt](https://numpy.org/devdocs/reference/generated/numpy.savetxt.html) fmt.
 
     """
     # prepare header comments
@@ -131,18 +124,16 @@ def savetxt(file_name, array, header=None, fmt='%.5f'):  # noqa: WPS323
 def opentxt_limits(file_name, limits_file=None, **kwargs):
     """Load file and split according to limit file.
 
-    If limits_file is not provided it will return [traj].
+    If limits_file is not provided it will return `[traj]`.
 
     Parameters
     ----------
     file_name : string
         Name of file to be opened.
-
     limits_file : str, optional
         File name of limit file. Should be single column ascii file.
-
-    kwargs
-        The Parameters defined in opentxt.
+    **kwargs
+        See parameters defined in [opentxt](iotext.md#msmhelper.iotext.opentxt)
 
     Returns
     -------
@@ -171,12 +162,10 @@ def openmicrostates(file_name, limits_file=None, **kwargs):
     ----------
     file_name : string
         Name of file to be opened.
-
     limits_file : str, optional
         File name of limit file. Should be single column ascii file.
-
-    kwargs
-        The Parameters defined in opentxt.
+    **kwargs
+        See parameters defined in [opentxt](iotext.md#msmhelper.iotext.opentxt)
 
     Returns
     -------
@@ -209,7 +198,6 @@ def open_limits(data_length, limits_file=None):
     ----------
     data_length : int
         Length of data read.
-
     limits_file : str, optional
         File name of limit file. Should be single column ascii file.
 
