@@ -28,6 +28,10 @@ theme:
   - content.code.annotate
   - navigation.tabs
   - navigation.top
+  font:
+    text: Roboto
+    headline: Playfair Display
+    code: Roboto Mono
   palette:
   - media: "(prefers-color-scheme: light)"
     scheme: default
