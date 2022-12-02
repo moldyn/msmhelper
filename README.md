@@ -58,17 +58,12 @@ for published works.
 
 ## Features
 - Simple usage with sleek function-based API
-- Supports latest Python 3.10
-- Extensive [documentation](https://moldyn.github.io/msmhelper) with
-  many command line scripts
-- ...
-
+- High performance based on [numba](https://numba.pydata.org/)
+- Supports Python 3.6-3.10
+- [Documentation](https://moldyn.github.io/msmhelper) including tutorials
 
 ## Installation
-The package is called `msmhelper` and is available via
-[PyPI](https://pypi.org/project/msmhelper) or
-[conda](https://anaconda.org/conda-forge/msmhelper). To install it,
-simply call:
+The package is called `msmhelper` and is available via [PyPI](https://pypi.org/project/msmhelper) or [conda](https://anaconda.org/conda-forge/msmhelper). To install it, simply call:
 ```bash
 python3 -m pip install --upgrade msmhelper
 ```
@@ -88,29 +83,13 @@ python3 -m pip install git+https://github.com/moldyn/msmhelper.git
 
 
 ## Usage
-This package is mainly based on `numpy` and `numba` for all computational complex tasks.
-## Usage
+This package is mainly based on `numpy` and `numba` for all computational complex tasks. Check out the documentation for an overview over all modules and some example workflows.
 ```python
 import msmhelper as mh
 ...
 ```
 
-## Roadmap:
+## Roadmap
 - Add unit tests for all functions
 - Add examples usage scripts
 - Create typing module
-
-# Development
-## Additional Requirements:
-- wemake-python-styleguide
-- flake8-spellcheck
-
-## Pytest
-Running pytest with numba needs an additional flag
-```
-export NUMBA_DISABLE_JIT=1 && pytest
-```
-
-# Credits:
-- [numpy](https://docs.scipy.org/doc/numpy)
-- [realpython](https://realpython.com/)
