@@ -20,7 +20,7 @@ nav:
 
 theme:
   name: material
-  logo: icon.png
+  favicon: icon.png
   logo_slate_mode: logo_dark.svg
   logo_default_mode: logo_light.svg
   custom_dir: docs/overrides
