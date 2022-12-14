@@ -6,8 +6,8 @@ from collections import defaultdict
 import setuptools
 
 # check for python version
-if sys.version_info < (3, 6):
-    raise SystemExit('Python 3.6+ is required!')
+if sys.version_info < (3, 7):
+    raise SystemExit('Python 3.7+ is required!')
 
 
 def get_extra_requirements(path, add_all=True):
@@ -76,7 +76,6 @@ setuptools.setup(
         'Intended Audience :: Science/Research',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
@@ -93,7 +92,7 @@ setuptools.setup(
     package_dir={'': 'src'},
     packages=setuptools.find_packages(where='src'),
     include_package_data=True,
-    python_requires='>=3.6',
+    python_requires='>=3.7',
     install_requires=[
         'numpy',
         'numba',

@@ -8,6 +8,7 @@ from .benchmark import (
     ck_test,
 )
 from .compare import compare_discretization
+from .dyncor import dynamical_coring
 from .iotext import (
     opentxt,
     savetxt,
