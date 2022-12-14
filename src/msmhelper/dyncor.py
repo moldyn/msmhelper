@@ -10,7 +10,6 @@ Authors: Daniel Nagel
 """
 import numba
 
-from msmhelper import linalg, tests
 from msmhelper.statetraj import LumpedStateTraj, StateTraj
 
 
@@ -48,6 +47,15 @@ def dynamical_coring(trajs, lagtime, iterative=True):
 
     """
     trajs = StateTraj(trajs)
+
+    if isinstance(trajs, LumpedStateTraj):
+        raise NotImplementedError(
+            'Applying dynamical coring on a LumpedStateTraj is not supported. '
+            'The reason is that while applying dynamical coring on the '
+            'microstate level leads to different coarse-graining, applying it '
+            'on the macrostate level the HS-Projection is not well defined '
+            'anymore.'
+        )
 
     # convert trajs to numba list # noqa: SC100
     if numba.config.DISABLE_JIT:  # pragma: no cover

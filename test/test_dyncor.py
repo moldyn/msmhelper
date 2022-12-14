@@ -12,8 +12,7 @@ import numba
 import numpy as np
 import pytest
 
-from msmhelper import dyncor, msm
-from msmhelper.statetraj import StateTraj
+from msmhelper import dyncor
 
 
 @pytest.mark.parametrize('idx, traj, lagtime, iterative, result', [
@@ -57,41 +56,41 @@ def test__find_first_core(traj, lagtime, result):
 
 
 @pytest.mark.parametrize('traj, lagtime, iterative, result, error', [
-        (
-            [1, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 3, 3],
-            2,
-            True,
-            [1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3],
-            None,
-        ),
-        (
-            [1, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 3, 3],
-            3,
-            True,
-            [1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-            None,
-        ),
-        (
-            [1, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 3, 3],
-            3,
-            False,
-            [1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2],
-            None,
-        ),
-        (
-            [1, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 3, 3],
-            4,
-            False,
-            [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-            None,
-        ),
-        (
-            [1, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 3, 3],
-            6,
-            True,
-            None,
-            dyncor.LagtimeError,
-        ),
+    (
+        [1, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 3, 3],
+        2,
+        True,
+        [1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3],
+        None,
+    ),
+    (
+        [1, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 3, 3],
+        3,
+        True,
+        [1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+        None,
+    ),
+    (
+        [1, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 3, 3],
+        3,
+        False,
+        [1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2],
+        None,
+    ),
+    (
+        [1, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 3, 3],
+        4,
+        False,
+        [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+        None,
+    ),
+    (
+        [1, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 3, 3],
+        6,
+        True,
+        None,
+        dyncor.LagtimeError,
+    ),
 ])
 def test__dynamical_coring_single_traj(
         traj, lagtime, iterative, result, error,
