@@ -24,6 +24,12 @@ def dynamical_coring(trajs, lagtime, iterative=True):
     can result in spurious state transitions which can be correct for applying
     dynamical coring, for more details see Nagel et al. [^1].
 
+    !!! note
+        Applying dynamical coring on a [msmhelper.LumpedStateTraj][] is not
+        supported. The reason is that while applying dynamical coring on the
+        microstate level leads to different coarse-graining, applying it on the
+        macrostate level the HS-Projection is not well defined anymore.
+
     [^1]: Nagel et al., **Dynamical coring of Markov state models**,
         *J. Chem. Phys.*, 150, 094111 (2019),
         doi:[10.1063/1.5081767](https://doi.org/10.1063/1.5081767)
@@ -58,10 +64,10 @@ def dynamical_coring(trajs, lagtime, iterative=True):
         )
 
     # convert trajs to numba list # noqa: SC100
-    if numba.config.DISABLE_JIT:  # pragma: no cover
-        cored_trajs = trajs.trajs
-    else:
-        cored_trajs = numba.typed.List(trajs)
+    if numba.config.DISABLE_JIT:
+        cored_trajs = trajs.state_trajs
+    else:  # pragma: no cover
+        cored_trajs = numba.typed.List(trajs.state_trajs)
 
     if lagtime <= 0:
         raise ValueError('The lagtime should be greater 0.')
