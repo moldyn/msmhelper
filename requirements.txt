@@ -1,4 +1,4 @@
-numba
+numba>=0.54.0
 numpy>=1.21.0
 pandas
 beartype>=0.8.1
