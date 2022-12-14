@@ -90,15 +90,14 @@ def dynamical_coring(trajs, lagtime, iterative=True):
 def _dynamical_coring(trajs, lagtime, iterative):
     """Apply dynamical coring."""
     lagtimes = list(range(2, lagtime + 1)) if iterative else [lagtime]
-    cored_trajs = trajs
     for tau in lagtimes:
-        cored_trajs = _dynamical_coring_single_lagtime(
-            cored_trajs,
+        trajs = _dynamical_coring_single_lagtime(
+            trajs,
             lagtime=tau,
             iterative=iterative,
         )
 
-    return cored_trajs
+    return trajs
 
 
 @numba.njit
