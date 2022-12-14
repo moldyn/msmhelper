@@ -115,22 +115,22 @@ def test__dynamical_coring_single_traj(
 
 @pytest.mark.parametrize('trajs, lagtime, iterative, result', [
     (
-        [np.array([1, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 3, 3])],
+        [[1, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 3, 3]],
         2,
         True,
-        [np.array([1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3])],
+        [[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3]],
     ),
     (
-        [np.array([2, 2, 2, 1]), np.array([1, 1, 1, 2, 1, 2, 2, 3, 2])],
+        [[2, 2, 2, 1], [1, 1, 1, 2, 1, 2, 2, 3, 2]],
         2,
         True,
-        [np.array([2, 2, 2, 2]), np.array([1, 1, 1, 1, 1, 2, 2, 2, 2])],
+        [[2, 2, 2, 2], [1, 1, 1, 1, 1, 2, 2, 2, 2]],
     ),
     (
-        [np.array([2, 2, 2, 1]), np.array([1, 1, 1, 2, 1, 2, 2, 3])],
+        [[2, 2, 2, 1], [1, 1, 1, 2, 1, 2, 2, 3]],
         4,
         True,
-        [np.array([2, 2, 2, 2]), np.array([1, 1, 1, 1, 1, 1, 1, 1])],
+        [[2, 2, 2, 2], [1, 1, 1, 1, 1, 1, 1, 1]],
     ),
 ])
 def test__dynamical_coring(trajs, lagtime, iterative, result):
