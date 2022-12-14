@@ -113,39 +113,14 @@ def test__dynamical_coring_single_traj(
             )
 
 
-@pytest.mark.parametrize('trajs, lagtime, iterative, result', [
-    (
-        [[1, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 3, 3]],
-        2,
-        True,
-        [[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3]],
-    ),
-    (
-        [[2, 2, 2, 1], [1, 1, 1, 2, 1, 2, 2, 3, 2]],
-        2,
-        True,
-        [[2, 2, 2, 2], [1, 1, 1, 1, 1, 2, 2, 2, 2]],
-    ),
-    (
-        [[2, 2, 2, 1], [1, 1, 1, 2, 1, 2, 2, 3]],
-        4,
-        True,
-        [[2, 2, 2, 2], [1, 1, 1, 1, 1, 1, 1, 1]],
-    ),
-])
-def test__dynamical_coring(trajs, lagtime, iterative, result):
-    """Test dynamical coring of single trajectory."""
-    # convert traj to numba # noqa: SC100
-    if not numba.config.DISABLE_JIT:
-        trajs = numba.typed.List(trajs)
-
-    cored_trajs = dyncor._dynamical_coring(trajs, lagtime, iterative)
-    assert len(cored_trajs) == len(result)
-    for cored_traj, traj in zip(cored_trajs, result):
-        np.testing.assert_array_almost_equal(cored_traj, traj)
-
-
 @pytest.mark.parametrize('trajs, lagtime, kwargs, result, error', [
+    (
+        StateTraj([1, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2]),
+        2,
+        {},
+        StateTraj([1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2]),
+        None,
+    ),
     (
         StateTraj([1, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2]),
         3,
