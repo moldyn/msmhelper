@@ -78,11 +78,7 @@ def dynamical_coring(trajs, lagtime, iterative=True):
 
     # catch if lagtime <=1
     return StateTraj(
-        _dynamical_coring(
-            cored_trajs,
-            lagtime=lagtime,
-            iterative=iterative,
-        )
+        _dynamical_coring(cored_trajs, lagtime, iterative),
     )
 
 
@@ -92,9 +88,7 @@ def _dynamical_coring(trajs, lagtime, iterative):
     lagtimes = list(range(2, lagtime + 1)) if iterative else [lagtime]
     for tau in lagtimes:
         trajs = _dynamical_coring_single_lagtime(
-            trajs,
-            lagtime=tau,
-            iterative=iterative,
+            trajs, tau, iterative,
         )
 
     return trajs
@@ -105,11 +99,7 @@ def _dynamical_coring_single_lagtime(trajs, lagtime, iterative):
     """Apply dynamical coring."""
     # initialize matrix
     return [
-        _dynamical_coring_single_traj(
-            traj=traj,
-            lagtime=lagtime,
-            iterative=iterative,
-        )
+        _dynamical_coring_single_traj(traj, lagtime, iterative)
         for traj in trajs
     ]
 

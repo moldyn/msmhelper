@@ -139,11 +139,7 @@ def test__dynamical_coring(trajs, lagtime, iterative, result):
     if not numba.config.DISABLE_JIT:
         trajs = numba.typed.List(trajs)
 
-    cored_trajs = dyncor._dynamical_coring(
-        trajs=trajs,
-        lagtime=lagtime,
-        iterative=iterative,
-    )
+    cored_trajs = dyncor._dynamical_coring(trajs, lagtime, iterative)
     assert len(cored_trajs) == len(result)
     for cored_traj, traj in zip(cored_trajs, result):
         np.testing.assert_array_almost_equal(cored_traj, traj)
