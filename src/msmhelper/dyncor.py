@@ -103,10 +103,12 @@ def _dynamical_coring(trajs, lagtime, iterative):
 def _dynamical_coring_single_lagtime(trajs, lagtime, iterative):
     """Apply dynamical coring."""
     # initialize matrix
-    return numba.typed.List([
-        _dynamical_coring_single_traj(traj, lagtime, iterative)
-        for traj in trajs
-    ])
+    cored_trajs = numba.typed.List([])
+    for traj in trajs:
+        cored_trajs.append(
+            _dynamical_coring_single_traj(traj, lagtime, iterative)
+        )
+    return cored_trajs
 
 
 @numba.njit
