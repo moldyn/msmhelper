@@ -13,6 +13,7 @@ import numpy as np
 import pytest
 
 from msmhelper import dyncor
+from msmhelper.statetraj import LumpedStateTraj, StateTraj
 
 
 @pytest.mark.parametrize('idx, traj, lagtime, iterative, result', [
@@ -26,9 +27,7 @@ from msmhelper import dyncor
 def test__remains_in_core(idx, traj, lagtime, iterative, result):
     """Test finding first core."""
     # convert traj to numba # noqa: SC100
-    if numba.config.DISABLE_JIT:
-        traj = traj
-    else:
+    if not numba.config.DISABLE_JIT:
         traj = numba.typed.List(traj)
 
     assert dyncor._remains_in_core(
@@ -47,9 +46,7 @@ def test__remains_in_core(idx, traj, lagtime, iterative, result):
 def test__find_first_core(traj, lagtime, result):
     """Test finding first core."""
     # convert traj to numba # noqa: SC100
-    if numba.config.DISABLE_JIT:
-        traj = traj
-    else:
+    if not numba.config.DISABLE_JIT:
         traj = numba.typed.List(traj)
 
     assert dyncor._find_first_core(traj, lagtime) == result
@@ -97,9 +94,7 @@ def test__dynamical_coring_single_traj(
 ):
     """Test dynamical coring of single trajectory."""
     # convert traj to numba # noqa: SC100
-    if numba.config.DISABLE_JIT:
-        traj = traj
-    else:
+    if not numba.config.DISABLE_JIT:
         traj = numba.typed.List(traj)
 
     if error is None:
@@ -116,3 +111,100 @@ def test__dynamical_coring_single_traj(
                 lagtime=lagtime,
                 iterative=iterative,
             )
+
+
+@pytest.mark.parametrize('trajs, lagtime, iterative, result', [
+    (
+        [np.array([1, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 3, 3])],
+        2,
+        True,
+        [np.array([1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3])],
+    ),
+    (
+        [np.array([2, 2, 2, 1]), np.array([1, 1, 1, 2, 1, 2, 2, 3, 2])],
+        2,
+        True,
+        [np.array([2, 2, 2, 2]), np.array([1, 1, 1, 1, 1, 2, 2, 2, 2])],
+    ),
+    (
+        [np.array([2, 2, 2, 1]), np.array([1, 1, 1, 2, 1, 2, 2, 3])],
+        4,
+        True,
+        [np.array([2, 2, 2, 2]), np.array([1, 1, 1, 1, 1, 1, 1, 1])],
+    ),
+])
+def test__dynamical_coring(trajs, lagtime, iterative, result):
+    """Test dynamical coring of single trajectory."""
+    # convert traj to numba # noqa: SC100
+    if not numba.config.DISABLE_JIT:
+        trajs = numba.typed.List(trajs)
+
+    cored_trajs = dyncor._dynamical_coring(
+        trajs=trajs,
+        lagtime=lagtime,
+        iterative=iterative,
+    )
+    assert len(cored_trajs) == len(result)
+    for cored_traj, traj in zip(cored_trajs, result):
+        np.testing.assert_array_almost_equal(cored_traj, traj)
+
+
+@pytest.mark.parametrize('trajs, lagtime, kwargs, result, error', [
+    (
+        StateTraj([1, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2]),
+        3,
+        {},
+        StateTraj([1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2]),
+        None,
+    ),
+    (
+        StateTraj([1, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2]),
+        3,
+        {'iterative': True},
+        StateTraj([1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2]),
+        None,
+    ),
+    (
+        StateTraj([1, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2]),
+        3,
+        {'iterative': False},
+        StateTraj([1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2]),
+        None,
+    ),
+    (
+        StateTraj([1, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2]),
+        1,
+        {},
+        StateTraj([1, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2]),
+        None,
+    ),
+    (
+        StateTraj([1, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2]),
+        0,
+        {},
+        None,
+        ValueError,
+    ),
+    (
+        LumpedStateTraj(
+            [1, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2],
+            [1, 1, 3, 2, 3, 4, 2, 3, 2, 2, 4],
+        ),
+        2,
+        {},
+        None,
+        NotImplementedError,
+    ),
+])
+def test_dynamical_coring(trajs, lagtime, kwargs, result, error):
+    """Test dynamical coring."""
+    if error is None:
+        cored_trajs = dyncor.dynamical_coring(
+            trajs=trajs, lagtime=lagtime, **kwargs,
+        )
+        assert len(cored_trajs) == len(result)
+        for cored_traj, traj in zip(cored_trajs, result):
+            np.testing.assert_array_almost_equal(cored_traj, traj)
+    else:
+        with pytest.raises(error):
+            dyncor.dynamical_coring(trajs=trajs, lagtime=lagtime, **kwargs)
