@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+### API changes warning ⚠️:
+- Added `dyncor` module containing an implementation of dynamical coring
+- Removed Python 3.6 support.
 
 
 ## [0.6.2] - 2022-09-20
