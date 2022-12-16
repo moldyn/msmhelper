@@ -8,15 +8,15 @@
     <a href="https://pypi.org/project/msmhelper" alt="PyPI">
         <img src="https://img.shields.io/pypi/v/msmhelper" /></a>
     <a href="https://anaconda.org/conda-forge/msmhelper" alt="conda version">
-	<img src="https://img.shields.io/conda/vn/conda-forge/msmhelper" /></a>
+        <img src="https://img.shields.io/conda/vn/conda-forge/msmhelper" /></a>
     <a href="https://pepy.tech/project/msmhelper" alt="Downloads">
         <img src="https://pepy.tech/badge/msmhelper" /></a>
     <a href="https://github.com/moldyn/msmhelper/actions/workflows/pytest.yml" alt="GitHub Workflow Status">
         <img src="https://img.shields.io/github/actions/workflow/status/moldyn/msmhelper/pytest.yml?branch=main"></a>
     <a href="https://codecov.io/gh/moldyn/msmhelper" alt="Code coverage">
         <img src="https://codecov.io/gh/moldyn/msmhelper/branch/main/graph/badge.svg?token=Ce2eW5JICI" /></a>
-    <a href="https://lgtm.com/projects/g/moldyn/msmhelper" alt="LGTM">
-	<img src="https://img.shields.io/lgtm/grade/python/github/moldyn/msmhelper" alt="LGTM Grade" /></a>
+    <a href="https://github.com/moldyn/msmhelper/actions/workflows/codeql.yml" alt="CodeQL">
+        <img src="https://github.com/moldyn/msmhelper/actions/workflows/codeql.yml/badge.svg?branch=main" /></a>
     <a href="https://img.shields.io/pypi/pyversions/msmhelper" alt="PyPI - Python Version">
         <img src="https://img.shields.io/pypi/pyversions/msmhelper" /></a>
     <a href="https://moldyn.github.io/msmhelper" alt="Docs">
