@@ -30,3 +30,12 @@
     --md-logo-slate-mode: block;
     --md-logo-default-mode: none;
 }
+
+body {
+    --md-headline-font-family: var(--md-headline-font,_),-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif;
+}
+
+.md-typeset h1, .md-typeset h2, .md-typeset h3, .md-header__title {
+  font-family: var(--md-headline-font-family);
+  font-weight: 700;
+}

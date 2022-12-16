@@ -103,7 +103,7 @@ def savetxt(file_name, array, header=None, fmt='%.5f'):  # noqa: WPS323
     header : str, optional
         Comment written into the header of the output file.
     fmt : str or sequence of strs, optional
-        See [np.savetxt](https://numpy.org/devdocs/reference/generated/numpy.savetxt.html) fmt. # noqa: E501
+        See [numpy.savetxt][].
 
     """
     # prepare header comments
@@ -133,7 +133,7 @@ def opentxt_limits(file_name, limits_file=None, **kwargs):
     limits_file : str, optional
         File name of limit file. Should be single column ascii file.
     **kwargs
-        See parameters defined in [opentxt](iotext.md#msmhelper.iotext.opentxt)
+        See parameters defined in [opentxt][msmhelper.iotext.opentxt]
 
     Returns
     -------
@@ -165,7 +165,7 @@ def openmicrostates(file_name, limits_file=None, **kwargs):
     limits_file : str, optional
         File name of limit file. Should be single column ascii file.
     **kwargs
-        See parameters defined in [opentxt](iotext.md#msmhelper.iotext.opentxt)
+        See parameters defined in [opentxt][msmhelper.iotext.opentxt]
 
     Returns
     -------

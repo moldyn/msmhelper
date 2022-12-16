@@ -158,11 +158,11 @@ def unique(trajs, **kwargs):
     trajs : list or ndarray or list of ndarrays
         State trajectory or list of state trajectories.
     **kwargs
-        Arguments of [np.unique](https://numpy.org/devdocs/reference/generated/numpy.unique.html)# noqa: E501
+        Arguments of [numpy.unique][]
 
     Returns
     -------
-    unique
+    unique : ndarray
         Array containing all states, see numpy for more details.
 
     """
@@ -354,7 +354,7 @@ def _flatten_data(array):
     """Flatten data to 1D ndarray.
 
     This method flattens ndarrays, list of ndarrays to a 1D ndarray. This can
-    be undone with _unflatten_data().
+    be undone with [msmhelper.tools._unflatten_data][].
 
     Parameters
     ----------
@@ -392,7 +392,7 @@ def _flatten_data(array):
 def _unflatten_data(array, kwargs):
     """Unflatten data to original structure.
 
-    This method undoes _flatten_data().
+    This method undoes [msmhelper.tools._flatten_data][].
 
     Parameters
     ----------
@@ -425,8 +425,7 @@ def _unflatten_data(array, kwargs):
 def matrix_power(matrix, power):
     """Calculate matrix power with np.linalg.matrix_power.
 
-    Same as numpy function, except only for float matrices. See
-    [np.linalg.matrix_power](https://numpy.org/devdocs/reference/generated/numpy.linalg.matrix_power.html).
+    Numba wrapper for [numpy.linalg.matrix_power][]. Only for float matrices.
 
     Parameters
     ----------

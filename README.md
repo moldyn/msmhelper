@@ -5,8 +5,6 @@
   <p>
     <a href="https://github.com/wemake-services/wemake-python-styleguide" alt="wemake-python-styleguide">
         <img src="https://img.shields.io/badge/style-wemake-000000.svg" /></a>
-    <a href="https://beartype.rtfd.io" alt="bear-ified">
-        <img src="https://raw.githubusercontent.com/beartype/beartype-assets/main/badge/bear-ified.svg" /></a>
     <a href="https://pypi.org/project/msmhelper" alt="PyPI">
         <img src="https://img.shields.io/pypi/v/msmhelper" /></a>
     <a href="https://anaconda.org/conda-forge/msmhelper" alt="conda version">
@@ -22,7 +20,7 @@
     <a href="https://img.shields.io/pypi/pyversions/msmhelper" alt="PyPI - Python Version">
         <img src="https://img.shields.io/pypi/pyversions/msmhelper" /></a>
     <a href="https://moldyn.github.io/msmhelper" alt="Docs">
-        <img src="https://img.shields.io/badge/pdoc3-Documentation-brightgreen" /></a>
+        <img src="https://img.shields.io/badge/mkdocs-Documentation-brightgreen" /></a>
     <a href="https://github.com/moldyn/MoSAIC/blob/main/LICENSE" alt="License">
         <img src="https://img.shields.io/github/license/moldyn/msmhelper" /></a>
   </p>
@@ -41,34 +39,32 @@
 > This package is still in beta stage. Please open an issue if you encounter
 > any bug/error.
 
-This is a package with helper functions to work with discrete state
-trajectories and Markov state models. In contrast to `pyemma` and `msmbuilder`
-it features a very limited set of functionality. This repo is prepared to be
-published. In the next weeks the source code will be cleaned up, tutorials will
-be added and this readme will be extended.
+This is a package with helper functions to work with discrete state trajectories and Markov state models. In contrast to [pyemma](https://github.com/markovmodel/PyEMMA) and [msmbuilder](https://github.com/msmbuilder/msmbuilder), it focuses on Markov state modeling based on an already existing state trajectory. Therefore, neither dimensionality reduction methods nor clustering methods are included. For a methodological overview, we recommend [Sittel and Stock](https://doi.org/10.1063/1.5049637)
 
 This package will be published soon:
 > D. Nagel, and G. Stock,
 > *msmhelper: A Python Package for Markov State Modeling of Protein Dynamics*,
 > in preparation
 
-We kindly ask you to cite this article in case you use this software package
-for published works.
-
+We kindly ask you to cite this article in case you use this software package for published works.
 
 ## Features
 - Simple usage with sleek function-based API
-- Supports latest Python 3.10
-- Extensive [documentation](https://moldyn.github.io/msmhelper) with
-  many command line scripts
-- ...
+- High performance due to [numba](https://numba.pydata.org/)-optimized source code
+- Supports Python 3.7-3.10
+- [Documentation](https://moldyn.github.io/msmhelper) including tutorials
+- Many helpful functions for dealing with state trajectories
 
+## Implemented Key Functionalities
+- Hummer-Szabo projection of optimal dimensionality reduction by [Hummer and Szabo 2014](https://doi.org/10.1021/jp508375q)
+- Dynamical coring by [Nagel et al. 2019](https://doi.org/10.1063/1.5081767)
+- Fast extraction of pathways and MSM-based prediction of pathways based on the definition of [Nagel et al. 2020](https://pubs.acs.org/doi/10.1021/acs.jctc.0c00774) 
+- Fast calculation of waiting times based on state trajectory and MSMs
+- [Chapman-Kolmogorov](https://www.wikiwand.com/en/Chapman%E2%80%93Kolmogorov_equation) test
+- Entropy-based comparison of different state discretizations
 
 ## Installation
-The package is called `msmhelper` and is available via
-[PyPI](https://pypi.org/project/msmhelper) or
-[conda](https://anaconda.org/conda-forge/msmhelper). To install it,
-simply call:
+The package is called `msmhelper` and is available via [PyPI](https://pypi.org/project/msmhelper) or [conda](https://anaconda.org/conda-forge/msmhelper). To install it, simply call:
 ```bash
 python3 -m pip install --upgrade msmhelper
 ```
@@ -88,29 +84,12 @@ python3 -m pip install git+https://github.com/moldyn/msmhelper.git
 
 
 ## Usage
-This package is mainly based on `numpy` and `numba` for all computational complex tasks.
-## Usage
+Check out the documentation for an overview over all modules and some example workflows.
 ```python
 import msmhelper as mh
 ...
 ```
 
-## Roadmap:
-- Add unit tests for all functions
-- Add examples usage scripts
-- Create typing module
-
-# Development
-## Additional Requirements:
-- wemake-python-styleguide
-- flake8-spellcheck
-
-## Pytest
-Running pytest with numba needs an additional flag
-```
-export NUMBA_DISABLE_JIT=1 && pytest
-```
-
-# Credits:
-- [numpy](https://docs.scipy.org/doc/numpy)
-- [realpython](https://realpython.com/)
+## Roadmap
+- Add tutorials
+- Use static type hintes together with [beartype](https://github.com/beartype/beartype)
