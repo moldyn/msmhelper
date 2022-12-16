@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed Python 3.6 support.
 
 ### Added Features and Improvements 🙌:
-- Add all new mkdocs documentation🎉
+- Add all new mkdocs documentation 🎉
 
 
 ## [0.6.2] - 2022-09-20
