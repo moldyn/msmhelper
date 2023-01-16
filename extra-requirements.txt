@@ -10,3 +10,4 @@ mkdocstrings:          docs
 mkdocstrings-python:   docs
 mkdocs-literate-nav:   docs
 mkdocs-gen-files:      docs
+mkdocs-jupyter:        docs
