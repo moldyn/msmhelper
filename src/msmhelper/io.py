@@ -133,7 +133,7 @@ def opentxt_limits(file_name, limits_file=None, **kwargs):
     limits_file : str, optional
         File name of limit file. Should be single column ascii file.
     **kwargs
-        See parameters defined in [opentxt][msmhelper.iotext.opentxt]
+        See parameters defined in [opentxt][msmhelper.io.opentxt]
 
     Returns
     -------
@@ -165,7 +165,7 @@ def openmicrostates(file_name, limits_file=None, **kwargs):
     limits_file : str, optional
         File name of limit file. Should be single column ascii file.
     **kwargs
-        See parameters defined in [opentxt][msmhelper.iotext.opentxt]
+        See parameters defined in [opentxt][msmhelper.io.opentxt]
 
     Returns
     -------

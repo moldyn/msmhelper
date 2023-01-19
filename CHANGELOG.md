@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### API changes warning ⚠️:
 - Added `dyncor` module containing an implementation of dynamical coring
+- Renamed module `iotext` to `io`
 - Removed Python 3.6 support.
 
 ### Added Features and Improvements 🙌:

@@ -9,7 +9,7 @@ from .benchmark import (
 )
 from .compare import compare_discretization
 from .dyncor import dynamical_coring
-from .iotext import (
+from .io import (
     opentxt,
     savetxt,
     opentxt_limits,
