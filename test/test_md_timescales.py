@@ -18,16 +18,16 @@ import msmhelper
 ])
 def test_estimate_waiting_times(traj, start, final, reftimes):
     """Test estimate waiting time."""
-    times = msmhelper.estimate_waiting_times(traj, start, final)
+    times = msmhelper.md.estimate_waiting_times(traj, start, final)
     np.testing.assert_array_equal(times, reftimes)
 
     # check overlapping start and final states
     with pytest.raises(ValueError):
-        msmhelper.estimate_waiting_times(traj, start, start)
+        msmhelper.md.estimate_waiting_times(traj, start, start)
 
     # check state not contained in traj
     with pytest.raises(ValueError):
-        msmhelper.estimate_waiting_times(traj, start, np.max(traj) + 1)
+        msmhelper.md.estimate_waiting_times(traj, start, np.max(traj) + 1)
 
 
 @pytest.mark.parametrize('traj, start, final, refpaths', [
@@ -52,13 +52,13 @@ def test_estimate_waiting_times(traj, start, final, reftimes):
 ])
 def test_estimate_paths(traj, start, final, refpaths):
     """Test estimate waiting time."""
-    paths = msmhelper.estimate_paths(traj, start, final)
+    paths = msmhelper.md.estimate_paths(traj, start, final)
     assert paths == refpaths
 
     # check overlapping start and final states
     with pytest.raises(ValueError):
-        msmhelper.estimate_paths(traj, start, start)
+        msmhelper.md.estimate_paths(traj, start, start)
 
     # check state not contained in traj
     with pytest.raises(ValueError):
-        msmhelper.estimate_paths(traj, start, np.max(traj) + 1)
+        msmhelper.md.estimate_paths(traj, start, np.max(traj) + 1)
