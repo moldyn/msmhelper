@@ -6,12 +6,10 @@ Copyright (c) 2019-2023, Daniel Nagel
 All rights reserved.
 
 """
-import numba
 import numpy as np
 import pytest
 
 from msmhelper.msm import timescales
-from msmhelper.statetraj import StateTraj
 
 
 @pytest.mark.parametrize('transmat, lagtime, result', [
