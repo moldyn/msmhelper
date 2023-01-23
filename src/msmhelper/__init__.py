@@ -17,12 +17,9 @@ from .io import (
     open_limits,
 )
 from .md import (
-    estimate_msm_waiting_times,
-    estimate_msm_wt,
     estimate_paths,
     estimate_waiting_times,
     estimate_wt,
-    propagate_MCMC,
 )
 from .msm import (
     estimate_markov_model,
