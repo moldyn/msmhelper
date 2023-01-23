@@ -10,7 +10,7 @@ import decorit
 import numba
 import numpy as np
 
-from msmhelper import linalg, msm, tests, tools
+from msmhelper import msm, tests, tools
 from msmhelper.statetraj import LumpedStateTraj, StateTraj
 
 
@@ -247,7 +247,7 @@ def _buchete_hummer_test(trajs, lagtime, tmax):
     tmat = np.sqrt(tmat * tmat.T)
 
     # get orthogonal eigenvectors of symmetric matrix
-    evals, evecs = linalg.right_eigenvectors(tmat)
+    evals, evecs = msm.utils.linalg.right_eigenvectors(tmat)
     pi, *evecs = evecs  # first eigenvector is equilibrium population
 
     # stationary distribution

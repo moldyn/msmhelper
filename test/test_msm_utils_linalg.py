@@ -2,7 +2,7 @@
 """Tests for the linalg module.
 
 BSD 3-Clause License
-Copyright (c) 2019-2020, Daniel Nagel
+Copyright (c) 2019-2023, Daniel Nagel
 All rights reserved.
 
 """
@@ -10,7 +10,7 @@ All rights reserved.
 import numpy as np
 import pytest
 
-from msmhelper import linalg
+from msmhelper.msm.utils import linalg
 
 
 # ~~~ TESTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
