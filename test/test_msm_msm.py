@@ -2,18 +2,15 @@
 """Tests for the msm module.
 
 BSD 3-Clause License
-Copyright (c) 2019-2020, Daniel Nagel
+Copyright (c) 2019-2023, Daniel Nagel
 All rights reserved.
-
-Author: Daniel Nagel
-        Georg Diez
 
 """
 import numba
 import numpy as np
 import pytest
 
-from msmhelper import msm
+from msmhelper.msm import msm
 from msmhelper.statetraj import StateTraj
 
 
@@ -69,72 +66,6 @@ def test__estimate_markov_model(traj, lagtime, Tref, statesref):
     T, states = msm._estimate_markov_model(traj.trajs, lagtime, traj.nstates)
     np.testing.assert_array_equal(T, Tref)
     np.testing.assert_array_equal(states, statesref)
-
-
-@pytest.mark.parametrize('transmat, lagtime, result', [
-    (
-        [[0.8, 0.2, 0.0], [0.2, 0.78, 0.02], [0.0, 0.2, 0.8]],
-        2,
-        -2 / np.log([4 / 5, 29 / 50]),
-    ),
-    (
-        [[0.1, 0.9], [0.8, 0.2]],
-        1,
-        [np.nan],
-    ),
-])
-def test__implied_timescales(transmat, lagtime, result):
-    """Test implied timescale."""
-    ntimescales = len(result)
-    impl = msm._implied_timescales(transmat, lagtime, ntimescales=ntimescales)
-    np.testing.assert_array_almost_equal(impl, result)
-
-
-@pytest.mark.parametrize('trajs, lagtimes, kwargs, result, error', [
-    (
-        [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1],
-        [1, 2],
-        {},
-        [-1 / np.log([2 / 3]), -2 / np.log([7 / 15])],
-        None,
-    ),
-    (
-        [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1],
-        [1, 2],
-        {'ntimescales': 1},
-        [-1 / np.log([2 / 3]), -2 / np.log([7 / 15])],
-        None,
-    ),
-    (
-        [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1],
-        [-1, 2],
-        {},
-        None,
-        TypeError,
-    ),
-    (
-        [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1],
-        [1, 2.3],
-        {},
-        None,
-        TypeError,
-    ),
-    (
-        [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1],
-        [1, 2],
-        {'reversible': True},
-        None,
-        NotImplementedError,
-    ),
-])
-def test_implied_timescales(trajs, lagtimes, kwargs, result, error):
-    """Test implied timescale."""
-    if error is None:
-        impl = msm.implied_timescales(trajs, lagtimes, **kwargs)
-        np.testing.assert_array_almost_equal(impl, result)
-    else:
-        with pytest.raises(error):
-            msm.implied_timescales(trajs, lagtimes, **kwargs)
 
 
 @pytest.mark.parametrize('tmat, peqref, kwargs, error', [
