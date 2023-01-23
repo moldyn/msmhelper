@@ -2,7 +2,7 @@
 """Benchmarking Linalg.
 
 BSD 3-Clause License
-Copyright (c) 2019-2020, Daniel Nagel
+Copyright (c) 2019-2023, Daniel Nagel
 All rights reserved.
 
 """
@@ -48,29 +48,29 @@ def tmat3():
 # ~~~ TESTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def test_linalg_eigvals_10states(tmat1, benchmark):
     """Benchmark msmhelper with StateTraj class."""
-    benchmark(mh.linalg.eigvals, tmat1)
+    benchmark(mh.msm.utils.linalg.eigvals, tmat1)
 
 
 def test_linalg_eigvals_100states(tmat2, benchmark):
     """Benchmark msmhelper with StateTraj class."""
-    benchmark(mh.linalg.eigvals, tmat2)
+    benchmark(mh.msm.utils.linalg.eigvals, tmat2)
 
 
 def test_linalg_eigvals_1000states(tmat3, benchmark):
     """Benchmark msmhelper with StateTraj class."""
-    benchmark(mh.linalg.eigvals, tmat3)
+    benchmark(mh.msm.utils.linalg.eigvals, tmat3)
 
 
 def test_linalg_eig_10states(tmat1, benchmark):
     """Benchmark msmhelper with StateTraj class."""
-    benchmark(mh.linalg.eig, tmat1)
+    benchmark(mh.msm.utils.linalg.eig, tmat1)
 
 
 def test_linalg_eig_100states(tmat2, benchmark):
     """Benchmark msmhelper with StateTraj class."""
-    benchmark(mh.linalg.eig, tmat2)
+    benchmark(mh.msm.utils.linalg.eig, tmat2)
 
 
 def test_linalg_eig_1000states(tmat3, benchmark):
     """Benchmark msmhelper with StateTraj class."""
-    benchmark(mh.linalg.eig, tmat3)
+    benchmark(mh.msm.utils.linalg.eig, tmat3)

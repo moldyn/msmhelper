@@ -2,18 +2,16 @@
 """Create Markov State Model.
 
 BSD 3-Clause License
-Copyright (c) 2019-2020, Daniel Nagel
+Copyright (c) 2019-2023, Daniel Nagel
 All rights reserved.
-
-Authors: Daniel Nagel
-         Georg Diez
 
 """
 import decorit
 import numba
 import numpy as np
 
-from msmhelper import linalg, tests
+from msmhelper import tests
+from msmhelper.msm.utils import linalg
 from msmhelper.statetraj import LumpedStateTraj, StateTraj
 
 

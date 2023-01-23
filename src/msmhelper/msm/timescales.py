@@ -13,8 +13,8 @@ import numba
 import numpy as np
 
 from msmhelper.compare import _intersect as intersect
+from msmhelper.msm.utils import linalg
 from msmhelper.statetraj import StateTraj
-from msmhelper import linalg
 
 
 def _implied_timescales(tmat, lagtime, ntimescales):
