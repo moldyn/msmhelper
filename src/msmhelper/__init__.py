@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
 """  --8<-- "README.md" """
 
-from .benchmark import (
-    bh_test,
-    buchete_hummer_test,
-    chapman_kolmogorov_test,
-    ck_test,
-)
 from .compare import compare_discretization
 from .dyncor import dynamical_coring
 from .io import (
