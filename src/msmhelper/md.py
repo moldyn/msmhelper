@@ -52,7 +52,7 @@ def estimate_waiting_times(trajs, start, final):
     for states in (states_start, states_final):
         if intersect(states, trajs.states) != len(states):
             raise ValueError(
-                'Selected states does not exist in state trajectoty.',
+                'Selected states does not exist in state trajectory.',
             )
 
     # do not convert for pytest coverage
@@ -121,7 +121,7 @@ def estimate_paths(trajs, start, final):
     for states in (states_start, states_final):
         if intersect(states, trajs.states) != len(states):
             raise ValueError(
-                'Selected states does not exist in state trajectoty.',
+                'Selected states does not exist in state trajectory.',
             )
 
     # do not convert for pytest coverage

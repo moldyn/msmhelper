@@ -155,7 +155,7 @@ def estimate_waiting_times(
     for states in (states_start, states_final):
         if intersect(states, trajs.states) != len(states):
             raise ValueError(
-                'Selected states does not exist in state trajectoty.',
+                'Selected states does not exist in state trajectory.',
             )
 
     # convert states to idx
@@ -266,7 +266,7 @@ def propagate_MCMC(
         start = np.random.choice(trajs.states)
     elif start not in trajs.states:
         raise ValueError(
-            'Selected starting state does not exist in state trajectoty.',
+            'Selected starting state does not exist in state trajectory.',
         )
 
     # convert states to idx
