@@ -69,7 +69,8 @@ def gaussian_filter(array, sigma):
         Data which is time-averaged with the specified Gaussian kernel.
 
     """
-    ndim = _np.asarray(array).ndim
+    array = _np.asarray(array, dtype=_np.float64)
+    ndim = array.ndim
     if ndim > 2:
         raise ValueError(
             'Gaussian filtering is only defined for 1D and 2D data, but'
