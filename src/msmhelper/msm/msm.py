@@ -2,18 +2,16 @@
 """Create Markov State Model.
 
 BSD 3-Clause License
-Copyright (c) 2019-2020, Daniel Nagel
+Copyright (c) 2019-2023, Daniel Nagel
 All rights reserved.
-
-Authors: Daniel Nagel
-         Georg Diez
 
 """
 import decorit
 import numba
 import numpy as np
 
-from msmhelper import linalg, tests
+from msmhelper.utils import tests
+from msmhelper.msm.utils import linalg
 from msmhelper.statetraj import LumpedStateTraj, StateTraj
 
 
@@ -102,93 +100,6 @@ def row_normalize_matrix(mat):
 
     # due to missing np.newaxis row_sum[:, np.newaxis] becomes # noqa: SC100
     return mat / row_sum.reshape(mat.shape[0], 1)
-
-
-def _implied_timescales(tmat, lagtime, ntimescales):
-    """
-    Calculate implied timescales.
-
-    !!! note
-        Clearify usage. Better passing trajs to calculate matrix?
-
-    Parameters
-    ----------
-    tmat : ndarray
-        Quadratic transition matrix.
-    lagtime: int
-        Lagtime for estimating the markov model given in [frames].
-    ntimescales : int, optional
-        Number of returned timescales.
-
-    Returns
-    -------
-    timescales: ndarray
-        Implied timescale given in frames.
-
-    """
-    tmat = np.asarray(tmat)
-
-    eigenvalues = linalg.left_eigenvalues(tmat, nvals=ntimescales + 1)
-    # for negative eigenvalues no timescale is defined
-    eigenvalues[eigenvalues < 0] = np.nan
-    return np.ma.divide(- lagtime, np.log(eigenvalues[1:]))
-
-
-def implied_timescales(trajs, lagtimes, ntimescales=None, reversible=False):
-    """Calculate the implied timescales.
-
-    Calculate the implied timescales for the given values.
-    !!! note
-        It is not checked if for higher lagtimes the dimensionality changes.
-
-    Parameters
-    ----------
-    trajs : StateTraj or list or ndarray or list of ndarray
-        State trajectory/trajectories. The states should start from zero and
-        need to be integers.
-    lagtimes : list or ndarray int
-        Lagtimes for estimating the markov model given in [frames].
-        This is not implemented yet!
-    ntimescales : int, optional
-        Number of returned lagtimes.
-    reversible : bool
-        If reversibility should be enforced for the markov state model.
-
-    Returns
-    -------
-    T : ndarray
-        Transition rate matrix.
-
-    """
-    # format input
-    trajs = StateTraj(trajs)
-    lagtimes = np.atleast_1d(lagtimes)
-
-    # check that lag times are array of integers
-    if not np.issubdtype(lagtimes.dtype, np.integer):
-        raise TypeError(
-            'Lagtimes needs to be integers but are {0}'.format(lagtimes.dtype),
-        )
-    if not (lagtimes > 0).all():
-        raise TypeError('Lagtimes needs to be positive integers')
-    if reversible:
-        raise NotImplementedError(
-            'Reversible matrices are not anymore supported.'
-        )
-
-    if ntimescales is None:
-        ntimescales = trajs.nstates - 1
-
-    # initialize result
-    impl_timescales = np.zeros((len(lagtimes), ntimescales))
-
-    for idx, lagtime in enumerate(lagtimes):
-        transmat, _ = trajs.estimate_markov_model(lagtime)
-        impl_timescales[idx] = _implied_timescales(
-            transmat, lagtime, ntimescales=ntimescales,
-        )
-
-    return impl_timescales
 
 
 @decorit.alias('peq')

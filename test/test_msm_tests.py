@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
-"""Tests for the benchmark module.
+"""Tests for the tests submodule of msm.
 
 BSD 3-Clause License
-Copyright (c) 2019-2020, Daniel Nagel
+Copyright (c) 2019-2023, Daniel Nagel
 All rights reserved.
 
 """
 import numpy as np
 import pytest
 
-from msmhelper import benchmark
+from msmhelper.msm import tests
 from msmhelper.statetraj import StateTraj
 
 
@@ -20,26 +20,26 @@ def test_chapman_kolmogorov_test(trajs, lagtimes, tmax):
     """Test Chapman Kolmogorov test."""
     # check float as lag times
     with pytest.raises(TypeError):
-        _ = benchmark.ck_test(trajs, lagtimes=[1.2], tmax=tmax)
+        _ = tests.ck_test(trajs, lagtimes=[1.2], tmax=tmax)
 
     # check negative lag times
     with pytest.raises(TypeError):
-        _ = benchmark.ck_test(trajs, lagtimes=[-1], tmax=tmax)
+        _ = tests.ck_test(trajs, lagtimes=[-1], tmax=tmax)
 
     # check 2d lag times
     with pytest.raises(TypeError):
-        _ = benchmark.ck_test(trajs, lagtimes=[lagtimes], tmax=tmax)
+        _ = tests.ck_test(trajs, lagtimes=[lagtimes], tmax=tmax)
 
     # check maximal time negative
     with pytest.raises(TypeError):
-        _ = benchmark.ck_test(trajs, lagtimes=lagtimes, tmax=-1)
+        _ = tests.ck_test(trajs, lagtimes=lagtimes, tmax=-1)
 
     # check maximal time float
     with pytest.raises(TypeError):
-        _ = benchmark.ck_test(trajs, lagtimes=lagtimes, tmax=5.7)
+        _ = tests.ck_test(trajs, lagtimes=lagtimes, tmax=5.7)
 
     # check if all keys exists
-    cktest = benchmark.ck_test(trajs, lagtimes=lagtimes, tmax=tmax)
+    cktest = tests.ck_test(trajs, lagtimes=lagtimes, tmax=tmax)
     assert 'md' in cktest
     for lagtime in lagtimes:
         assert lagtime in cktest
@@ -56,7 +56,7 @@ def test_chapman_kolmogorov_test(trajs, lagtimes, tmax):
 )])
 def test__chapman_kolmogorov_test(trajs, lagtime, tmax, result):
     """Test Chapman Kolmogorov test."""
-    cktest = benchmark._chapman_kolmogorov_test(trajs, lagtime, tmax)
+    cktest = tests._chapman_kolmogorov_test(trajs, lagtime, tmax)
 
     np.testing.assert_array_equal(cktest.keys(), result.keys())
     for key in cktest.keys():
@@ -70,21 +70,21 @@ def test_buchete_hummer_test(trajs, lagtime, tmax):
     """Test Buchete Hummer test."""
     # check float as lag times
     with pytest.raises(TypeError):
-        _ = benchmark.bh_test(trajs, lagtime=[1.2], tmax=tmax)
+        _ = tests.bh_test(trajs, lagtime=[1.2], tmax=tmax)
 
     # check negative lag times
     with pytest.raises(TypeError):
-        _ = benchmark.bh_test(trajs, lagtime=-1, tmax=tmax)
+        _ = tests.bh_test(trajs, lagtime=-1, tmax=tmax)
 
     # check maximal time negative
     with pytest.raises(TypeError):
-        _ = benchmark.bh_test(trajs, lagtime=lagtime, tmax=-1)
+        _ = tests.bh_test(trajs, lagtime=lagtime, tmax=-1)
 
     # check maximal time float
     with pytest.raises(TypeError):
-        _ = benchmark.bh_test(trajs, lagtime=lagtime, tmax=5.7)
+        _ = tests.bh_test(trajs, lagtime=lagtime, tmax=5.7)
 
     # check if all keys exists
-    bhtest = benchmark.bh_test(trajs, lagtime=lagtime, tmax=tmax)
+    bhtest = tests.bh_test(trajs, lagtime=lagtime, tmax=tmax)
     assert 'md' in bhtest
     assert lagtime in bhtest
