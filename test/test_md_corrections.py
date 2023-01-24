@@ -176,4 +176,6 @@ def test_dynamical_coring(trajs, lagtime, kwargs, result, error):
             np.testing.assert_array_almost_equal(cored_traj, traj)
     else:
         with pytest.raises(error):
-            corrections.dynamical_coring(trajs=trajs, lagtime=lagtime, **kwargs)
+            corrections.dynamical_coring(
+                trajs=trajs, lagtime=lagtime, **kwargs,
+            )
