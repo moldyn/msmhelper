@@ -469,7 +469,7 @@ class LumpedStateTraj(StateTraj):
         """
         # in the following corresponds 'i' to micro and 'a' to macro
         msm_i, _ = mh.msm.estimate_markov_model(self, lagtime)
-        if not mh.tests.is_ergodic(msm_i):
+        if not mh.utils.tests.is_ergodic(msm_i):
             raise TypeError('tmat needs to be ergodic transition matrix.')
         return (self._estimate_markov_model(msm_i), self.states)
 

@@ -9,7 +9,7 @@ All rights reserved.
 import decorit
 import numpy as np
 
-from msmhelper import tests
+from msmhelper.utils import tests
 
 
 @decorit.alias('eigl')
