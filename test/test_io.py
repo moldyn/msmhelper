@@ -7,8 +7,11 @@ All rights reserved.
 
 """
 import os.path
+from importlib import reload
 
 import numpy as np
+import __main__ as main
+import msmhelper
 import pytest
 
 from msmhelper import io
@@ -21,6 +24,28 @@ HERE = os.path.dirname(__file__)
 def limits_file():
     """Define limits file."""
     return os.path.join(HERE, 'limits.dat')
+
+
+class change_main__file__:
+    """Emulate an ipython usage."""
+
+    def __enter__(self):
+        """Delete file name and reload module."""
+        self.filename = main.__file__
+        del main.__file__
+        main.msmhelper = reload(msmhelper)
+
+    def __exit__(self, typ, val, traceback):
+        """Reset file name and reload module."""
+        main.__file__ = self.filename
+        main.msmhelper = reload(msmhelper)
+
+
+def test_get_runtime_user_information():
+    """Check for console usage."""
+    assert io._get_runtime_user_information()['script_name'] != 'console'
+    with change_main__file__():
+        assert io._get_runtime_user_information()['script_name'] == 'console'
 
 
 @pytest.mark.parametrize('traj_file, kwargs', [
