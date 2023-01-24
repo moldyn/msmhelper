@@ -31,9 +31,9 @@ def traj2():
 def test_compare_discretization(traj1, traj2, benchmark):
     """Benchmark msmhelper with pure numpy."""
     # execute for compiling numba
-    mh.compare._compare_discretization(traj1, traj2, method='symmetric')
+    mh.md.comparison._compare_discretization(traj1, traj2, method='symmetric')
     benchmark(
-        mh.compare._compare_discretization,
+        mh.md.comparison._compare_discretization,
         traj1,
         traj2,
         method='symmetric',

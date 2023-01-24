@@ -2,7 +2,6 @@
 """  --8<-- "README.md" """
 
 from . import md, msm
-from .compare import compare_discretization
 from .io import (
     opentxt,
     savetxt,
