@@ -2,7 +2,7 @@
 """Tests for the compare module.
 
 BSD 3-Clause License
-Copyright (c) 2019-2020, Daniel Nagel
+Copyright (c) 2019-2023, Daniel Nagel
 All rights reserved.
 
 """
@@ -10,7 +10,7 @@ import numba
 import numpy as np
 import pytest
 
-from msmhelper import compare
+from msmhelper.md import comparison
 from msmhelper.statetraj import StateTraj
 
 
@@ -26,7 +26,7 @@ def test__intersect(arr1, arr2, result):
         arr2 = numba.typed.List(arr2)
 
     np.testing.assert_almost_equal(
-        compare._intersect(arr1, arr2),
+        comparison._intersect(arr1, arr2),
         result,
     )
 
@@ -43,7 +43,7 @@ def test__intersect_array(arr1, arr2, result):
         arr2 = numba.typed.List(arr2)
 
     np.testing.assert_array_almost_equal(
-        compare._intersect_array(arr1, arr2), result,
+        comparison._intersect_array(arr1, arr2), result,
     )
 
 
@@ -73,12 +73,12 @@ def test__compare_discretization(traj1, traj2, kwargs, result):
     """Test compare diescretitzation."""
     traj1, traj2 = StateTraj(traj1), StateTraj(traj2)
     np.testing.assert_almost_equal(
-        compare._compare_discretization(traj1, traj2, **kwargs),
+        comparison._compare_discretization(traj1, traj2, **kwargs),
         result,
     )
 
     with pytest.raises(ValueError):
-        compare._compare_discretization(traj1, traj2, method='NotAMethod')
+        comparison._compare_discretization(traj1, traj2, method='NotAMethod')
 
 
 @pytest.mark.parametrize('traj1, traj2, kwargs, error', [
@@ -95,7 +95,7 @@ def test__compare_discretization(traj1, traj2, kwargs, result):
 def test_compare_discretization(traj1, traj2, kwargs, error):
     """Test compare diescretitzation."""
     if error is None:
-        compare.compare_discretization(traj1, traj2, **kwargs)
+        comparison.compare_discretization(traj1, traj2, **kwargs)
     else:
         with pytest.raises(error):
-            compare.compare_discretization(traj1, traj2, **kwargs)
+            comparison.compare_discretization(traj1, traj2, **kwargs)

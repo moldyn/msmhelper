@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-"""Set of helpful functions for comparing markov state models.
+"""Set of helpful functions for comparing different state discretizations.
 
 BSD 3-Clause License
-Copyright (c) 2019-2020, Daniel Nagel
+Copyright (c) 2019-2023, Daniel Nagel
 All rights reserved.
 
 """
