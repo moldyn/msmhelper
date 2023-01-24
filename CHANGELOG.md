@@ -15,12 +15,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### API changes warning ⚠️:
-- Added `dyncor` module containing an implementation of dynamical coring
-- Renamed module `iotext` to `io`
+- Completely refactoring of the API
+  - Renamed module `iotext` to `io`
+  - Moved all functions related to msm to `msm` module
+  - Moved all functions related to raw state trajectories to `md` module
+  - Moved all remaing functions into `utils` module
 - Removed Python 3.6 support.
 
 ### Added Features and Improvements 🙌:
 - Add all new mkdocs documentation 🎉
+- Add `gaussian_filter` functionality
+- Add implementation of `dynamical_coring`
 
 
 ## [0.6.2] - 2022-09-20

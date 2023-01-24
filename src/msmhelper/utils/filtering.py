@@ -19,8 +19,8 @@ def runningmean(array, window):
 
     This function returns the centered based running average of the given
     data. The output of this function is of the same length as the input,
-    by assuming that the given data is zero before and after the given
-    series. Hence, there are border affects which are not corrected.
+    by assuming that the given data is zero before and after the given series.
+    Hence, there are border affects which are not corrected.
 
     !!! warning
         If the given window is even (not symmetric) it will be shifted towards
@@ -44,6 +44,13 @@ def runningmean(array, window):
         Data which is time-averaged over the specified window.
 
     """
+    ndim = _np.asarray(array).ndim
+    if ndim > 1:
+        raise ValueError(
+            'Runningmean is only defined for 1D data, but'
+            f'{ndim:.0f}D data were provided.'
+        )
+
     # Calculate running mean
     return _np.convolve(
         array,
