@@ -6,30 +6,11 @@ Copyright (c) 2019-2020, Daniel Nagel
 All rights reserved.
 
 """
-from importlib import reload
-
 import numpy as np
 import pytest
-
-import __main__ as main
 import msmhelper
 from msmhelper import tools
 from msmhelper.statetraj import StateTraj
-
-
-class change_main__file__:
-    """Emulate an ipython usage."""
-
-    def __enter__(self):
-        """Delete file name and reload module."""
-        self.filename = main.__file__
-        del main.__file__
-        main.msmhelper = reload(msmhelper)
-
-    def __exit__(self, typ, val, traceback):
-        """Reset file name and reload module."""
-        main.__file__ = self.filename
-        main.msmhelper = reload(msmhelper)
 
 
 @pytest.mark.parametrize('data, expected, val_old, val_new', [
@@ -168,13 +149,6 @@ def test__check_state_traj(traj):
 
     with pytest.raises(TypeError):
         tools._check_state_traj(traj[0])
-
-
-def test_get_runtime_user_information():
-    """Check for console usage."""
-    assert tools.get_runtime_user_information()['script_name'] != 'console'
-    with change_main__file__():
-        assert tools.get_runtime_user_information()['script_name'] == 'console'
 
 
 @pytest.mark.parametrize('mat, power', [

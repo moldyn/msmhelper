@@ -2,23 +2,16 @@
 """Set of helpful functions.
 
 BSD 3-Clause License
-Copyright (c) 2019-2020, Daniel Nagel
+Copyright (c) 2019-2023, Daniel Nagel
 All rights reserved.
 
 TODO:
     - Correct border effects of running mean
 
 """
-import datetime
-import getpass  # noqa: SC100 # get user name with getpass.getuser()
-import os
-import platform  # get pc name with platform.node()
-import sys
-
 import numba
 import numpy as np
 
-import __main__ as main
 from msmhelper.statetraj import StateTraj
 
 
@@ -250,42 +243,6 @@ def swapcols(array, indicesold, indicesnew):
     array_swapped.T[indicesold] = array.T[indicesnew]
 
     return array_swapped
-
-
-def get_runtime_user_information():
-    r"""Get user runtime information.
-
-    !!! warning
-        For python 3.5 or lower the date is not formatted and contains
-        microscends.
-
-    Returns
-    -------
-    RUI : dict
-        Holding username in 'user', pc name in 'pc', date of execution 'date',
-        path of execution 'script_dir' and name of execution main file
-        'script_name'. In case of interactive usage, script_name is 'console'.
-
-    """
-    try:
-        script_dir, script_name = os.path.split(
-            os.path.abspath(main.__file__),  # noqa: WPS609
-        )
-    except AttributeError:  # pragma: no cover
-        script_dir, script_name = '', 'console'
-
-    # get time without microseconds
-    date = datetime.datetime.now()
-    if sys.version_info >= (3, 6):
-        date = date.isoformat(sep=' ', timespec='seconds')
-
-    return {
-        'user': getpass.getuser(),
-        'pc': platform.node(),
-        'date': date,
-        'script_dir': script_dir,
-        'script_name': script_name,
-    }
 
 
 def _asindex(idx):
