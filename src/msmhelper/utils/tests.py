@@ -9,7 +9,7 @@ All rights reserved.
 import decorit
 import numpy as np
 
-from msmhelper import tools
+from msmhelper.utils import _utils
 from msmhelper.statetraj import StateTraj
 
 
@@ -55,7 +55,7 @@ def is_state_traj(trajs):
 
     """
     try:
-        tools._check_state_traj(trajs)  # noqa: WPS437
+        _utils._check_state_traj(trajs)  # noqa: WPS437
     except TypeError:
         return False
     else:
@@ -78,7 +78,7 @@ def is_index_traj(trajs):
     if isinstance(trajs, StateTraj):
         return True
     if is_state_traj(trajs):
-        states = tools.unique(trajs)
+        states = _utils.unique(trajs)
         return np.array_equal(states, np.arange(len(states)))
     return False
 
@@ -143,7 +143,7 @@ def is_ergodic(matrix, atol=1e-8):
     nstates = len(matrix)
     exponent = (nstates - 1)**2 + 1
 
-    matrix = tools.matrix_power(matrix, exponent)
+    matrix = _utils.matrix_power(matrix, exponent)
     return (matrix > atol).all()
 
 
@@ -181,7 +181,7 @@ def is_fuzzy_ergodic(matrix, atol=1e-8):
 
     nstates = len(matrix)
     exponent = (nstates - 1)**2 + 1
-    matrix = tools.matrix_power(matrix, exponent)
+    matrix = _utils.matrix_power(matrix, exponent)
 
     return np.logical_or(matrix > 0, is_trap_state).all()
 
@@ -208,7 +208,7 @@ def ergodic_mask(matrix, atol=1e-8):
     nstates = len(matrix)
     exponent = (nstates - 1)**2 + 1
 
-    matrix = tools.matrix_power(matrix, exponent) > atol
+    matrix = _utils.matrix_power(matrix, exponent) > atol
     matrix = np.logical_and(matrix, matrix.T)
 
     # find minimum row counts to identify largest connected block

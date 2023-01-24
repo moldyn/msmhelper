@@ -10,10 +10,9 @@ from .io import (
     open_limits,
 )
 from .statetraj import LumpedStateTraj, StateTraj
-from .tools import (
+from .utils import (
     rename_by_population,
     rename_by_index,
-    runningmean,
     shift_data,
     unique,
 )

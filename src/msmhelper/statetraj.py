@@ -117,14 +117,14 @@ class StateTraj:  # noqa: WPS214
             List of ndarrays holding the input data.
 
         """
-        self._trajs = mh.tools.format_state_traj(trajs)
+        self._trajs = mh.utils.format_state_traj(trajs)
 
         # get number of states
-        self._states = mh.tools.unique(self._trajs)
+        self._states = mh.utils.unique(self._trajs)
 
         # shift to indices
         if not np.array_equal(self._states, np.arange(self.nstates)):
-            self._trajs, self._states = mh.tools.rename_by_index(
+            self._trajs, self._states = mh.utils.rename_by_index(
                 self._trajs,
                 return_permutation=True,
             )
@@ -518,7 +518,7 @@ class LumpedStateTraj(StateTraj):
 
         self.state_assignment = np.zeros(self.nmicrostates, dtype=np.int64)
         for idx, microstate in enumerate(self.microstates):
-            idx_first = mh.tools.find_first(microstate, microtrajs_flatten)
+            idx_first = mh.utils.find_first(microstate, microtrajs_flatten)
             self.state_assignment[idx] = macrotrajs_flatten[idx_first]
 
         self.state_assignment_idx = mh.shift_data(
@@ -529,14 +529,14 @@ class LumpedStateTraj(StateTraj):
 
     def _parse_microtrajs(self, trajs):
         """Parse the microtrajs."""
-        self._trajs = mh.tools.format_state_traj(trajs)
+        self._trajs = mh.utils.format_state_traj(trajs)
 
         # get number of states
-        self._states = mh.tools.unique(self._trajs)
+        self._states = mh.utils.unique(self._trajs)
 
         # shift to indices
         if not np.array_equal(self._states, np.arange(self.nmicrostates)):
-            self._trajs, self._states = mh.tools.rename_by_index(
+            self._trajs, self._states = mh.utils.rename_by_index(
                 self._trajs,
                 return_permutation=True,
             )
