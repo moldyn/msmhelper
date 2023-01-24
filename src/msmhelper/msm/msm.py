@@ -10,7 +10,7 @@ import decorit
 import numba
 import numpy as np
 
-from msmhelper import tests
+from msmhelper.utils import tests
 from msmhelper.msm.utils import linalg
 from msmhelper.statetraj import LumpedStateTraj, StateTraj
 

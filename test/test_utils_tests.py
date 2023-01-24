@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
-"""Tests for the tests module.
+"""Tests for the tests submodule.
 
 BSD 3-Clause License
-Copyright (c) 2019-2020, Daniel Nagel
+Copyright (c) 2019-2023, Daniel Nagel
 All rights reserved.
 
 """
 import numpy as np
 import pytest
 
-from msmhelper import tests, tools
+from msmhelper import tools
+from msmhelper.utils import tests
 from msmhelper.statetraj import StateTraj
 
 

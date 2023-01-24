@@ -2,7 +2,7 @@
 """Benchmark Markov State Model.
 
 BSD 3-Clause License
-Copyright (c) 2019-2020, Daniel Nagel
+Copyright (c) 2019-2023, Daniel Nagel
 All rights reserved.
 
 """
@@ -10,7 +10,8 @@ import decorit
 import numba
 import numpy as np
 
-from msmhelper import msm, tests, tools
+from msmhelper import msm, tools
+from msmhelper import utils
 from msmhelper.statetraj import LumpedStateTraj, StateTraj
 
 
@@ -86,8 +87,8 @@ def _chapman_kolmogorov_test(trajs, lagtime, tmax):
     # estimate Markov model
     tmat, _ = trajs.estimate_markov_model(lagtime=lagtime)
 
-    is_ergodic = tests.is_ergodic(tmat)
-    is_fuzzy_ergodic = tests.is_fuzzy_ergodic(tmat)
+    is_ergodic = utils.tests.is_ergodic(tmat)
+    is_fuzzy_ergodic = utils.tests.is_fuzzy_ergodic(tmat)
     for idx in range(ntimes):
         tmatpow = tools.matrix_power(tmat, idx + 1)
         ckeq[:, idx] = np.diagonal(tmatpow)
@@ -125,8 +126,8 @@ def _chapman_kolmogorov_test_md(trajs, tmin, tmax, steps=30):
     for idx, time in enumerate(times):
         tmat, _ = macrotrajs.estimate_markov_model(lagtime=time)
         ckeq[:, idx] = np.diagonal(tmat)
-        is_ergodic[idx] = tests.is_ergodic(tmat)
-        is_fuzzy_ergodic[idx] = tests.is_fuzzy_ergodic(tmat)
+        is_ergodic[idx] = utils.tests.is_ergodic(tmat)
+        is_fuzzy_ergodic[idx] = utils.tests.is_fuzzy_ergodic(tmat)
 
     return {
         'ck': ckeq,

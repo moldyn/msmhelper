@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """  --8<-- "README.md" """
 
-from . import md, msm
+from . import md, msm, utils
 from .io import (
     opentxt,
     savetxt,
