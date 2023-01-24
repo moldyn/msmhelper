@@ -10,8 +10,7 @@ import decorit
 import numba
 import numpy as np
 
-from msmhelper import msm, tools
-from msmhelper import utils
+from msmhelper import msm, utils
 from msmhelper.statetraj import LumpedStateTraj, StateTraj
 
 
@@ -90,7 +89,7 @@ def _chapman_kolmogorov_test(trajs, lagtime, tmax):
     is_ergodic = utils.tests.is_ergodic(tmat)
     is_fuzzy_ergodic = utils.tests.is_fuzzy_ergodic(tmat)
     for idx in range(ntimes):
-        tmatpow = tools.matrix_power(tmat, idx + 1)
+        tmatpow = utils.matrix_power(tmat, idx + 1)
         ckeq[:, idx] = np.diagonal(tmatpow)
 
     return {

@@ -16,7 +16,7 @@ import numpy as np
 import pandas as pd
 
 import __main__ as main
-from msmhelper import tools
+from msmhelper import utils
 
 
 class FileError(Exception):
@@ -81,7 +81,7 @@ def opentxt(file_name, comment='#', nrows=None, **kwargs):
             array = array.flatten()
         # swap columns back to ensure correct order
         elif cols is not None:
-            array = tools.swapcols(array, idx, np.arange(len(idx)))
+            array = utils.swapcols(array, idx, np.arange(len(idx)))
 
         return array
 

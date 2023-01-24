@@ -9,7 +9,7 @@ All rights reserved.
 import numpy as np
 import pytest
 
-from msmhelper import tools
+from msmhelper import utils
 from msmhelper.utils import tests
 from msmhelper.statetraj import StateTraj
 
@@ -30,7 +30,7 @@ def test_is_quadratic(mat):
 @pytest.mark.parametrize('traj', [([1, 1, 1, 1, 1, 2, 2, 1, 2, 0, 2, 2, 0])])
 def test_is_state_traj(traj):
     """Test formating state trajectory."""
-    traj = tools.format_state_traj(traj)
+    traj = utils.format_state_traj(traj)
 
     assert tests.is_state_traj(traj)
     assert not tests.is_state_traj([traj[0].astype(np.float32)])
@@ -39,7 +39,7 @@ def test_is_state_traj(traj):
 @pytest.mark.parametrize('traj', [([1, 1, 1, 1, 1, 2, 2, 1, 2, 0, 2, 2, 0])])
 def test_is_index_traj(traj):
     """Test formating state trajectory."""
-    traj = tools.format_state_traj(traj)
+    traj = utils.format_state_traj(traj)
 
     assert tests.is_index_traj(traj)
     assert tests.is_index_traj(StateTraj(traj))
