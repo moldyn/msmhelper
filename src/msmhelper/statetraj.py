@@ -237,7 +237,7 @@ class StateTraj:  # noqa: WPS214
             Array with corresponding states.
 
         """
-        return mh.estimate_markov_model(self, lagtime)
+        return mh.msm.estimate_markov_model(self, lagtime)
 
     def state_to_idx(self, state):
         """Get idx corresponding to state.
@@ -468,7 +468,7 @@ class LumpedStateTraj(StateTraj):
 
         """
         # in the following corresponds 'i' to micro and 'a' to macro
-        msm_i, _ = mh.estimate_markov_model(self, lagtime)
+        msm_i, _ = mh.msm.estimate_markov_model(self, lagtime)
         if not mh.tests.is_ergodic(msm_i):
             raise TypeError('tmat needs to be ergodic transition matrix.')
         return (self._estimate_markov_model(msm_i), self.states)
@@ -480,7 +480,7 @@ class LumpedStateTraj(StateTraj):
         id_i = np.diag(ones_i)
         id_a = np.diag(ones_a)
 
-        peq_i = mh.peq(msm_i)
+        peq_i = mh.msm.peq(msm_i)
         peq_a = np.array([
             np.sum(peq_i[self.state_assignment == state])
             for state in self.states
@@ -504,7 +504,7 @@ class LumpedStateTraj(StateTraj):
             ones_a[:, np.newaxis] * peq_a[np.newaxis:, ] -
             m_twoprime @ d_a
         )
-        return mh.row_normalize_matrix(msm_a)
+        return mh.msm.row_normalize_matrix(msm_a)
 
     def _parse_macrotrajs(self, macrotrajs):
         """Parse the macrotrajs."""
