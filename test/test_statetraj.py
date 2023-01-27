@@ -195,9 +195,13 @@ def test_microstate_trajs(macrotraj, statetraj, indextraj):
         macro_traj.state_trajs_flatten,
     )
 
-    # check that state_trajs cannot be set unlike to StateTraj
+    # check that state_trajs cannot be set
     with pytest.raises(AttributeError):
         macro_traj.state_trajs = 5
+
+    # check that state_trajs cannot be set
+    with pytest.raises(AttributeError):
+        macro_traj.trajs = 5
 
     # check for index trajs
     macro_traj = LumpedStateTraj(macrotraj, indextraj)

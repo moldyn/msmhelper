@@ -28,7 +28,7 @@ class StateTraj:  # noqa: WPS214
     def __init__(self, trajs):
         """Initialize StateTraj and convert to index trajectories.
 
-        If called with StateTraj instance, it will be retuned instead.
+        If called with StateTraj instance, it will be returned instead.
 
         Parameters
         ----------
@@ -39,7 +39,20 @@ class StateTraj:  # noqa: WPS214
         if isinstance(trajs, StateTraj):
             return
 
-        self.state_trajs = trajs
+        self._trajs = mh.utils.format_state_traj(trajs)
+
+        # get number of states
+        self._states = mh.utils.unique(self._trajs)
+
+        # shift to indices
+        if not np.array_equal(self._states, np.arange(self.nstates)):
+            self._trajs, self._states = mh.utils.rename_by_index(
+                self._trajs,
+                return_permutation=True,
+            )
+
+        # set number of frames
+        self._nframes = np.sum([len(traj) for traj in self.trajs])
 
     @property
     def states(self):
@@ -79,7 +92,7 @@ class StateTraj:  # noqa: WPS214
 
     @property
     def nframes(self):
-        """Return cummulated length of all trajectories.
+        """Return cumulative length of all trajectories.
 
         Returns
         -------
@@ -106,31 +119,6 @@ class StateTraj:  # noqa: WPS214
             np.arange(self.nstates),
             self.states,
         )
-
-    @state_trajs.setter
-    def state_trajs(self, trajs):
-        """Set the state trajectory.
-
-        Parameters
-        ----------
-        trajs : list of ndarrays
-            List of ndarrays holding the input data.
-
-        """
-        self._trajs = mh.utils.format_state_traj(trajs)
-
-        # get number of states
-        self._states = mh.utils.unique(self._trajs)
-
-        # shift to indices
-        if not np.array_equal(self._states, np.arange(self.nstates)):
-            self._trajs, self._states = mh.utils.rename_by_index(
-                self._trajs,
-                return_permutation=True,
-            )
-
-        # set number of frames
-        self._nframes = np.sum([len(traj) for traj in self.trajs])
 
     @property
     def state_trajs_flatten(self):
