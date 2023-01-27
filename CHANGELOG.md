@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Moved all functions related to msm to `msm` module
   - Moved all functions related to raw state trajectories to `md` module
   - Moved all remaing functions into `utils` module
+- Removed `StateTraj.trajs` property to reduce confusion between index and
+  state trajectories.
 - Removed Python 3.6 support.
 
 ### Added Features and Improvements 🙌:
