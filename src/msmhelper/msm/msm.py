@@ -37,20 +37,7 @@ def estimate_markov_model(trajs, lagtime):
 
     """
     trajs = StateTraj(trajs)
-
-    if isinstance(trajs, LumpedStateTraj):
-        return _estimate_markov_model(
-            trajs.trajs,
-            lagtime,
-            trajs.nmicrostates,
-            trajs.microstates,
-        )
-    return _estimate_markov_model(
-        trajs.trajs,
-        lagtime,
-        trajs.nstates,
-        trajs.states,
-    )
+    return trajs.estimate_markov_model(lagtime)
 
 
 def _estimate_markov_model(trajs, lagtime, nstates, perm=None):

@@ -270,7 +270,7 @@ def test_LumpedStateTraj_estimate_markov_model(macro_traj):
     np.testing.assert_array_equal(states, states_ref)
 
     with pytest.raises(TypeError):
-        macrotraj = macro_traj.state_trajs_flatten
+        macrotraj = macro_traj.trajs_flatten
         microtraj = macro_traj.microstate_trajs_flatten
         microtraj[-1] = np.max(microtraj) + 1
         trap_traj = LumpedStateTraj(macrotraj, microtraj)
