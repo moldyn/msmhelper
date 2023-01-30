@@ -205,6 +205,14 @@ def test_microstate_trajs(macrotraj, statetraj, indextraj):
         indextraj,
         macro_traj.microstate_trajs_flatten,
     )
+    np.testing.assert_array_equal(
+        indextraj,
+        macro_traj.microstate_index_trajs[0],
+    )
+    np.testing.assert_array_equal(
+        indextraj,
+        macro_traj.microstate_index_trajs_flatten,
+    )
 
 
 def test___eq__(state_traj, index_traj):
