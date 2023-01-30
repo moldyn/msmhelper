@@ -14,6 +14,7 @@ import numpy as np
 
 from msmhelper.md.comparison import _intersect as intersect
 from msmhelper.msm.utils import linalg
+from msmhelper.utils import shift_data
 from msmhelper.statetraj import StateTraj
 
 
@@ -276,10 +277,14 @@ def propagate_MCMC(
     cummat = _get_cummat(trajs=trajs, lagtime=lagtime)
 
     # do not convert for pytest coverage
-    return _propagate_MCMC(  # pragma: no cover
-        cummat=cummat,
-        start=idx_start,
-        steps=steps,
+    return shift_data(
+        _propagate_MCMC(  # pragma: no cover
+            cummat=cummat,
+            start=idx_start,
+            steps=steps,
+        ),
+        np.arange(trajs.nstates),
+        trajs.states,
     )
 
 
