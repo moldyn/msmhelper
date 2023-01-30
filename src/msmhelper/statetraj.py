@@ -14,7 +14,7 @@ import msmhelper as mh
 class StateTraj:  # noqa: WPS214
     """Class for handling discrete state trajectories."""
 
-    # noqa: E800 # add slots magic,  self.__slots__ = ('_states', '_trajs').
+    __slots__ = ('_trajs', '_states')
     def __new__(cls, trajs):
         """Initialize new instance.
 
@@ -50,9 +50,6 @@ class StateTraj:  # noqa: WPS214
                 self._trajs,
                 return_permutation=True,
             )
-
-        # set number of frames
-        self._nframes = np.sum([len(traj) for traj in self.trajs])
 
     @property
     def states(self):
@@ -100,7 +97,7 @@ class StateTraj:  # noqa: WPS214
             Number of frames of all trajectories.
 
         """
-        return self._nframes
+        return np.sum([len(traj) for traj in self._trajs])
 
     @property
     def state_trajs(self):
