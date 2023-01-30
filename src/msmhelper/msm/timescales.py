@@ -305,6 +305,9 @@ def _get_cummat(trajs, lagtime):
     # estimate cummulative transition matrix
     msm, _ = StateTraj(trajs).estimate_markov_model(lagtime)
 
+    if np.any(msm < 0):
+        raise ValueError('An entry of T_ij is less than 0!')
+
     cummat_perm = np.empty_like(msm)
     state_perm = np.empty_like(msm, dtype=np.int64)
 
