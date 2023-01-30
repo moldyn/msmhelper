@@ -258,9 +258,9 @@ class LumpedStateTraj(StateTraj):
         return super().__new__(cls, None)
 
     def __init__(self, macrotrajs, microtrajs=None, positive=False):
-        """Initialize LumpedStateTraj and convert to index trajectories.
+        r"""Initialize LumpedStateTraj and convert to index trajectories.
 
-        If called with LumpedStateTraj instance, it will be retuned instead.
+        If called with LumpedStateTraj instance, it will be returned instead.
 
         Parameters
         ----------
