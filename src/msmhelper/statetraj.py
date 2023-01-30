@@ -100,7 +100,7 @@ class StateTraj:  # noqa: WPS214
         return np.sum([len(traj) for traj in self._trajs])
 
     @property
-    def state_trajs(self):
+    def trajs(self):
         """Return state trajectory.
 
         Returns
@@ -109,6 +109,8 @@ class StateTraj:  # noqa: WPS214
             List of ndarrays holding the input data.
 
         """
+        if np.array_equal(self.states, np.arange(1, self.nstates + 1)):
+            return [traj + 1 for traj in self._trajs]
         if np.array_equal(self.states, np.arange(self.nstates)):
             return self._trajs
         return mh.shift_data(
@@ -118,22 +120,20 @@ class StateTraj:  # noqa: WPS214
         )
 
     @property
-    def state_trajs_flatten(self):
+    def trajs_flatten(self):
         """Return flattened state trajectory.
 
         Returns
         -------
         trajs : ndarray
-            1D ndarrays representation of state trajectories.
+            1D ndarray representation of state trajectories.
 
         """
-        return np.concatenate(self.state_trajs)
+        return np.concatenate(self.trajs)
 
     @property
     def index_trajs(self):
         """Return index trajectory.
-
-        Same as `self.trajs`
 
         Returns
         -------
@@ -143,21 +143,33 @@ class StateTraj:  # noqa: WPS214
         """
         return self._trajs
 
+    @property
+    def index_trajs_flatten(self):
+        """Return flattened index trajectory.
+
+        Returns
+        -------
+        trajs : ndarray
+            1D ndarray representation of index trajectories.
+
+        """
+        return np.concatenate(self.index_trajs)
+
     def __repr__(self):
         """Return representation of class."""
         kw = {
             'classname': self.__class__.__name__,
-            'trajs': self.state_trajs,
+            'trajs': self.trajs,
         }
         return ('{classname}({trajs})'.format(**kw))
 
     def __str__(self):
         """Return string representation of class."""
-        return ('{trajs!s}'.format(trajs=self.state_trajs))
+        return ('{trajs!s}'.format(trajs=self.trajs))
 
     def __iter__(self):
         """Iterate over trajectories."""
-        return iter(self.state_trajs)
+        return iter(self.trajs)
 
     def __len__(self):
         """Return length of list of trajectories."""
@@ -165,7 +177,7 @@ class StateTraj:  # noqa: WPS214
 
     def __getitem__(self, key):
         """Get key value."""
-        return self.state_trajs.__getitem__(key)  # noqa: WPS609
+        return self.trajs.__getitem__(key)  # noqa: WPS609
 
     def __eq__(self, other):
         """Compare two objects."""
