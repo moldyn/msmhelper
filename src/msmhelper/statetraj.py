@@ -13,8 +13,8 @@ import msmhelper as mh
 
 class StateTraj:  # noqa: WPS214
     """Class for handling discrete state trajectories."""
-
     __slots__ = ('_trajs', '_states')
+
     def __new__(cls, trajs):
         """Initialize new instance.
 
