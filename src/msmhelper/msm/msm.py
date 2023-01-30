@@ -12,7 +12,7 @@ import numpy as np
 
 from msmhelper.utils import tests
 from msmhelper.msm.utils import linalg
-from msmhelper.statetraj import LumpedStateTraj, StateTraj
+from msmhelper.statetraj import StateTraj
 
 
 def estimate_markov_model(trajs, lagtime):
