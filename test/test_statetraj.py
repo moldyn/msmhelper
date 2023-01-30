@@ -276,6 +276,18 @@ def test_LumpedStateTraj_estimate_markov_model(macro_traj):
         trap_traj = LumpedStateTraj(macrotraj, microtraj)
         trap_traj.estimate_markov_model(tlag)
 
+    # enforce T_ij >= 0
+    macro_traj = LumpedStateTraj(
+        macro_traj.trajs,
+        macro_traj.microstate_trajs,
+        positive=True,
+    )
+
+    tmat, states = macro_traj.estimate_markov_model(tlag)
+    assert np.all(tmat >= 0)
+    np.testing.assert_array_almost_equal(tmat, tmat_ref)
+    np.testing.assert_array_equal(states, states_ref)
+
 
 @pytest.mark.parametrize('traj, state, idx, error', [
     ([1, 2, 4], 1, 0, None),

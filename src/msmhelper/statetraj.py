@@ -243,15 +243,21 @@ class StateTraj:  # noqa: WPS214
 
 class LumpedStateTraj(StateTraj):
     """Class for handling lumped discrete state trajectories."""
-    __slots__ = ('_trajs', '_states', '_macrostates', '_state_assignment')
+    __slots__ = (
+        '_trajs',
+        '_states',
+        '_macrostates',
+        '_state_assignment',
+        'positive',
+    )
 
-    def __new__(cls, macrotrajs, microtrajs=None):
+    def __new__(cls, macrotrajs, microtrajs=None, positive=False):
         """Initialize new instance."""
         if isinstance(macrotrajs, LumpedStateTraj):
             return macrotrajs
         return super().__new__(cls, None)
 
-    def __init__(self, macrotrajs, microtrajs=None):
+    def __init__(self, macrotrajs, microtrajs=None, positive=False):
         """Initialize LumpedStateTraj and convert to index trajectories.
 
         If called with LumpedStateTraj instance, it will be retuned instead.
@@ -262,10 +268,12 @@ class LumpedStateTraj(StateTraj):
             Lumped state trajectory/trajectories. The states need to be
             integers and all states needs to correspond to union of
             microstates.
-
         microtrajs : list or ndarray or list of ndarray
             State trajectory/trajectories. EaThe states should start from zero
             and need to be integers.
+        positive : bool
+            If `True` $T_ij\ge0$ will be enforced, else small negative values
+            are possible.
 
         """
         if isinstance(macrotrajs, LumpedStateTraj):
@@ -276,6 +284,8 @@ class LumpedStateTraj(StateTraj):
                 'microtrajs may only be None when macrotrajs is of type ' +
                 'LumpedStateTraj.',
             )
+
+        self.positive = positive
 
         # parse macrotraj
         macrotrajs = mh.utils.format_state_traj(macrotrajs)
@@ -458,7 +468,8 @@ class LumpedStateTraj(StateTraj):
                 np.array_equal(self.trajs[idx], other.trajs[idx])
                 for idx in range(self.ntrajs)
             ) and
-            np.array_equal(self.state_assignment, other.state_assignment)
+            np.array_equal(self.state_assignment, other.state_assignment) and
+            self.positive == other.positive
         )
 
     def estimate_markov_model(self, lagtime):
@@ -523,4 +534,9 @@ class LumpedStateTraj(StateTraj):
             ones_a[:, np.newaxis] * peq_a[np.newaxis:, ] -
             m_twoprime @ d_a
         )
+
+        # enforce T_ij >= 0
+        if self.positive:
+            msm_a[msm_a < 0] = 0
+
         return mh.msm.row_normalize_matrix(msm_a)
