@@ -78,7 +78,7 @@ def test_StateTraj_constructor(statetraj):
     traj = StateTraj(statetraj)
     np.testing.assert_array_equal(
         statetraj,
-        traj.state_trajs[0],
+        traj.trajs[0],
     )
 
     # check if passing StateTraj returns object
@@ -93,7 +93,7 @@ def test_LumpedStateTraj_constructor(macrotraj, statetraj):
     traj = LumpedStateTraj(macrotraj, statetraj)
     np.testing.assert_array_equal(
         macrotraj,
-        traj.state_trajs[0],
+        traj.trajs[0],
     )
 
     np.testing.assert_array_equal(
@@ -138,11 +138,7 @@ def test_index_trajs(state_traj, index_traj):
     """Test index trajs property."""
     np.testing.assert_array_equal(
         index_traj.trajs,
-        index_traj.state_trajs,
-    )
-    np.testing.assert_array_equal(
-        state_traj.trajs,
-        state_traj.index_trajs,
+        index_traj.index_trajs,
     )
 
     with pytest.raises(AttributeError):
@@ -163,15 +159,15 @@ def test_trajs_flatten(state_traj, index_traj):
     )
 
 
-def test_state_trajs_flatten(state_traj, index_traj):
-    """Test flatten state trajectory."""
+def test_index_trajs_flatten(state_traj, index_traj):
+    """Test flatten index trajectory."""
     np.testing.assert_array_equal(
-        index_traj.state_trajs[0],
-        index_traj.state_trajs_flatten,
+        index_traj.index_trajs[0],
+        index_traj.index_trajs_flatten,
     )
     np.testing.assert_array_equal(
-        state_traj.state_trajs[0],
-        state_traj.state_trajs_flatten,
+        state_traj.index_trajs[0],
+        state_traj.index_trajs_flatten,
     )
 
 
@@ -188,33 +184,41 @@ def test_microstate_trajs(macrotraj, statetraj, indextraj):
     )
     np.testing.assert_array_equal(
         macrotraj,
-        macro_traj.state_trajs[0],
+        macro_traj.trajs[0],
     )
     np.testing.assert_array_equal(
         macrotraj,
-        macro_traj.state_trajs_flatten,
+        macro_traj.trajs_flatten,
     )
 
-    # check that state_trajs cannot be set unlike to StateTraj
+    # check that state_trajs cannot be set
     with pytest.raises(AttributeError):
-        macro_traj.state_trajs = 5
+        macro_traj.trajs = 5
 
     # check for index trajs
     macro_traj = LumpedStateTraj(macrotraj, indextraj)
     np.testing.assert_array_equal(
         indextraj,
-        macro_traj.trajs[0],
+        macro_traj.microstate_trajs[0],
     )
     np.testing.assert_array_equal(
         indextraj,
-        macro_traj.trajs_flatten,
+        macro_traj.microstate_trajs_flatten,
+    )
+    np.testing.assert_array_equal(
+        indextraj,
+        macro_traj.microstate_index_trajs[0],
+    )
+    np.testing.assert_array_equal(
+        indextraj,
+        macro_traj.microstate_index_trajs_flatten,
     )
 
 
 def test___eq__(state_traj, index_traj):
     """Test eq method."""
     for traj in [state_traj, index_traj]:
-        assert StateTraj(traj.state_trajs) == traj
+        assert StateTraj(traj.trajs) == traj
 
     assert state_traj != index_traj
     assert state_traj != 5
@@ -223,7 +227,7 @@ def test___eq__(state_traj, index_traj):
 def test_LumpedStateTraj__eq__(macro_traj):
     """Test eq method."""
     assert LumpedStateTraj(
-        macro_traj.state_trajs, macro_traj.microstate_trajs,
+        macro_traj.trajs, macro_traj.microstate_trajs,
     ) == macro_traj
 
     assert macro_traj != LumpedStateTraj([0, 0], [1, 0])
@@ -274,11 +278,23 @@ def test_LumpedStateTraj_estimate_markov_model(macro_traj):
     np.testing.assert_array_equal(states, states_ref)
 
     with pytest.raises(TypeError):
-        macrotraj = macro_traj.state_trajs_flatten
+        macrotraj = macro_traj.trajs_flatten
         microtraj = macro_traj.microstate_trajs_flatten
         microtraj[-1] = np.max(microtraj) + 1
         trap_traj = LumpedStateTraj(macrotraj, microtraj)
         trap_traj.estimate_markov_model(tlag)
+
+    # enforce T_ij >= 0
+    macro_traj = LumpedStateTraj(
+        macro_traj.trajs,
+        macro_traj.microstate_trajs,
+        positive=True,
+    )
+
+    tmat, states = macro_traj.estimate_markov_model(tlag)
+    assert np.all(tmat >= 0)
+    np.testing.assert_array_almost_equal(tmat, tmat_ref)
+    np.testing.assert_array_equal(states, states_ref)
 
 
 @pytest.mark.parametrize('traj, state, idx, error', [

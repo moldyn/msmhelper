@@ -13,8 +13,8 @@ import msmhelper as mh
 
 class StateTraj:  # noqa: WPS214
     """Class for handling discrete state trajectories."""
+    __slots__ = ('_trajs', '_states')
 
-    # noqa: E800 # add slots magic,  self.__slots__ = ('_states', '_trajs').
     def __new__(cls, trajs):
         """Initialize new instance.
 
@@ -28,7 +28,7 @@ class StateTraj:  # noqa: WPS214
     def __init__(self, trajs):
         """Initialize StateTraj and convert to index trajectories.
 
-        If called with StateTraj instance, it will be retuned instead.
+        If called with StateTraj instance, it will be returned instead.
 
         Parameters
         ----------
@@ -39,7 +39,17 @@ class StateTraj:  # noqa: WPS214
         if isinstance(trajs, StateTraj):
             return
 
-        self.state_trajs = trajs
+        self._trajs = mh.utils.format_state_traj(trajs)
+
+        # get number of states
+        self._states = mh.utils.unique(self._trajs)
+
+        # shift to indices
+        if not np.array_equal(self._states, np.arange(self.nstates)):
+            self._trajs, self._states = mh.utils.rename_by_index(
+                self._trajs,
+                return_permutation=True,
+            )
 
     @property
     def states(self):
@@ -79,7 +89,7 @@ class StateTraj:  # noqa: WPS214
 
     @property
     def nframes(self):
-        """Return cummulated length of all trajectories.
+        """Return cummulative length of all trajectories.
 
         Returns
         -------
@@ -87,10 +97,10 @@ class StateTraj:  # noqa: WPS214
             Number of frames of all trajectories.
 
         """
-        return self._nframes
+        return np.sum([len(traj) for traj in self._trajs])
 
     @property
-    def state_trajs(self):
+    def trajs(self):
         """Return state trajectory.
 
         Returns
@@ -99,67 +109,30 @@ class StateTraj:  # noqa: WPS214
             List of ndarrays holding the input data.
 
         """
+        if np.array_equal(self.states, np.arange(1, self.nstates + 1)):
+            return [traj + 1 for traj in self._trajs]
         if np.array_equal(self.states, np.arange(self.nstates)):
-            return self.trajs
+            return self._trajs
         return mh.shift_data(
-            self.trajs,
+            self._trajs,
             np.arange(self.nstates),
             self.states,
         )
 
-    @state_trajs.setter
-    def state_trajs(self, trajs):
-        """Set the state trajectory.
-
-        Parameters
-        ----------
-        trajs : list of ndarrays
-            List of ndarrays holding the input data.
-
-        """
-        self._trajs = mh.utils.format_state_traj(trajs)
-
-        # get number of states
-        self._states = mh.utils.unique(self._trajs)
-
-        # shift to indices
-        if not np.array_equal(self._states, np.arange(self.nstates)):
-            self._trajs, self._states = mh.utils.rename_by_index(
-                self._trajs,
-                return_permutation=True,
-            )
-
-        # set number of frames
-        self._nframes = np.sum([len(traj) for traj in self.trajs])
-
     @property
-    def state_trajs_flatten(self):
+    def trajs_flatten(self):
         """Return flattened state trajectory.
 
         Returns
         -------
         trajs : ndarray
-            1D ndarrays representation of state trajectories.
+            1D ndarray representation of state trajectories.
 
         """
-        return np.concatenate(self.state_trajs)
+        return np.concatenate(self.trajs)
 
     @property
     def index_trajs(self):
-        """Return index trajectory.
-
-        Same as `self.trajs`
-
-        Returns
-        -------
-        trajs : list of ndarrays
-            List of ndarrays holding the input data.
-
-        """
-        return self.trajs
-
-    @property
-    def trajs(self):
         """Return index trajectory.
 
         Returns
@@ -171,40 +144,40 @@ class StateTraj:  # noqa: WPS214
         return self._trajs
 
     @property
-    def trajs_flatten(self):
+    def index_trajs_flatten(self):
         """Return flattened index trajectory.
 
         Returns
         -------
         trajs : ndarray
-            1D ndarrays representation of index trajectories.
+            1D ndarray representation of index trajectories.
 
         """
-        return np.concatenate(self._trajs)
+        return np.concatenate(self.index_trajs)
 
     def __repr__(self):
         """Return representation of class."""
         kw = {
-            'clname': self.__class__.__name__,
-            'trajs': self.state_trajs,
+            'classname': self.__class__.__name__,
+            'trajs': self.trajs,
         }
-        return ('{clname}({trajs})'.format(**kw))
+        return ('{classname}({trajs})'.format(**kw))
 
     def __str__(self):
         """Return string representation of class."""
-        return ('{trajs!s}'.format(trajs=self.state_trajs))
+        return ('{trajs!s}'.format(trajs=self.trajs))
 
     def __iter__(self):
         """Iterate over trajectories."""
-        return iter(self.state_trajs)
+        return iter(self.trajs)
 
     def __len__(self):
         """Return length of list of trajectories."""
-        return len(self.trajs)
+        return len(self._trajs)
 
     def __getitem__(self, key):
         """Get key value."""
-        return self.state_trajs.__getitem__(key)  # noqa: WPS609
+        return self.trajs.__getitem__(key)  # noqa: WPS609
 
     def __eq__(self, other):
         """Compare two objects."""
@@ -237,7 +210,12 @@ class StateTraj:  # noqa: WPS214
             Array with corresponding states.
 
         """
-        return mh.msm.estimate_markov_model(self, lagtime)
+        return mh.msm.msm._estimate_markov_model(
+            self.index_trajs,
+            lagtime,
+            self.nstates,
+            self.states,
+        )
 
     def state_to_idx(self, state):
         """Get idx corresponding to state.
@@ -265,17 +243,24 @@ class StateTraj:  # noqa: WPS214
 
 class LumpedStateTraj(StateTraj):
     """Class for handling lumped discrete state trajectories."""
+    __slots__ = (
+        '_trajs',
+        '_states',
+        '_macrostates',
+        '_state_assignment',
+        'positive',
+    )
 
-    def __new__(cls, macrotrajs, microtrajs=None):
+    def __new__(cls, macrotrajs, microtrajs=None, positive=False):
         """Initialize new instance."""
         if isinstance(macrotrajs, LumpedStateTraj):
             return macrotrajs
         return super().__new__(cls, None)
 
-    def __init__(self, macrotrajs, microtrajs=None):
-        """Initialize LumpedStateTraj and convert to index trajectories.
+    def __init__(self, macrotrajs, microtrajs=None, positive=False):
+        r"""Initialize LumpedStateTraj and convert to index trajectories.
 
-        If called with LumpedStateTraj instance, it will be retuned instead.
+        If called with LumpedStateTraj instance, it will be returned instead.
 
         Parameters
         ----------
@@ -283,10 +268,12 @@ class LumpedStateTraj(StateTraj):
             Lumped state trajectory/trajectories. The states need to be
             integers and all states needs to correspond to union of
             microstates.
-
         microtrajs : list or ndarray or list of ndarray
             State trajectory/trajectories. EaThe states should start from zero
             and need to be integers.
+        positive : bool
+            If `True` $T_ij\ge0$ will be enforced, else small negative values
+            are possible.
 
         """
         if isinstance(macrotrajs, LumpedStateTraj):
@@ -297,11 +284,24 @@ class LumpedStateTraj(StateTraj):
                 'microtrajs may only be None when macrotrajs is of type ' +
                 'LumpedStateTraj.',
             )
-        # initialize base class
-        self._parse_microtrajs(microtrajs)
 
-        # parse the microstate to macrostate lumping
-        self._parse_macrotrajs(macrotrajs)
+        self.positive = positive
+
+        # parse macrotraj
+        macrotrajs = mh.utils.format_state_traj(macrotrajs)
+        self._macrostates = mh.utils.unique(macrotrajs)
+
+        # init microstate trajectories
+        super().__init__(microtrajs)
+
+        # cache flattened trajectories to speed up code for many states
+        macrotrajs_flatten = np.concatenate(macrotrajs)
+        microtrajs_flatten = self.microstate_trajs_flatten
+
+        self._state_assignment = np.zeros(self.nmicrostates, dtype=np.int64)
+        for idx, microstate in enumerate(self.microstates):
+            idx_first = mh.utils.find_first(microstate, microtrajs_flatten)
+            self._state_assignment[idx] = macrotrajs_flatten[idx_first]
 
     @property
     def states(self):
@@ -338,9 +338,9 @@ class LumpedStateTraj(StateTraj):
 
         """
         if np.array_equal(self.microstates, np.arange(self.nmicrostates)):
-            return self.trajs
+            return self._trajs
         return mh.shift_data(
-            self.trajs,
+            self._trajs,
             np.arange(self.nmicrostates),
             self.microstates,
         )
@@ -358,7 +358,31 @@ class LumpedStateTraj(StateTraj):
         return np.concatenate(self.microstate_trajs)
 
     @property
-    def state_trajs(self):
+    def microstate_index_trajs(self):
+        """Return microstate index trajectory.
+
+        Returns
+        -------
+        trajs : list of ndarrays
+            List of ndarrays holding the microstate index trajectory.
+
+        """
+        return self._trajs
+
+    @property
+    def microstate_index_trajs_flatten(self):
+        """Return flattened microstate index trajectory.
+
+        Returns
+        -------
+        trajs : ndarray
+            1D ndarrays representation of microstate index trajectories.
+
+        """
+        return np.concatenate(self.microstate_index_trajs)
+
+    @property
+    def trajs(self):
         """Return macrostate trajectory.
 
         Returns
@@ -368,26 +392,14 @@ class LumpedStateTraj(StateTraj):
 
         """
         return mh.shift_data(
-            self.trajs,
+            self._trajs,
             np.arange(self.nmicrostates),
-            self.state_assignment,
+            self._state_assignment,
         )
 
     @property
-    def state_trajs_flatten(self):
-        """Return flattened macrostate trajectory.
-
-        Returns
-        -------
-        trajs : ndarray
-            1D ndarrays representation of macrostate trajectories.
-
-        """
-        return np.concatenate(self.state_trajs)
-
-    @property
     def microstates(self):
-        """Return active set of states.
+        """Return active set of microstates.
 
         Returns
         -------
@@ -399,40 +411,52 @@ class LumpedStateTraj(StateTraj):
 
     @property
     def nmicrostates(self):
-        """Return number of states.
+        """Return number of active set of states.
 
         Returns
         -------
-        nstates : int
-            Number of states.
+        states : ndarray
+            Numpy array holding active set of states.
 
         """
         return len(self.microstates)
 
+    @property
+    def state_assignment(self):
+        """Return micro to macrostate assignment vector.
+
+        Returns
+        -------
+        state_assignment : ndarray
+            Micro to macrostate assignment vector.
+
+        """
+        return self._state_assignment
+
+    @property
+    def _state_assignment_idx(self):
+        """Return micro to macrostate assignment vector.
+
+        Returns
+        -------
+        state_assignment_idx : ndarray
+            Micro to macrostate assignment vector.
+
+        """
+        return mh.shift_data(
+            self.state_assignment,
+            self.states,
+            np.arange(self.nstates),
+        )
+
     def __repr__(self):
         """Return representation of class."""
         kw = {
-            'clname': self.__class__.__name__,
-            'trajs': self.state_trajs,
+            'classname': self.__class__.__name__,
+            'trajs': self.trajs,
             'microtrajs': self.microstate_trajs,
         }
-        return ('{clname}({trajs}, {microtrajs})'.format(**kw))
-
-    def __str__(self):
-        """Return string representation of class."""
-        return ('{trajs!s}'.format(trajs=self.state_trajs))
-
-    def __iter__(self):
-        """Iterate over trajectories."""
-        return iter(self.state_trajs)
-
-    def __len__(self):
-        """Return length of list of trajectories."""
-        return len(self.trajs)
-
-    def __getitem__(self, key):
-        """Get key value."""
-        return self.state_trajs.__getitem__(key)  # noqa: WPS609
+        return ('{classname}({trajs}, {microtrajs})'.format(**kw))
 
     def __eq__(self, other):
         """Compare two objects."""
@@ -444,7 +468,8 @@ class LumpedStateTraj(StateTraj):
                 np.array_equal(self.trajs[idx], other.trajs[idx])
                 for idx in range(self.ntrajs)
             ) and
-            np.array_equal(self.state_assignment, other.state_assignment)
+            np.array_equal(self.state_assignment, other.state_assignment) and
+            self.positive == other.positive
         )
 
     def estimate_markov_model(self, lagtime):
@@ -468,7 +493,12 @@ class LumpedStateTraj(StateTraj):
 
         """
         # in the following corresponds 'i' to micro and 'a' to macro
-        msm_i, _ = mh.msm.estimate_markov_model(self, lagtime)
+        msm_i, _ = mh.msm.msm._estimate_markov_model(
+            self.microstate_index_trajs,
+            lagtime,
+            self.nmicrostates,
+            self.microstates,
+        )
         if not mh.utils.tests.is_ergodic(msm_i):
             raise TypeError('tmat needs to be ergodic transition matrix.')
         return (self._estimate_markov_model(msm_i), self.states)
@@ -488,7 +518,7 @@ class LumpedStateTraj(StateTraj):
         d_i = np.diag(peq_i)
         d_a = np.diag(peq_a)
         aggret = np.zeros((self.nmicrostates, self.nstates))
-        aggret[(np.arange(self.nmicrostates), self.state_assignment_idx)] = 1
+        aggret[(np.arange(self.nmicrostates), self._state_assignment_idx)] = 1
 
         m_prime = np.linalg.inv(
             id_i +
@@ -504,42 +534,9 @@ class LumpedStateTraj(StateTraj):
             ones_a[:, np.newaxis] * peq_a[np.newaxis:, ] -
             m_twoprime @ d_a
         )
+
+        # enforce T_ij >= 0
+        if self.positive:
+            msm_a[msm_a < 0] = 0
+
         return mh.msm.row_normalize_matrix(msm_a)
-
-    def _parse_macrotrajs(self, macrotrajs):
-        """Parse the macrotrajs."""
-        # TODO: improve performance by not using StateTraj
-        macrotrajs = StateTraj(macrotrajs)
-        self._macrostates = macrotrajs.states.copy()
-
-        # cache flattened trajectories to speed up code for many states
-        macrotrajs_flatten = macrotrajs.state_trajs_flatten
-        microtrajs_flatten = self.microstate_trajs_flatten
-
-        self.state_assignment = np.zeros(self.nmicrostates, dtype=np.int64)
-        for idx, microstate in enumerate(self.microstates):
-            idx_first = mh.utils.find_first(microstate, microtrajs_flatten)
-            self.state_assignment[idx] = macrotrajs_flatten[idx_first]
-
-        self.state_assignment_idx = mh.shift_data(
-            self.state_assignment,
-            self.states,
-            np.arange(self.nstates),
-        )
-
-    def _parse_microtrajs(self, trajs):
-        """Parse the microtrajs."""
-        self._trajs = mh.utils.format_state_traj(trajs)
-
-        # get number of states
-        self._states = mh.utils.unique(self._trajs)
-
-        # shift to indices
-        if not np.array_equal(self._states, np.arange(self.nmicrostates)):
-            self._trajs, self._states = mh.utils.rename_by_index(
-                self._trajs,
-                return_permutation=True,
-            )
-
-        # set number of frames
-        self._nframes = np.sum([len(traj) for traj in self.trajs])

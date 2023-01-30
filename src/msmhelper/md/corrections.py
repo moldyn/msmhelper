@@ -65,9 +65,9 @@ def dynamical_coring(trajs, lagtime, iterative=True):
 
     # convert trajs to numba list # noqa: SC100
     if numba.config.DISABLE_JIT:
-        cored_trajs = trajs.state_trajs
+        cored_trajs = trajs.trajs
     else:  # pragma: no cover
-        cored_trajs = numba.typed.List(trajs.state_trajs)
+        cored_trajs = numba.typed.List(trajs.trajs)
 
     if lagtime <= 0:
         raise ValueError('The lagtime should be greater 0.')
