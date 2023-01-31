@@ -117,7 +117,7 @@ def test__get_cummat(traj, lagtime, result, error):
         np.testing.assert_array_almost_equal(perm, result[1])
     else:
         with pytest.raises(error):
-            cummat, perm = timescales._get_cummat(traj, lagtime)
+            timescales._get_cummat(traj, lagtime)
 
 
 @pytest.mark.parametrize('cummat, idx_from, result', [
@@ -196,4 +196,4 @@ def test_propagate_MCMC(trajs, lagtime, steps, start, error, rand):
         )
     else:
         with pytest.raises(error):
-            mcmc = timescales.propagate_MCMC(trajs, lagtime, steps, start)
+            timescales.propagate_MCMC(trajs, lagtime, steps, start)
