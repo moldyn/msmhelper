@@ -144,21 +144,36 @@ def test__propagate_MCMC_step(cummat, idx_from, result, rand):
     assert idx_next == result
 
 
-@pytest.mark.parametrize('cummat, start, steps, result', [
+@pytest.mark.parametrize('cummat, start, steps, result_pop', [
     (
         (
-            np.array([[0.8, 1.0], [0.6, 1.0]]),
-            np.array([[1, 0], [0, 1]]),
+            np.array([[0.8, 1.0], [0.8, 1.0]]),
+            np.array([[0, 1], [1, 0]]),
         ),
         0,
-        4,
-        [0, 1, 1, 0],
+        10000,
+        {0: 0.5, 1: 0.5},
+    ),
+    (
+        (
+            np.array([[0.9, 1.0], [0.8, 1.0]]),
+            np.array([[0, 1], [1, 0]]),
+        ),
+        0,
+        10000,
+        {0: 2/3, 1: 1/3},
     ),
 ])
-def test__propagate_MCMC(cummat, start, steps, result, rand):
+def test__propagate_MCMC(cummat, start, steps, result_pop, rand):
     """Test MCMC propagation step."""
     mcmc = timescales._propagate_MCMC(cummat, start, steps)
-    np.testing.assert_array_almost_equal(mcmc, result)
+    # check if population is approxematly the given one:
+    for state, pop in result_pop.items():
+        np.testing.assert_approx_equal(
+            len(mcmc[mcmc == state]) / steps,
+            pop,
+            significant=2,
+        )
 
 
 @pytest.mark.parametrize('trajs, lagtime, steps, start, error', [
