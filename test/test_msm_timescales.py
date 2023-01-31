@@ -142,3 +142,20 @@ def test__propagate_MCMC_step(cummat, idx_from, result, rand):
     """Test MCMC propagation step."""
     idx_next = timescales._propagate_MCMC_step(cummat, idx_from)
     assert idx_next == result
+
+
+@pytest.mark.parametrize('cummat, start, steps, result', [
+    (
+        (
+            np.array([[0.8, 1.0], [0.6, 1.0]]),
+            np.array([[1, 0], [0, 1]]),
+        ),
+        0,
+        4,
+        [0, 1, 1, 0],
+    ),
+])
+def test__propagate_MCMC(cummat, start, steps, result, rand):
+    """Test MCMC propagation step."""
+    mcmc = timescales._propagate_MCMC(cummat, start, steps)
+    np.testing.assert_array_almost_equal(mcmc, result)
