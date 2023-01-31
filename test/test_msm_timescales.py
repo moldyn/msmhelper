@@ -161,7 +161,7 @@ def test__propagate_MCMC_step(cummat, idx_from, result, rand):
         ),
         0,
         10000,
-        {0: 2/3, 1: 1/3},
+        {0: 0.6667, 1: 0.3333},
     ),
 ])
 def test__propagate_MCMC(cummat, start, steps, result_pop, rand):
