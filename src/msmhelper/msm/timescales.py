@@ -105,6 +105,94 @@ def _implied_timescales(tmat, lagtime, ntimescales):
     return np.ma.divide(- lagtime, np.log(eigenvalues[1:]))
 
 
+def _estimate_times(
+    *,
+    trajs,
+    lagtime,
+    start,
+    final,
+    steps,
+    estimator,
+    return_list=False,
+):
+    """Estimates waiting times between stated states.
+
+    The stated states (from/to) will be treated as a basin. The function
+    calculates all transitions from first entering the start-basin until first
+    reaching the final-basin.
+
+    Parameters
+    ----------
+    trajs : statetraj or list or ndarray or list of ndarray
+        State trajectory/trajectories. The states should start from zero and
+        need to be integers.
+    lagtime : int
+        Lag time for estimating the markov model given in [frames].
+    start : int or list of
+        States to start counting.
+    final : int or list of
+        States to start counting.
+    steps : int
+        Number of MCMC propagation steps of MCMC run.
+    estimator : function
+        Estimator to propagate mcmc and return times.
+    return_list : bool
+        If true a list of all events is returned, else a dictionary is
+        returned.
+
+    Returns
+    -------
+    wt : ndarray
+        List of waiting times, given in frames.
+
+    """
+    # check correct input format
+    trajs = StateTraj(trajs)
+
+    states_start, states_final = np.unique(start), np.unique(final)
+
+    if intersect(states_start, states_final):
+        raise ValueError('States `start` and `final` do overlap.')
+
+    # check that all states exist in trajectory
+    for states in (states_start, states_final):
+        if intersect(states, trajs.states) != len(states):
+            raise ValueError(
+                'Selected states does not exist in state trajectory.',
+            )
+
+    # convert states to idx
+    idxs_start = np.array(
+        [trajs.state_to_idx(state) for state in states_start],
+    )
+    idxs_final = np.array(
+        [trajs.state_to_idx(state) for state in states_final],
+    )
+    start = np.random.choice(idxs_final)
+
+    # do not convert for pytest coverage
+    if not numba.config.DISABLE_JIT:  # pragma: no cover
+        idxs_start = numba.typed.List(idxs_start)
+        idxs_final = numba.typed.List(idxs_final)
+
+    # estimate cumulative transition matrix
+    cummat = _get_cummat(trajs=trajs, lagtime=lagtime)
+
+    ts = estimator(
+        cummat=cummat,
+        start=start,
+        states_from=idxs_start,
+        states_to=idxs_final,
+        steps=steps,
+    )
+    # multiply wts by lagtime
+    if return_list:
+        return np.repeat(
+            list(ts.keys()), list(ts.values()),
+        ) * lagtime
+    return {t * lagtime: count for t, count in ts.items()}
+
+
 @decorit.alias('estimate_wt')
 def estimate_waiting_times(
     *,
@@ -144,51 +232,65 @@ def estimate_waiting_times(
         List of waiting times, given in frames.
 
     """
-    # check correct input format
-    trajs = StateTraj(trajs)
-
-    states_start, states_final = np.unique(start), np.unique(final)
-
-    if intersect(states_start, states_final):
-        raise ValueError('States `start` and `final` do overlap.')
-
-    # check that all states exist in trajectory
-    for states in (states_start, states_final):
-        if intersect(states, trajs.states) != len(states):
-            raise ValueError(
-                'Selected states does not exist in state trajectory.',
-            )
-
-    # convert states to idx
-    idxs_start = np.array(
-        [trajs.state_to_idx(state) for state in states_start],
-    )
-    idxs_final = np.array(
-        [trajs.state_to_idx(state) for state in states_final],
-    )
-    start = np.random.choice(idxs_final)
-
-    # do not convert for pytest coverage
-    if not numba.config.DISABLE_JIT:
-        idxs_start = numba.typed.List(idxs_start)
-        idxs_final = numba.typed.List(idxs_final)
-
-    # estimate cumulative transition matrix
-    cummat = _get_cummat(trajs=trajs, lagtime=lagtime)
-
-    wts = _estimate_waiting_times(
-        cummat=cummat,
+    return _estimate_times(
+        trajs=trajs,
+        lagtime=lagtime,
         start=start,
-        states_from=idxs_start,
-        states_to=idxs_final,
+        final=final,
         steps=steps,
+        estimator=_estimate_waiting_times,
+        return_list=return_list,
     )
-    # multiply wts by lagtime
-    if return_list:
-        return np.repeat(
-            list(wts.keys()), list(wts.values()),
-        ) * lagtime
-    return {wt * lagtime: count for wt, count in wts.items()}
+
+
+@decorit.alias('estimate_tt')
+def estimate_transition_times(
+    *,
+    trajs,
+    lagtime,
+    start,
+    final,
+    steps,
+    return_list=False,
+):
+    """Estimates waiting times between stated states.
+
+    The stated states (from/to) will be treated as a basin. The function
+    calculates all transitions from first entering the start-basin until first
+    reaching the final-basin.
+
+    Parameters
+    ----------
+    trajs : statetraj or list or ndarray or list of ndarray
+        State trajectory/trajectories. The states should start from zero and
+        need to be integers.
+    lagtime : int
+        Lag time for estimating the markov model given in [frames].
+    start : int or list of
+        States to start counting.
+    final : int or list of
+        States to start counting.
+    steps : int
+        Number of MCMC propagation steps of MCMC run.
+    return_list : bool
+        If true a list of all events is returned, else a dictionary is
+        returned.
+
+    Returns
+    -------
+    wt : ndarray
+        List of waiting times, given in frames.
+
+    """
+    return _estimate_times(
+        trajs=trajs,
+        lagtime=lagtime,
+        start=start,
+        final=final,
+        steps=steps,
+        estimator=_estimate_transition_times,
+        return_list=return_list,
+    )
 
 
 @numba.njit
@@ -231,6 +333,32 @@ def _estimate_waiting_times(
                 wts[wt] = 1
 
     return wts
+
+
+@numba.njit
+def _estimate_transition_times(
+    cummat, start, states_from, states_to, steps,
+):
+    tpts = {}
+
+    idx_start = 0
+    propagates_forwards = False
+    state = start
+    for idx in range(steps):
+        state = _propagate_MCMC_step(cummat=cummat, idx_from=state)
+
+        if state in states_from:
+            propagates_forwards = True
+            idx_start = idx
+        elif propagates_forwards and state in states_to:
+            propagates_forwards = False
+            wt = idx - idx_start
+            if wt in tpts:
+                tpts[wt] += 1
+            else:
+                tpts[wt] = 1
+
+    return tpts
 
 
 def propagate_MCMC(
