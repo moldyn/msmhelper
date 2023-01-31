@@ -115,11 +115,7 @@ def _estimate_times(
     estimator,
     return_list=False,
 ):
-    """Estimates waiting times between stated states.
-
-    The stated states (from/to) will be treated as a basin. The function
-    calculates all transitions from first entering the start-basin until first
-    reaching the final-basin.
+    """Estimates times between stated states.
 
     Parameters
     ----------
@@ -142,8 +138,9 @@ def _estimate_times(
 
     Returns
     -------
-    wt : ndarray
-        List of waiting times, given in frames.
+    ts : dict or ndarray
+        Dict with times as keys and counts as values, given in frames.
+        If `return_list=True`, return a sorted (!) list containing all times.
 
     """
     # check correct input format
@@ -228,8 +225,9 @@ def estimate_waiting_times(
 
     Returns
     -------
-    wt : ndarray
-        List of waiting times, given in frames.
+    wt : dict or ndarray
+        Dict with times as keys and counts as values, given in frames.
+        If `return_list=True`, return a sorted (!) list containing all times.
 
     """
     return _estimate_times(
@@ -253,10 +251,10 @@ def estimate_transition_times(
     steps,
     return_list=False,
 ):
-    """Estimates waiting times between stated states.
+    """Estimates transition times between stated states.
 
     The stated states (from/to) will be treated as a basin. The function
-    calculates all transitions from first entering the start-basin until first
+    calculates all transitions from leaving the start-basin until first
     reaching the final-basin.
 
     Parameters
@@ -278,8 +276,9 @@ def estimate_transition_times(
 
     Returns
     -------
-    wt : ndarray
-        List of waiting times, given in frames.
+    wt : dict or ndarray
+        Dict with times as keys and counts as values, given in frames.
+        If `return_list=True`, return a sorted (!) list containing all times.
 
     """
     return _estimate_times(
