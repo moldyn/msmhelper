@@ -197,3 +197,82 @@ def test_propagate_MCMC(trajs, lagtime, steps, start, error, rand):
     else:
         with pytest.raises(error):
             timescales.propagate_MCMC(trajs, lagtime, steps, start)
+
+
+@pytest.mark.parametrize(
+    'trajs, lagtime, start, final, return_list, result, error',
+    [
+        (
+            [1, 1, 1, 2, 2, 1, 1],
+            1,
+            1,
+            2,
+            False,
+            {1: 10, 2: 3},
+            None,
+        ),
+        (
+            [1, 1, 1, 2, 2, 1, 1],
+            1,
+            1,
+            2,
+            True,
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2],
+            None,
+        ),
+        (
+            [1, 1, 1, 2, 2, 1, 1],
+            1,
+            1,
+            1,
+            None,
+            None,
+            ValueError,
+        ),
+        (
+            [1, 1, 1, 2, 2, 1, 1],
+            1,
+            1,
+            4,
+            None,
+            None,
+            ValueError,
+        ),
+    ],
+)
+def test__estimate_time(
+        trajs, lagtime, start, final, return_list, result, error,
+):
+    """Test WT/TT time wrapper."""
+    # define deterministic estimator to debug wrapper only
+    def estimator(cummat, start, states_from, states_to, steps):
+        return {1: 10, 2: 3}
+
+    # not used by estimator
+    steps = 10
+
+    if error is None:
+        ts = timescales._estimate_times(
+            trajs=trajs,
+            lagtime=lagtime,
+            start=start,
+            final=final,
+            steps=steps,
+            estimator=estimator,
+            return_list=return_list,
+        )
+        if isinstance(ts, dict):
+            assert ts == result
+        else:
+            np.testing.assert_array_almost_equal(ts, result)
+    else:
+        with pytest.raises(error):
+            timescales._estimate_times(
+                trajs=trajs,
+                lagtime=lagtime,
+                start=start,
+                final=final,
+                steps=steps,
+                estimator=estimator,
+                return_list=return_list,
+            )
