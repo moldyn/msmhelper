@@ -9,6 +9,7 @@ All rights reserved.
 import numpy as np
 import pytest
 
+from msmhelper import LumpedStateTraj
 from msmhelper.msm import timescales
 
 
@@ -78,3 +79,34 @@ def test_implied_timescales(trajs, lagtimes, kwargs, result, error):
     else:
         with pytest.raises(error):
             timescales.implied_timescales(trajs, lagtimes, **kwargs)
+
+
+@pytest.mark.parametrize('traj, lagtime, result, error', [
+    (
+        [1, 2, 1, 2, 2, 1, 1, 2, 2, 1, 2],
+        1,
+        (
+            [[0.8, 1.0], [0.6, 1.0]],
+            [[1, 0], [0, 1]],
+        ),
+        None,
+    ),
+    (
+        LumpedStateTraj(
+            [3, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 2, 2, 3],
+            [4, 1, 1, 1, 3, 2, 3, 2, 1, 1, 1, 3, 2, 2, 4],
+        ),
+        1,
+        None,
+        ValueError,
+    ),
+])
+def test__get_cummat(traj, lagtime, result, error):
+    """Test cumulative matrix."""
+    if error is None:
+        cummat, perm = timescales._get_cummat(traj, lagtime)
+        np.testing.assert_array_almost_equal(cummat, result[0])
+        np.testing.assert_array_almost_equal(perm, result[1])
+    else:
+        with pytest.raises(error):
+            cummat, perm = timescales._get_cummat(traj, lagtime)
