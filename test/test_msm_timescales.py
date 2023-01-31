@@ -6,11 +6,19 @@ Copyright (c) 2019-2023, Daniel Nagel
 All rights reserved.
 
 """
+import random
+
 import numpy as np
 import pytest
 
 from msmhelper import LumpedStateTraj
 from msmhelper.msm import timescales
+
+
+@pytest.fixture
+def rand():
+    random.seed(43)
+    np.random.seed(43)
 
 
 @pytest.mark.parametrize('transmat, lagtime, result', [
@@ -110,3 +118,27 @@ def test__get_cummat(traj, lagtime, result, error):
     else:
         with pytest.raises(error):
             cummat, perm = timescales._get_cummat(traj, lagtime)
+
+
+@pytest.mark.parametrize('cummat, idx_from, result', [
+    (
+        (
+            np.array([[0.8, 1.0], [0.6, 1.0]]),
+            np.array([[1, 0], [0, 1]]),
+        ),
+        0,
+        1,
+    ),
+    (
+        (
+            np.array([[0.8, 1.0], [0.6, 1.0]]),
+            np.array([[1, 0], [0, 1]]),
+        ),
+        1,
+        0,
+    ),
+])
+def test__propagate_MCMC_step(cummat, idx_from, result, rand):
+    """Test MCMC propagation step."""
+    idx_next = timescales._propagate_MCMC_step(cummat, idx_from)
+    assert idx_next == result
