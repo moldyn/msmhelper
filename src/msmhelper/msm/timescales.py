@@ -18,36 +18,6 @@ from msmhelper.utils import shift_data
 from msmhelper.statetraj import StateTraj
 
 
-def _implied_timescales(tmat, lagtime, ntimescales):
-    """
-    Calculate implied timescales.
-
-    !!! note
-        Clearify usage. Better passing trajs to calculate matrix?
-
-    Parameters
-    ----------
-    tmat : ndarray
-        Quadratic transition matrix.
-    lagtime: int
-        Lagtime for estimating the markov model given in [frames].
-    ntimescales : int, optional
-        Number of returned timescales.
-
-    Returns
-    -------
-    timescales: ndarray
-        Implied timescale given in frames.
-
-    """
-    tmat = np.asarray(tmat)
-
-    eigenvalues = linalg.left_eigenvalues(tmat, nvals=ntimescales + 1)
-    # for negative eigenvalues no timescale is defined
-    eigenvalues[eigenvalues < 0] = np.nan
-    return np.ma.divide(- lagtime, np.log(eigenvalues[1:]))
-
-
 def implied_timescales(trajs, lagtimes, ntimescales=None, reversible=False):
     """Calculate the implied timescales.
 
@@ -103,6 +73,36 @@ def implied_timescales(trajs, lagtimes, ntimescales=None, reversible=False):
         )
 
     return impl_timescales
+
+
+def _implied_timescales(tmat, lagtime, ntimescales):
+    """
+    Calculate implied timescales.
+
+    !!! note
+        Clearify usage. Better passing trajs to calculate matrix?
+
+    Parameters
+    ----------
+    tmat : ndarray
+        Quadratic transition matrix.
+    lagtime: int
+        Lagtime for estimating the markov model given in [frames].
+    ntimescales : int, optional
+        Number of returned timescales.
+
+    Returns
+    -------
+    timescales: ndarray
+        Implied timescale given in frames.
+
+    """
+    tmat = np.asarray(tmat)
+
+    eigenvalues = linalg.left_eigenvalues(tmat, nvals=ntimescales + 1)
+    # for negative eigenvalues no timescale is defined
+    eigenvalues[eigenvalues < 0] = np.nan
+    return np.ma.divide(- lagtime, np.log(eigenvalues[1:]))
 
 
 @decorit.alias('estimate_wt')
@@ -173,7 +173,7 @@ def estimate_waiting_times(
         idxs_start = numba.typed.List(idxs_start)
         idxs_final = numba.typed.List(idxs_final)
 
-    # estimate cummulative transition matrix
+    # estimate cumulative transition matrix
     cummat = _get_cummat(trajs=trajs, lagtime=lagtime)
 
     wts = _estimate_waiting_times(
@@ -239,7 +239,7 @@ def propagate_MCMC(
     steps,
     start=-1,
 ):
-    """Propagate MCMC trajectory.
+    """Propagate Monte Carlo Markov chain.
 
     Parameters
     ----------
@@ -256,7 +256,7 @@ def propagate_MCMC(
     Returns
     -------
     mcmc : ndarray
-        MCMC trajecory.
+        Monte Carlo Markov chain state trajectory.
 
     """
     # check correct input format
@@ -302,7 +302,7 @@ def _propagate_MCMC(cummat, start, steps):
 
 
 def _get_cummat(trajs, lagtime):
-    # estimate cummulative transition matrix
+    # estimate cumulative transition matrix
     msm, _ = StateTraj(trajs).estimate_markov_model(lagtime)
 
     if np.any(msm < 0):
