@@ -37,7 +37,13 @@ If you want to request a change, you first have to [fork the repository](https:/
 
 ### Make changes and run tests
 
-Apply your changes. If you add a new function/method/class please ensure that you add a test function, as well. Running the test simply by
+Apply your changes and check if you followed the codeing style (PEP8) by running
+```bash
+python -m flake8 --config flake8-CI.cfg
+```
+All errors pointing to `./build/` can be neglected.
+
+If you add a new function/method/class please ensure that you add a test function, as well. Running the test simply by
 ```bash
 pytest --benchmark-skip --no-cov
 export NUMBA_DISABLE_JIT=1 && pytest --cov-report=xml --benchmark-skip
