@@ -50,7 +50,7 @@ We kindly ask you to cite this article in case you use this software package for
 
 ## Features
 - Simple usage with sleek function-based API
-- High performance due to [numba](https://numba.pydata.org/)-optimized source code
+- High performance due to [numba](https://numba.pydata.org/)-optimized source code, checkout the [benchmark comparing to PyEMMA](https://moldyn.github.io/msmhelper/tutorials/benchmark)
 - Supports Python 3.7-3.10
 - [Documentation](https://moldyn.github.io/msmhelper) including tutorials
 - Many helpful functions for dealing with state trajectories
@@ -88,9 +88,14 @@ python3 -m pip install git+https://github.com/moldyn/msmhelper.git
 Check out the documentation for an overview over all modules and some example workflows.
 ```python
 import msmhelper as mh
+
+# open text files
+traj = mh.openmicrostates(filename, limitsfile)
+# create markov state model
+tmat, states = mh.estimate_markov_model(traj, lagtime=1)
 ...
 ```
+For more examples checkout the [tutorials](https://moldyn.github.io/msmhelper/tutorials)
 
 ## Roadmap
-- Add tutorials
-- Use static type hintes together with [beartype](https://github.com/beartype/beartype)
+- Use static type hints together with [beartype](https://github.com/beartype/beartype)
