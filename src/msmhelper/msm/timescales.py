@@ -19,9 +19,12 @@ from msmhelper.statetraj import StateTraj
 
 
 def implied_timescales(trajs, lagtimes, ntimescales=None, reversible=False):
-    """Calculate the implied timescales.
+    r"""Calculate the implied timescales.
 
-    Calculate the implied timescales for the given values.
+    Calculate the implied timescales, which are defined by
+    $$t_i = - \frac{t_\text{lag}}{\log(\lambda_i)}$$
+    the $i$-th eigenvalue $\lambda_i$.
+
     !!! note
         It is not checked if for higher lagtimes the dimensionality changes.
 
@@ -40,8 +43,8 @@ def implied_timescales(trajs, lagtimes, ntimescales=None, reversible=False):
 
     Returns
     -------
-    T : ndarray
-        Transition rate matrix.
+    ts : ndarray
+        Matrix containing the implied Timescales.
 
     """
     # format input
@@ -76,24 +79,20 @@ def implied_timescales(trajs, lagtimes, ntimescales=None, reversible=False):
 
 
 def _implied_timescales(tmat, lagtime, ntimescales):
-    """
-    Calculate implied timescales.
-
-    !!! note
-        Clearify usage. Better passing trajs to calculate matrix?
+    """Calculate implied timescales.
 
     Parameters
     ----------
     tmat : ndarray
         Quadratic transition matrix.
-    lagtime: int
+    lagtime : int
         Lagtime for estimating the markov model given in [frames].
     ntimescales : int, optional
         Number of returned timescales.
 
     Returns
     -------
-    timescales: ndarray
+    timescales : ndarray
         Implied timescale given in frames.
 
     """
