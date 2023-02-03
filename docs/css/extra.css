@@ -37,5 +37,5 @@ body {
 
 .md-typeset h1, .md-typeset h2, .md-typeset h3, .md-header__title {
   font-family: var(--md-headline-font-family);
-  font-weight: 700;
+  font-weight: 600;
 }

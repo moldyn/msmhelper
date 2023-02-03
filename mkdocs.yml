@@ -32,9 +32,9 @@ theme:
   - navigation.tabs
   - navigation.top
   font:
-    text: Roboto
+    text: Source Sans Pro
     headline: Playfair Display
-    code: Roboto Mono
+    code: Source Code Pro
   palette:
   - media: "(prefers-color-scheme: light)"
     scheme: default
