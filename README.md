@@ -29,7 +29,7 @@
     <a href="https://moldyn.github.io/msmhelper">Docs</a> •
     <a href="#features">Features</a> •
     <a href="#installation">Installation</a> •
-    <a href="#usage">Usage</a>
+    <a href="https://moldyn.github.io/msmhelper/faq">FAQ</a>
   </p>
 </div>
 
