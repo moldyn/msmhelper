@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-"""Input and output text files.
+# BSD 3-Clause License
+# Copyright (c) 2019-2023, Daniel Nagel
+# All rights reserved.
+"""# Input and Output Text Files
 
-BSD 3-Clause License
-Copyright (c) 2019-2023, Daniel Nagel
-All rights reserved.
+This submodule contains all methods related to reading data from text files and writing data to text files, including helpful header comments.
 
 """
 import datetime
