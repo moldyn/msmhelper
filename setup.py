@@ -94,6 +94,11 @@ setuptools.setup(
     packages=setuptools.find_packages(where='src'),
     include_package_data=True,
     python_requires='>=3.7',
+    entry_points={
+        'console_scripts': [
+            'mosaic = mosaic.__main__:main',
+        ],
+    },
     install_requires=[
         'numpy',
         'numba',

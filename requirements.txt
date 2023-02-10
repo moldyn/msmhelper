@@ -4,3 +4,4 @@ pandas
 beartype>=0.8.1
 scipy
 decorit
+prettypyplot
