@@ -110,7 +110,7 @@ plugins:
           members_order: "source"
           docstring_style: "numpy"
           docstring_section_style: "list"
-          merge_init_into_class: True
+          merge_init_into_class: true
           filters: ["!^_"]
 
 extra_css:
