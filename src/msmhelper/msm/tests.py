@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 """Benchmark Markov State Model.
 
-BSD 3-Clause License
-Copyright (c) 2019-2023, Daniel Nagel
-All rights reserved.
+This submodule holds methods for validating Markov state models.
 
 """
+# BSD 3-Clause License
+# Copyright (c) 2019-2023, Daniel Nagel
+# All rights reserved.
 import decorit
 import numba
 import numpy as np

@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 """Create Markov State Model.
 
-BSD 3-Clause License
-Copyright (c) 2019-2023, Daniel Nagel
-All rights reserved.
+This submodule contains all methods related to estimate the Markov state model.
 
 """
+# BSD 3-Clause License
+# Copyright (c) 2019-2023, Daniel Nagel
+# All rights reserved.
+
 import decorit
 import numba
 import numpy as np

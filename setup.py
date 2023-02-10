@@ -87,6 +87,7 @@ setuptools.setup(
     project_urls={
         'Documentation': 'https://moldyn.github.io/msmhelper',
         'Source Code': 'https://github.com/moldyn/msmhelper',
+        'Changelog': 'https://moldyn.github.io/msmhelper/changelog',
         'Bug Tracker': 'https://github.com/moldyn/msmhelper/issues',
     },
     package_dir={'': 'src'},

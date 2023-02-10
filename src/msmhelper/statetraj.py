@@ -45,7 +45,10 @@ class StateTraj:  # noqa: WPS214
         self._states = mh.utils.unique(self._trajs)
 
         # shift to indices
-        if not np.array_equal(self._states, np.arange(self.nstates)):
+        if np.array_equal(self._states, np.arange(1, self.nstates + 1)):
+            self._states = np.arange(1, self.nstates + 1)
+            self._trajs = [traj - 1 for traj in self._trajs]
+        elif not np.array_equal(self._states, np.arange(self.nstates)):
             self._trajs, self._states = mh.utils.rename_by_index(
                 self._trajs,
                 return_permutation=True,

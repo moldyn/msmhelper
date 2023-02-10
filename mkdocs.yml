@@ -11,9 +11,13 @@ watch: [src/msmhelper]
 nav:
 - Home:
   - Overview: index.md
+  - Benchmark: benchmark.ipynb
   - Changelog: changelog.md
   - License: license.md
 - Code Reference: reference/
+- How-To Guides:
+  - Getting Started: tutorials/tutorial.ipynb
+- FAQ: faq.md
 - Development:
   - Contributing: contributing.md
 - MolDyn Freiburg: https://moldyn.uni-freiburg.de/
@@ -29,9 +33,9 @@ theme:
   - navigation.tabs
   - navigation.top
   font:
-    text: Roboto
+    text: Source Sans Pro
     headline: Playfair Display
-    code: Roboto Mono
+    code: Source Code Pro
   palette:
   - media: "(prefers-color-scheme: light)"
     scheme: default
@@ -84,12 +88,18 @@ markdown_extensions:
   - pymdownx.tilde
 
 plugins:
+- section-index
 - search
 - gen-files:
     scripts:
     - docs/gen_ref_nav.py
 - literate-nav:
     nav_file: SUMMARY.md
+- mkdocs-jupyter:
+    include: ["*.ipynb"]
+    execute: true
+    allow_errors: false
+    ignore_h1_titles: true
 - mkdocstrings:
     handlers:
       python:
@@ -100,7 +110,7 @@ plugins:
           members_order: "source"
           docstring_style: "numpy"
           docstring_section_style: "list"
-          merge_init_into_class: True
+          merge_init_into_class: true
           filters: ["!^_"]
 
 extra_css:

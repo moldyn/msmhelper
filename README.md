@@ -8,15 +8,15 @@
     <a href="https://pypi.org/project/msmhelper" alt="PyPI">
         <img src="https://img.shields.io/pypi/v/msmhelper" /></a>
     <a href="https://anaconda.org/conda-forge/msmhelper" alt="conda version">
-	<img src="https://img.shields.io/conda/vn/conda-forge/msmhelper" /></a>
+        <img src="https://img.shields.io/conda/vn/conda-forge/msmhelper" /></a>
     <a href="https://pepy.tech/project/msmhelper" alt="Downloads">
         <img src="https://pepy.tech/badge/msmhelper" /></a>
     <a href="https://github.com/moldyn/msmhelper/actions/workflows/pytest.yml" alt="GitHub Workflow Status">
         <img src="https://img.shields.io/github/actions/workflow/status/moldyn/msmhelper/pytest.yml?branch=main"></a>
     <a href="https://codecov.io/gh/moldyn/msmhelper" alt="Code coverage">
         <img src="https://codecov.io/gh/moldyn/msmhelper/branch/main/graph/badge.svg?token=Ce2eW5JICI" /></a>
-    <a href="https://lgtm.com/projects/g/moldyn/msmhelper" alt="LGTM">
-	<img src="https://img.shields.io/lgtm/grade/python/github/moldyn/msmhelper" alt="LGTM Grade" /></a>
+    <a href="https://github.com/moldyn/msmhelper/actions/workflows/codeql.yml" alt="CodeQL">
+        <img src="https://github.com/moldyn/msmhelper/actions/workflows/codeql.yml/badge.svg?branch=main" /></a>
     <a href="https://img.shields.io/pypi/pyversions/msmhelper" alt="PyPI - Python Version">
         <img src="https://img.shields.io/pypi/pyversions/msmhelper" /></a>
     <a href="https://moldyn.github.io/msmhelper" alt="Docs">
@@ -29,7 +29,7 @@
     <a href="https://moldyn.github.io/msmhelper">Docs</a> •
     <a href="#features">Features</a> •
     <a href="#installation">Installation</a> •
-    <a href="#usage">Usage</a>
+    <a href="https://moldyn.github.io/msmhelper/faq">FAQ</a>
   </p>
 </div>
 
@@ -50,7 +50,7 @@ We kindly ask you to cite this article in case you use this software package for
 
 ## Features
 - Simple usage with sleek function-based API
-- High performance due to [numba](https://numba.pydata.org/)-optimized source code
+- High performance due to [numba](https://numba.pydata.org/)-optimized source code, checkout the [benchmark comparing to PyEMMA](https://moldyn.github.io/msmhelper/benchmark)
 - Supports Python 3.7-3.10
 - [Documentation](https://moldyn.github.io/msmhelper) including tutorials
 - Many helpful functions for dealing with state trajectories
@@ -62,6 +62,7 @@ We kindly ask you to cite this article in case you use this software package for
 - Fast calculation of waiting times based on state trajectory and MSMs
 - [Chapman-Kolmogorov](https://www.wikiwand.com/en/Chapman%E2%80%93Kolmogorov_equation) test
 - Entropy-based comparison of different state discretizations
+- Provide (non-reversible) transition matrix of all states (corresponds in pyemma to `connectivity='none', 'all'` which will (probably) never be [implemented](https://github.com/markovmodel/PyEMMA/blob/5315b8699eff2941e84577932921f694dca76f59/pyemma/msm/estimators/_msm_estimator_base.py#L110))
 
 ## Installation
 The package is called `msmhelper` and is available via [PyPI](https://pypi.org/project/msmhelper) or [conda](https://anaconda.org/conda-forge/msmhelper). To install it, simply call:
@@ -87,9 +88,14 @@ python3 -m pip install git+https://github.com/moldyn/msmhelper.git
 Check out the documentation for an overview over all modules and some example workflows.
 ```python
 import msmhelper as mh
+
+# open text files
+traj = mh.openmicrostates(filename, limitsfile)
+# create markov state model
+tmat, states = mh.estimate_markov_model(traj, lagtime=1)
 ...
 ```
+For more examples checkout the [tutorials](https://moldyn.github.io/msmhelper/tutorials)
 
 ## Roadmap
-- Add tutorials
-- Use static type hintes together with [beartype](https://github.com/beartype/beartype)
+- Use static type hints together with [beartype](https://github.com/beartype/beartype)
