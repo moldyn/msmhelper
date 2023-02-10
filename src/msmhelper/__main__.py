@@ -12,6 +12,7 @@ import click
 import msmhelper as mh
 from msmhelper._cli.ck_test import ck_test
 from msmhelper._cli.implied_timescales import implied_timescales
+from msmhelper._cli.gaussian_filter import gaussian_filtering
 
 HELP_STR = f"""msmhelper v{mh.__version__}
 
@@ -30,6 +31,7 @@ def main():
 
 main.add_command(ck_test)
 main.add_command(implied_timescales)
+main.add_command(gaussian_filtering)
 
 
 if __name__ == '__main__':
