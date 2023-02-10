@@ -33,7 +33,6 @@ import msmhelper as mh
         r'trajectories, e.g. "3\n3\n5"'
     ),
 )
-
 @click.option(
     '-s',
     '--sigma',
