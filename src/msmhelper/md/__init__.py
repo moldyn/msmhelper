@@ -9,7 +9,6 @@ The submodule is structured into the following submodules:
 - [**corrections:**][msmhelper.md.corrections] This submodule provides an implementation of dynamical coring.
 - [**timescales:**][msmhelper.msm.timescales] This submodule contains methods for estimating various timescales based on discrete time series.
 
-
 """
 __all__ = [
     'compare_discretization',

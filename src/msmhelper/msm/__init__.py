@@ -24,6 +24,7 @@ __all__ = [
     'estimate_waiting_times',
     'estimate_wt',
 ]
+
 from .tests import (
     bh_test,
     buchete_hummer_test,
