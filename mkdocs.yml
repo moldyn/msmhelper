@@ -98,6 +98,7 @@ plugins:
     include: ["*.ipynb"]
     execute: true
     allow_errors: false
+    ignore_h1_titles: true
 - mkdocstrings:
     handlers:
       python:
