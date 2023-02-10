@@ -11,13 +11,13 @@ import click
 
 import msmhelper as mh
 from msmhelper._cli.ck_test import ck_test
+from msmhelper._cli.implied_timescales import implied_timescales
 
 HELP_STR = f"""msmhelper v{mh.__version__}
 
-\b
-
 Unlock the power of protein dynamics time series with Markov state modeling, by
 simplifying scientific analysis.
+
 Copyright (c) 2019-2023, Daniel Nagel
 """
 
@@ -29,6 +29,7 @@ def main():
 
 
 main.add_command(ck_test)
+main.add_command(implied_timescales)
 
 
 if __name__ == '__main__':
