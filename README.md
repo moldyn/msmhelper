@@ -50,7 +50,7 @@ We kindly ask you to cite this article in case you use this software package for
 
 ## Features
 - Simple usage with sleek function-based API
-- High performance due to [numba](https://numba.pydata.org/)-optimized source code, checkout the [benchmark comparing to PyEMMA](https://moldyn.github.io/msmhelper/tutorials/benchmark)
+- High performance due to [numba](https://numba.pydata.org/)-optimized source code, checkout the [benchmark comparing to PyEMMA](https://moldyn.github.io/msmhelper/benchmark)
 - Supports Python 3.7-3.10
 - [Documentation](https://moldyn.github.io/msmhelper) including tutorials
 - Many helpful functions for dealing with state trajectories

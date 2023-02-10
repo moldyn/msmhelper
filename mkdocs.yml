@@ -11,13 +11,13 @@ watch: [src/msmhelper]
 nav:
 - Home:
   - Overview: index.md
-  - Benchmark: tutorials/benchmark.ipynb
+  - Benchmark: benchmark.ipynb
   - Changelog: changelog.md
   - License: license.md
 - Code Reference: reference/
 - How-To Guides:
   - Getting Started: tutorials/tutorial.ipynb
-- FAQ: faq.ipynb
+- FAQ: faq.md
 - Development:
   - Contributing: contributing.md
 - MolDyn Freiburg: https://moldyn.uni-freiburg.de/
