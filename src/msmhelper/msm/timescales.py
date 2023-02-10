@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
-"""Set of functions for analyzing the MD trajectory.
+# BSD 3-Clause License
+# Copyright (c) 2019-2023, Daniel Nagel
+# All rights reserved.
+"""# Set of functions for analyzing the MD trajectory.
 
-BSD 3-Clause License
-Copyright (c) 2019-2020, Daniel Nagel
-All rights reserved.
+This submodule contains methods for estimating various timescales based on a
+Markov model.
 
 """
 import random
