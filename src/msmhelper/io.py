@@ -4,7 +4,8 @@
 # All rights reserved.
 """# Input and Output Text Files
 
-This submodule contains all methods related to reading data from text files and writing data to text files, including helpful header comments.
+This submodule contains all methods related to reading data from text files and
+writing data to text files, including helpful header comments.
 
 """
 import datetime
