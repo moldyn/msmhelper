@@ -94,7 +94,10 @@ def _chapman_kolmogorov_test(trajs, lagtime, tmax):
         ckeq[:, idx] = np.diagonal(tmatpow)
 
     return {
-        'ck': ckeq,
+        'ck': {
+            state: ckeq[idx]
+            for idx, state in enumerate(trajs.states)
+        },
         'time': times,
         'is_ergodic': is_ergodic,
         'is_fuzzy_ergodic': is_fuzzy_ergodic,
@@ -130,7 +133,10 @@ def _chapman_kolmogorov_test_md(trajs, tmin, tmax, steps=30):
         is_fuzzy_ergodic[idx] = utils.tests.is_fuzzy_ergodic(tmat)
 
     return {
-        'ck': ckeq,
+        'ck': {
+            state: ckeq[idx]
+            for idx, state in enumerate(trajs.states)
+        },
         'time': times,
         'is_ergodic': is_ergodic,
         'is_fuzzy_ergodic': is_fuzzy_ergodic,
