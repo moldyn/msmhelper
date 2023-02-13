@@ -81,7 +81,7 @@ def ck_test(
 ):
     """Calculate and plot CK test."""
     # setup matplotlib
-    pplt.use_style(figsize=1.4, true_black=True, colors='pastel_autunm')
+    pplt.use_style(figsize=0.8, true_black=True, colors='pastel_autunm')
 
     # load file
     trajs = mh.openmicrostates(filename, limits_file=concat_limits)
@@ -98,98 +98,117 @@ def ck_test(
 
     # plot result
     nrows, ncols = grid
-    states_idx = np.arange(trajs.nstates)
-
-    for nfig, chunk in enumerate(_split_array(states_idx, nrows * ncols)):
-        n_elements = len(chunk)
-        needed_rows = int(np.ceil(n_elements / ncols))
-
-        fig, axs = plt.subplots(
-            needed_rows,
-            ncols,
-            sharex=True,
-            sharey='row',
-            gridspec_kw={'wspace': 0, 'hspace': 0},
-        )
-        axs = np.atleast_2d(axs)
-
-        for irow, row in enumerate(_split_array(chunk, ncols)):
-            for icol, state_idx in enumerate(row):
-                ax = axs[irow, icol]
-                state = trajs.states[state_idx]
-
-                pplt.plot(
-                    ck['md']['time'] / frames_per_unit,
-                    ck['md']['ck'][state_idx],
-                    '--',
-                    ax=ax,
-                    color='pplt:axes',
-                    label='MD',
-                )
-                for lagtime in lagtimes:
-                    pplt.plot(
-                        ck[lagtime]['time'] / frames_per_unit,
-                        ck[lagtime]['ck'][state_idx],
-                        ax=ax,
-                        label=lagtime / frames_per_unit,
-                    )
-                pplt.text(
-                    0.9,
-                    0.95,
-                    'state {0}'.format(state),
-                    contour=True,
-                    ha='right',
-                    va='top',
-                    transform=ax.transAxes,
-                    ax=ax,
-                )
-
-                # set scale
-                ax.set_xscale('log')
-                ax.set_xlim([
-                    lagtimes[0] / frames_per_unit,
-                    max_time / frames_per_unit,
-                ])
-                ax.set_ylim([0, 1])
-                if irow < len(axs) - 1:
-                    ax.set_yticks([0.5, 1])
-                else:
-                    ax.set_yticks([0, 0.5, 1])
-
-                pplt.grid(ax=ax)
-
-        # set legend
-        legend_kw = {
-            'outside': 'right',
-        } if ncols == 1 else {
-            'outside': 'top',
-            'bbox_to_anchor': (0.0, 1.0, ncols, 0.01),
-        }
-        if ncols == 2:
-            legend_kw['ncol'] = 3
-        pplt.legend(
-            ax=axs[0, 0],
-            **legend_kw,
-            title='Lagtime [{0}]'.format(unit),
-        )
-
-        pplt.hide_empty_axes()
-        pplt.label_outer()
-        pplt.subplot_labels(
-            ylabel=r'self-transition probability $P_{i\to i}$',
-            xlabel=r'time $t$ [{unit}]'.format(unit=unit),
+    for nfig, chunk in enumerate(_split_array(trajs.states, nrows * ncols)):
+        plot_ck_test(
+            ck=ck,
+            states=chunk,
+            lagtimes=lagtimes,
+            frames_per_unit=frames_per_unit,
+            unit=unit,
+            grid=grid,
         )
 
         # save figure and continue
-        output = '{f}'.format(f=filename)
+        output = filename
         if macrofilename:
             output = '{f}.sh'.format(f=macrofilename)
-        pplt.savefig('{f}.cktest.state{start:.0f}-{to:.0f}.pdf'.format(
-            f=output,
-            start=trajs.states[chunk[0]],
-            to=trajs.states[chunk[-1]],
-        ))
+        pplt.savefig(
+            '{f}.cktest.state{start:.0f}-{to:.0f}.pdf'.format(
+                f=output,
+                start=chunk[0],
+                to=chunk[-1],
+            )
+        )
         plt.close()
+
+
+def plot_ck_test(
+    ck,
+    states,
+    lagtimes,
+    frames_per_unit,
+    unit,
+    grid,
+):
+    nrows, ncols = grid
+    needed_rows = int(np.ceil(len(states) / ncols))
+
+    fig, axs = plt.subplots(
+        needed_rows,
+        ncols,
+        sharex=True,
+        sharey='row',
+        gridspec_kw={'wspace': 0, 'hspace': 0},
+    )
+    axs = np.atleast_2d(axs)
+
+    max_time = np.max(ck['md']['time'])
+    for irow, states_row in enumerate(_split_array(states, ncols)):
+        for icol, state in enumerate(states_row):
+            ax = axs[irow, icol]
+
+            pplt.plot(
+                ck['md']['time'] / frames_per_unit,
+                ck['md']['ck'][state],
+                '--',
+                ax=ax,
+                color='pplt:axes',
+                label='MD',
+            )
+            for lagtime in lagtimes:
+                pplt.plot(
+                    ck[lagtime]['time'] / frames_per_unit,
+                    ck[lagtime]['ck'][state],
+                    ax=ax,
+                    label=lagtime / frames_per_unit,
+                )
+            pplt.text(
+                0.9,
+                0.95,
+                'S{0}'.format(state),
+                contour=True,
+                ha='right',
+                va='top',
+                transform=ax.transAxes,
+                ax=ax,
+            )
+
+            # set scale
+            ax.set_xscale('log')
+            ax.set_xlim([
+                lagtimes[0] / frames_per_unit,
+                max_time / frames_per_unit,
+            ])
+            ax.set_ylim([0, 1])
+            if irow < len(axs) - 1:
+                ax.set_yticks([0.5, 1])
+            else:
+                ax.set_yticks([0, 0.5, 1])
+
+            pplt.grid(ax=ax)
+
+    # set legend
+    legend_kw = {
+        'outside': 'right',
+    } if ncols == 1 else {
+        'outside': 'top',
+        'bbox_to_anchor': (0.0, 1.0, ncols, 0.01),
+    }
+    if ncols in {2, 3}:
+        legend_kw['ncol'] = 3
+    pplt.legend(
+        ax=axs[0, 0],
+        **legend_kw,
+        title='Lagtime [{0}]'.format(unit),
+    )
+
+    pplt.hide_empty_axes()
+    pplt.label_outer()
+    pplt.subplot_labels(
+        ylabel=r'self-transition probability $P_{i\to i}$',
+        xlabel=r'time $t$ [{unit}]'.format(unit=unit),
+    )
+    return fig
 
 
 def _split_array(array, chunksize):
