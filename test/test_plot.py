@@ -8,7 +8,6 @@ All rights reserved.
 """
 import pytest
 import prettypyplot as pplt
-from matplotlib import pyplot as plt
 
 import msmhelper as mh
 from msmhelper.utils.datasets import hummer15_8state
