@@ -163,11 +163,10 @@ def plot_ck_test(
                     label=lagtime / frames_per_unit,
                 )
             pplt.text(
+                0.5,
                 0.9,
-                0.95,
                 'S{0}'.format(state),
                 contour=True,
-                ha='right',
                 va='top',
                 transform=ax.transAxes,
                 ax=ax,
@@ -190,22 +189,30 @@ def plot_ck_test(
     # set legend
     legend_kw = {
         'outside': 'right',
-    } if ncols == 1 else {
+        'bbox_to_anchor': (2.0, (1 - nrows), 0.2, nrows),
+    } if ncols in {1, 2} else {
         'outside': 'top',
         'bbox_to_anchor': (0.0, 1.0, ncols, 0.01),
     }
-    if ncols in {2, 3}:
+    if ncols == 3:
         legend_kw['ncol'] = 3
     pplt.legend(
         ax=axs[0, 0],
         **legend_kw,
-        title='Lagtime [{0}]'.format(unit),
+        title=fr'$\tau_\text{{lag}}$ [{unit}]',
+        frameon=False,
+    )
+
+    ylabel = (
+        r'self-transition probability $P_{i\to i}$'
+    ) if nrows >= 3 else (
+        r'$P_{i\to i}$'
     )
 
     pplt.hide_empty_axes()
     pplt.label_outer()
     pplt.subplot_labels(
-        ylabel=r'self-transition probability $P_{i\to i}$',
+        ylabel=ylabel,
         xlabel=r'time $t$ [{unit}]'.format(unit=unit),
     )
     return fig
