@@ -121,7 +121,7 @@ def _chapman_kolmogorov_test_md(trajs, tmin, tmax, steps=30):
 
     # enforce using non-lumped trajectory
     if isinstance(trajs, LumpedStateTraj):
-        macrotrajs = StateTraj(trajs.state_trajs)
+        macrotrajs = StateTraj(trajs.trajs)
     else:
         macrotrajs = trajs
 
