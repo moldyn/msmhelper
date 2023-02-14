@@ -105,6 +105,7 @@ setuptools.setup(
         'pandas',
         'decorit',
         'scipy',
+        'click',
         'prettypyplot',
     ],
     extras_require=get_extra_requirements('extra-requirements.txt'),
