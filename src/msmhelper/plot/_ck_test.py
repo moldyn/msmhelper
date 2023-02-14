@@ -105,7 +105,9 @@ def plot_ck_test(
             else:
                 ax.set_yticks([0, 0.5, 1])
 
-            pplt.grid(ax=ax)
+            ax.grid(True, which='major', linestyle='--')
+            ax.grid(True, which='minor', linestyle='dotted')
+            ax.set_axisbelow(True)
 
     # set legend
     legend_kw = {
