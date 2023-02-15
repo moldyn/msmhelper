@@ -46,7 +46,9 @@ def propagate_tmat(tmat, nsteps, start=None):
     )
 
 
-def _hummer15_nstate(*, n_states, rate_k, rate_h, nsteps, macrotraj=False):
+def _hummer15_nstate(
+    *, n_states, rate_k, rate_h, nsteps, return_macrotraj=False
+):
     """N-state model inspired by Hummer and Szabo 15.
 
     Gerhard Hummer and Attila Szabo
@@ -61,13 +63,16 @@ def _hummer15_nstate(*, n_states, rate_k, rate_h, nsteps, macrotraj=False):
         Rate between state 2<->3, 4<->5, etc.
     nsteps : int
         Number of steps to propagate.
-    macrotraj : bool, optional
-        If `True` return macrotraj where state (1,2), (3,4), etc. are lumped.
+    return_macrotraj : bool, optional
+        If `True` return a macrotraj where state (1,2), (3,4), etc. are lumped
+        as well.
 
     Returns
     -------
     traj : ndarray
         Markov chain Monte Carlo state trajectory.
+    macrotraj : ndarray
+        Markov chain Monte Carlo macrostate trajectory if `macrotraj=True`.
 
     """
     tmat = np.zeros((n_states, n_states))
@@ -82,19 +87,29 @@ def _hummer15_nstate(*, n_states, rate_k, rate_h, nsteps, macrotraj=False):
     # set diagonal
     tmat[np.diag_indices_from(tmat)] = 1 - np.sum(tmat, axis=1)
 
-    states = np.tile(
-        np.arange(1, n_states // 2 + 1),
-        (2, 1),
-    ).T.flatten() if macrotraj else np.arange(1, n_states + 1)
-
-    return shift_data(
+    microstates = np.arange(1, n_states + 1)
+    microtraj = shift_data(
         propagate_tmat(tmat, nsteps),
         np.arange(n_states),
-        states,
+        microstates,
     )
 
+    if return_macrotraj:
+        macrostates = np.tile(
+            np.arange(1, n_states // 2 + 1), (2, 1),
+        ).T.flatten()
+        return (
+            microtraj,
+            shift_data(
+                microtraj,
+                microstates,
+                macrostates,
+            ),
+        )
+    return microtraj
 
-def hummer15_4state(rate_k, rate_h, nsteps, macrotraj=False):
+
+def hummer15_4state(rate_k, rate_h, nsteps, return_macrotraj=False):
     """Four state model taken from Hummer and Szabo 15.
 
     Gerhard Hummer and Attila Szabo
@@ -109,13 +124,16 @@ def hummer15_4state(rate_k, rate_h, nsteps, macrotraj=False):
         Rate between state 2<->3.
     nsteps : int
         Number of steps to propagate.
-    macrotraj : bool, optional
-        If `True` return 2-state macrotraj where state 1,2 and 3,4 are lumped.
+    return_macrotraj : bool, optional
+        If `True` return a macrotraj where state (1,2) and (3,4) are lumped
+        as well.
 
     Returns
     -------
     traj : ndarray
         Markov chain Monte Carlo state trajectory.
+    macrotraj : ndarray
+        Markov chain Monte Carlo macrostate trajectory if `macrotraj=True`.
 
     """
     return _hummer15_nstate(
@@ -123,11 +141,11 @@ def hummer15_4state(rate_k, rate_h, nsteps, macrotraj=False):
         rate_k=rate_k,
         rate_h=rate_h,
         nsteps=nsteps,
-        macrotraj=macrotraj,
+        return_macrotraj=return_macrotraj,
     )
 
 
-def hummer15_8state(rate_k, rate_h, nsteps, macrotraj=False):
+def hummer15_8state(rate_k, rate_h, nsteps, return_macrotraj=False):
     """Eight state model inspired by Hummer and Szabo 15.
 
     Gerhard Hummer and Attila Szabo
@@ -142,14 +160,16 @@ def hummer15_8state(rate_k, rate_h, nsteps, macrotraj=False):
         Rate between state 2<->3, 4<->5, 6<->7.
     nsteps : int
         Number of steps to propagate.
-    macrotraj : bool, optional
-        If `True` return 4-state macrotraj where state (1,2), (3,4), (5, 6),
-        and (7,8) are lumped.
+    return_macrotraj : bool, optional
+        If `True` return a macrotraj where state (1,2), (3,4), (5,6), and (7,8)
+        are lumped as well.
 
     Returns
     -------
     traj : ndarray
         Markov chain Monte Carlo state trajectory.
+    macrotraj : ndarray
+        Markov chain Monte Carlo macrostate trajectory if `macrotraj=True`.
 
     """
     return _hummer15_nstate(
@@ -157,5 +177,5 @@ def hummer15_8state(rate_k, rate_h, nsteps, macrotraj=False):
         rate_k=rate_k,
         rate_h=rate_h,
         nsteps=nsteps,
-        macrotraj=macrotraj,
+        return_macrotraj=return_macrotraj,
     )
