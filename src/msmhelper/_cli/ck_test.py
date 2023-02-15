@@ -123,4 +123,4 @@ def ck_test(
 
 
 if __name__ == '__main__':
-    ck_test()
+    ck_test()  # pragma: no cover

@@ -67,4 +67,4 @@ def gaussian_filtering(input_file, concat_limits, sigma, output_file):
 
 
 if __name__ == '__main__':
-    gaussian_filtering()
+    gaussian_filtering()  # pragma: no cover

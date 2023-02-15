@@ -128,4 +128,4 @@ def implied_timescales(
 
 
 if __name__ == '__main__':
-    implied_timescales()
+    implied_timescales()  # pragma: no cover
