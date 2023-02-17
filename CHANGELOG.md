@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added Features and Improvements 🙌:
 - Add all new mkdocs documentation 🎉
+- Add command line interface for standalone tasks
 - Add `gaussian_filter` functionality
 - Add implementation of `dynamical_coring`
 
