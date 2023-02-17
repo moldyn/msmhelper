@@ -80,7 +80,7 @@ def ck_test(
 ):
     """Calculate and plot CK test."""
     # setup matplotlib
-    pplt.use_style(figsize=0.8, true_black=True, colors='pastel_autunm')
+    pplt.use_style(figsize=0.8, true_black=True, colors='pastel_autunm', latex=False)
 
     # load file
     trajs = mh.openmicrostates(filename, limits_file=concat_limits)
