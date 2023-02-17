@@ -11,6 +11,7 @@ import click
 
 import msmhelper as mh
 from msmhelper._cli.ck_test import ck_test
+from msmhelper._cli.dynamical_coring import dynamical_coring
 from msmhelper._cli.implied_timescales import implied_timescales
 from msmhelper._cli.gaussian_filter import gaussian_filtering
 
@@ -30,6 +31,7 @@ def main():
 
 
 main.add_command(ck_test)
+main.add_command(dynamical_coring)
 main.add_command(implied_timescales)
 main.add_command(gaussian_filtering)
 

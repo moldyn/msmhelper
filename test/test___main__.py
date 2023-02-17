@@ -111,3 +111,19 @@ def test_gaussian_filtering(tmpdir):
         f'gaussian-filtering {params} -i {input} -o {output}'.split(),
     )
     assert result.exit_code == 0
+
+
+def test_dynamical_coring(tmpdir):
+    runner = CliRunner()
+
+    # create trajectories
+    input = 'test/assets/8state_microtraj'
+    output = tmpdir.join('traj.gaussian')
+
+    params = '--tcor 5'
+
+    result = runner.invoke(
+        main,
+        f'dynamical-coring {params} -i {input} -o {output}'.split(),
+    )
+    assert result.exit_code == 0
