@@ -117,7 +117,10 @@ def implied_timescales(
     ax.set_xlim([0, max_lagtime / frames_per_unit])
     if not ylog:
         ax.set_ylim([0, ax.get_ylim()[1]])
-    pplt.grid(ax=ax)
+
+    ax.grid(True, which='major', linestyle='--')
+    ax.grid(True, which='minor', linestyle='dotted')
+    ax.set_axisbelow(True)
 
     # show diagonal
     ax.fill_between(ax.get_xlim(), ax.get_xlim(), color='pplt:grid', zorder=0)
