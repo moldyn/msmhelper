@@ -51,14 +51,15 @@ We kindly ask you to cite this article in case you use this software package for
 ## Features
 - Simple usage with sleek function-based API
 - High performance due to [numba](https://numba.pydata.org/)-optimized source code, checkout the [benchmark comparing to PyEMMA](https://moldyn.github.io/msmhelper/benchmark)
-- Supports Python 3.7-3.10
 - [Documentation](https://moldyn.github.io/msmhelper) including tutorials
+- Powerful command line interface (CLI) to create publication-ready figures
+- Supports Python 3.7-3.10
 - Many helpful functions for dealing with state trajectories
 
 ## Implemented Key Functionalities
 - Hummer-Szabo projection of optimal dimensionality reduction by [Hummer and Szabo 2014](https://doi.org/10.1021/jp508375q)
 - Dynamical coring by [Nagel et al. 2019](https://doi.org/10.1063/1.5081767)
-- Fast extraction of pathways and MSM-based prediction of pathways based on the definition of [Nagel et al. 2020](https://pubs.acs.org/doi/10.1021/acs.jctc.0c00774) 
+- Fast extraction of pathways and MSM-based prediction of pathways based on the definition of [Nagel et al. 2020](https://pubs.acs.org/doi/10.1021/acs.jctc.0c00774)
 - Fast calculation of waiting times based on state trajectory and MSMs
 - [Chapman-Kolmogorov](https://www.wikiwand.com/en/Chapman%E2%80%93Kolmogorov_equation) test
 - Entropy-based comparison of different state discretizations
@@ -82,6 +83,21 @@ python3 -m pip install git+ssh://git@github.com/moldyn/msmhelper.git
 # or via password-based login
 python3 -m pip install git+https://github.com/moldyn/msmhelper.git
 ```
+
+## Shell Completion
+Using the `bash`, `zsh` or `fish` shell click provides an easy way to
+provide shell completion, checkout the
+[docs](https://click.palletsprojects.com/en/8.1.x/shell-completion).
+In the case of bash you need to add following line to your `~/.bashrc`
+```bash
+eval "$(_MSMHELPER_COMPLETE=bash_source msmhelper)"
+```
+
+In general one can call the module directly by its entry point `$ msmhelper`
+or by calling the module `$ python -m msmhelper`. The latter method is
+preferred to ensure using the desired python environment. For enabling
+the shell completion, the entry point needs to be used.
+
 
 
 ## Usage

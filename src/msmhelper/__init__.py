@@ -37,7 +37,7 @@ __all__ = [
     'unique',
 ]
 
-from . import md, msm, utils
+from . import md, msm, plot, utils
 from .io import (
     opentxt,
     savetxt,

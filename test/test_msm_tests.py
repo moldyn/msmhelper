@@ -48,7 +48,7 @@ def test_chapman_kolmogorov_test(trajs, lagtimes, tmax):
 @pytest.mark.parametrize('trajs, lagtime, tmax, result', [(
     StateTraj([1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1]), 1, 2,
     {
-        'ck': np.array([[0.8, 0.68], [0.8, 0.68]]),
+        'ck': {0: np.array([0.8, 0.68]), 1: np.array([0.8, 0.68])},
         'time': np.array([1, 2]),
         'is_ergodic': True,
         'is_fuzzy_ergodic': True,
@@ -60,7 +60,13 @@ def test__chapman_kolmogorov_test(trajs, lagtime, tmax, result):
 
     np.testing.assert_array_equal(cktest.keys(), result.keys())
     for key in cktest.keys():
-        np.testing.assert_array_almost_equal(cktest[key], result[key])
+        if key == 'ck':
+            for state in trajs.states:
+                np.testing.assert_array_almost_equal(
+                    cktest[key][state], result[key][state]
+                )
+        else:
+            np.testing.assert_array_almost_equal(cktest[key], result[key])
 
 
 @pytest.mark.parametrize('trajs, lagtime, tmax', [

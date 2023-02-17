@@ -5,13 +5,13 @@ This submodule provides utility functions that can be used to manipulate and tes
 
 The submodule is structured into the following submodules:
 
+- [**datasets:**][msmhelper.msm.datasets] This submodule contains all methods related to create example datasets. This submodule needs to be imported explicitly!
 - [**msm:**][msmhelper.msm.msm] This submodule contains all methods related to estimate the Markov state model.
 - [**tests:**][msmhelper.msm.tests] This submodule holds methods for validating Markov state models.
 
 
 """
 __all__ = [
-    'find_first'
     'find_first',
     'format_state_traj',
     'matrix_power',
