@@ -17,6 +17,7 @@ nav:
 - Code Reference: reference/
 - How-To Guides:
   - Getting Started: tutorials/tutorial.ipynb
+  - CLI: tutorials/cli.ipynb
 - FAQ: faq.md
 - Development:
   - Contributing: contributing.md
