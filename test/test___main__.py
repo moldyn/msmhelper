@@ -37,10 +37,7 @@ def test_submodules(submodule):
     assert 'Usage:' in result.output
 
 
-@pytest.mark.parametrize('submodule', [
-    'ck-test', 'implied-timescales', 'gaussian-filtering',
-])
-def test_ck_test(submodule, tmpdir):
+def test_ck_test(tmpdir):
     runner = CliRunner()
 
     # create trajectories
@@ -57,9 +54,18 @@ def test_ck_test(submodule, tmpdir):
         (
             'ck-test --lagtimes 1 2 3 4 5 --frames-per-unit 1 '
             '--unit frames --grid 2 2 --max-time 500 '
-            f'--filename {trajfile}'
+            f'--filename {macrotrajfile}'
+        ).split(),
+    )
+    assert result.exit_code == 0
+
+    result = runner.invoke(
+        main,
+        (
+            'ck-test --lagtimes 1 2 3 4 5 --frames-per-unit 1 '
+            '--unit frames --grid 2 2 --max-time 500 '
+            f'--filename {macrotrajfile} --microfilename {trajfile}'
         ).split(),
     )
     print(result.output)
-
     assert result.exit_code == 0

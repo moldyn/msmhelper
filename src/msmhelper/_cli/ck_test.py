@@ -15,13 +15,16 @@ from matplotlib import pyplot as plt
     '-f',
     required=True,
     type=click.Path(exists=True),
-    help='Path to microstate trajectory file (single column ascii file).',
+    help='Path to state trajectory file (single column ascii file).',
 )
 @click.option(
-    '--macrofilename',
+    '--microfilename',
     required=False,
     type=click.Path(exists=True),
-    help='Path to macrostate trajectory file (single column ascii file).',
+    help=(
+        'Path to microstate trajectory file (single column ascii file) to use '
+        'Hummer-Szabo projection.'
+    ),
 )
 @click.option(
     '--concat-limits',
@@ -70,7 +73,7 @@ from matplotlib import pyplot as plt
 )
 def ck_test(
     filename,
-    macrofilename,
+    microfilename,
     concat_limits,
     lagtimes,
     frames_per_unit,
@@ -80,15 +83,17 @@ def ck_test(
 ):
     """Calculate and plot CK test."""
     # setup matplotlib
-    pplt.use_style(figsize=0.8, true_black=True, colors='pastel_autunm', latex=False)
+    pplt.use_style(
+        figsize=0.8, true_black=True, colors='pastel_autunm', latex=False,
+    )
 
     # load file
     trajs = mh.openmicrostates(filename, limits_file=concat_limits)
-    if macrofilename:
-        macrotrajs = mh.openmicrostates(
-            macrofilename, limits_file=concat_limits,
+    if microfilename:
+        microtrajs = mh.openmicrostates(
+            microfilename, limits_file=concat_limits,
         )
-        trajs = mh.LumpedStateTraj(macrotrajs, trajs)
+        trajs = mh.LumpedStateTraj(trajs, microtrajs)
     else:
         trajs = mh.StateTraj(trajs)
 
@@ -109,9 +114,7 @@ def ck_test(
         )
 
         # save figure and continue
-        output = filename
-        if macrofilename:
-            output = '{f}.sh'.format(f=macrofilename)
+        output = f'{filename}.sh' if microfilename else filename
         pplt.savefig(
             '{f}.cktest.state{start:.0f}-{to:.0f}.pdf'.format(
                 f=output,
