@@ -16,7 +16,16 @@ import prettypyplot as pplt
     '-f',
     required=True,
     type=click.Path(exists=True),
-    help='Path to microstate trajectory file (single column ascii file).',
+    help='Path to state trajectory file (single column ascii file).',
+)
+@click.option(
+    '--microfilename',
+    required=False,
+    type=click.Path(exists=True),
+    help=(
+        'Path to microstate trajectory file (single column ascii file) to use '
+        'Hummer-Szabo projection.'
+    ),
 )
 @click.option(
     '--concat-limits',
@@ -62,6 +71,7 @@ import prettypyplot as pplt
 )
 def implied_timescales(
     filename,
+    microfilename,
     concat_limits,
     max_lagtime,
     frames_per_unit,
@@ -72,7 +82,13 @@ def implied_timescales(
     """Calculate and plot the implied timescales."""
     # load file
     trajs = mh.openmicrostates(filename, limits_file=concat_limits)
-    trajs = mh.StateTraj(trajs)
+    if microfilename:
+        microtrajs = mh.openmicrostates(
+            microfilename, limits_file=concat_limits,
+        )
+        trajs = mh.LumpedStateTraj(trajs, microtrajs)
+    else:
+        trajs = mh.StateTraj(trajs)
 
     # calculate implied timescales
     lagtimes = np.unique(np.linspace(1, max_lagtime, num=50, dtype=int))
@@ -84,7 +100,7 @@ def implied_timescales(
     if n_lagtimes > 5:
         kwargs = {'colors': 'macaw', 'ncs': n_lagtimes + 1}
 
-    pplt.use_style(figsize=2.2, **kwargs)
+    pplt.use_style(figsize=2.2, **kwargs, latex=False)
 
     # plot result
     fig, ax = plt.subplots()
@@ -110,7 +126,7 @@ def implied_timescales(
     if unit == 'us':
         unit = r'\textmu{{}}s'
     ax.set_ylabel(r'time scales [{unit}]'.format(unit=unit))
-    ax.set_xlabel(r'$\tau _\text{{lag}}$ [{unit}]'.format(unit=unit))
+    ax.set_xlabel(r'$\tau _\mathrm{{lag}}$ [{unit}]'.format(unit=unit))
 
     pplt.legend(
         ax=ax,
@@ -122,9 +138,11 @@ def implied_timescales(
         ax.set_yscale('log')
 
     # save figure
-    pplt.savefig('{f}.impltime.tmax{tmax:.0f}.pdf'.format(
-        f=filename, tmax=max_lagtime,
-    ))
+    pplt.savefig(
+        f'{filename}.impltime' +
+        ('.sh' if microfilename else '') +
+        f'.tmax{max_lagtime:.0f}.pdf'
+    )
 
 
 if __name__ == '__main__':
