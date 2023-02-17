@@ -12,7 +12,6 @@ import numpy as np
 import pytest
 from click.testing import CliRunner
 from msmhelper.__main__ import main
-from msmhelper.utils import datasets
 
 # Current directory
 HERE = os.path.dirname(__file__)
@@ -73,9 +72,8 @@ def test_implied_timescale(tmpdir):
     runner = CliRunner()
 
     # create trajectories
-    traj, macrotraj = datasets.hummer15_8state(
-        0.2, 0.05, 50000, return_macrotraj=True,
-    )
+    traj = np.loadtxt('test/assets/8state_microtraj')
+    macrotraj = np.loadtxt('test/assets/8state_macrotraj')
     trajfile = tmpdir.join('traj')
     macrotrajfile = tmpdir.join('macrotraj')
     np.savetxt(trajfile, traj, fmt='%.0f')
@@ -95,5 +93,21 @@ def test_implied_timescale(tmpdir):
             f'implied-timescales {params} --filename {macrotrajfile} '
             f'--microfilename {trajfile}'
         ).split(),
+    )
+    assert result.exit_code == 0
+
+
+def test_gaussian_filtering(tmpdir):
+    runner = CliRunner()
+
+    # create trajectories
+    input = 'test/assets/8state_microtraj'
+    output = tmpdir.join('traj.gaussian')
+
+    params = '--sigma 2'
+
+    result = runner.invoke(
+        main,
+        f'gaussian-filtering {params} -i {input} -o {output}'.split(),
     )
     assert result.exit_code == 0

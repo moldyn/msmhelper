@@ -53,10 +53,13 @@ def gaussian_filtering(input_file, concat_limits, sigma, output_file):
     data = mh.opentxt_limits(
         input_file, limits_file=concat_limits, dtype=np.float32,
     )
-    if data.ndim == 1:
-        data = data.reshape(-1, 1)
+    if data[0].ndim == 1:
+        data = [part.reshape(-1, 1) for part in data]
 
-    filtered_data = mh.utils.filtering.gaussian_filter(data, sigma=sigma)
+    filtered_data = [
+        mh.utils.filtering.gaussian_filter(part, sigma=sigma)
+        for part in data
+    ]
 
     mh.savetxt(
         output_file,
