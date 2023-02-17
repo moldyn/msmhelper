@@ -12,7 +12,6 @@ The submodule is structured into the following submodules:
 
 """
 __all__ = [
-    'find_first'
     'find_first',
     'format_state_traj',
     'matrix_power',
