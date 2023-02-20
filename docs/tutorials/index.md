@@ -31,15 +31,15 @@ conda install -c conda-forge msmhelper
 Once you have installed the package, you are ready to head over to the tutorial!
 
 ## Sections
-- [**Theoretical Background:**](../theory) In this section, you will learn the basic concepts behind Markov state modeling and how it can be used to analyze protein dynamics. We will cover the key mathematical concepts, including transition matrices, equilibrium distributions, and Markov chains.
+- [**Theoretical Background:**](theory) In this section, you will learn the basic concepts behind Markov state modeling and how it can be used to analyze protein dynamics. We will cover the key mathematical concepts, including transition matrices, equilibrium distributions, and Markov chains.
 
-- [**Estimation and Validation of an MSM:**](../msm) Here, we will walk you through the process of constructing a Markov state model from clustered state trajectory of a protein dynamics simulation. We will cover data model creation, and model validation.
+- [**Estimation and Validation of an MSM:**](msm) Here, we will walk you through the process of constructing a Markov state model from clustered state trajectory of a protein dynamics simulation. We will cover data model creation, and model validation.
 
-- [**Estimation of Waiting Times and Pathways:**](../msm) In this section, we will show you how to estimate the timescales of protein conformational transitions and how to extract the most probable pathways from an MSM.
+- [**Estimation of Waiting Times and Pathways:**](msm) In this section, we will show you how to estimate the timescales of protein conformational transitions and how to extract the most probable pathways from an MSM.
 
-- [**HS-Projection:**](../hummerszabo) Here, we will introduce you to the concept of the Hummer-Szabo (HS) projection, which allows for the optimal coarse-graining/reduction together with PCCA or MPP. We will show the dramantic improvements relying on this technique.
+- [**HS-Projection:**](hummerszabo) Here, we will introduce you to the concept of the Hummer-Szabo (HS) projection, which allows for the optimal coarse-graining/reduction together with PCCA or MPP. We will show the dramantic improvements relying on this technique.
 
-- [**Command Line Interface:**](../cli) In this section, we will provide a short guide to the command line interface of `msmhelper`, which provides some common analysis and visualization functionality.
+- [**Command Line Interface:**](cli) In this section, we will provide a short guide to the command line interface of `msmhelper`, which provides some common analysis and visualization functionality.
 
 ## Conclusion
 By the end of this tutorial, you will have a good understanding of the theoretical underpinnings of Markov state modeling and how to use `msmhelper` to perform the practical analysis. You will also have learned about some advanced concepts, such as the Hummer-Szabo projection, and gained experience with the command line interface. We hope that this tutorial will provide you with the tools and knowledge you need to explore the fascinating world of protein dynamics!
