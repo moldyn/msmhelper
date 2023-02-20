@@ -16,7 +16,8 @@ nav:
   - License: license.md
 - Tutorials:
   - Getting Started: tutorials/index.md
-  - Theoretical Background: tutorials/theory.ipynb
+  - Theoretical Background: tutorials/theory.md
+  - Structure of msmhelper: tutorials/msmhelper.md
   - Estimation and Validation of MSM: tutorials/msm.ipynb
   - Waiting Times and Pathways: tutorials/msm.ipynb
   - HS-Projection: tutorials/hummerszabo.ipynb

@@ -33,6 +33,8 @@ Once you have installed the package, you are ready to head over to the tutorial!
 ## Sections
 - [**Theoretical Background:**](theory) In this section, you will learn the basic concepts behind Markov state modeling and how it can be used to analyze protein dynamics. We will cover the key mathematical concepts, including transition matrices, equilibrium distributions, and Markov chains.
 
+- [**Structure of `msmhelper`:**](msmhelper) This section gives a brief overview of the structure of the module, by describing the usage of every submodule itself. For more details refere to the [code reference](../reference).
+
 - [**Estimation and Validation of an MSM:**](msm) Here, we will walk you through the process of constructing a Markov state model from clustered state trajectory of a protein dynamics simulation. We will cover data model creation, and model validation.
 
 - [**Estimation of Waiting Times and Pathways:**](msm) In this section, we will show you how to estimate the timescales of protein conformational transitions and how to extract the most probable pathways from an MSM.
