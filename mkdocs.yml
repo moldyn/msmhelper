@@ -19,7 +19,7 @@ nav:
   - Theoretical Background: tutorials/theory.md
   - Structure of msmhelper: tutorials/msmhelper.md
   - Estimation and Validation of MSM: tutorials/msm.ipynb
-  - Waiting Times and Pathways: tutorials/msm.ipynb
+  - Waiting Times and Pathways: tutorials/timescales.ipynb
   - HS-Projection: tutorials/hummerszabo.ipynb
   - CLI: tutorials/cli.ipynb
 - FAQ: faq.md
