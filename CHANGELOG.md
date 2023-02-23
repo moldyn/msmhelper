@@ -19,16 +19,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Renamed module `iotext` to `io`
   - Moved all functions related to msm to `msm` module
   - Moved all functions related to raw state trajectories to `md` module
-  - Moved all remaing functions into `utils` module
+  - Moved all remaining functions into `utils` module
 - Removed `StateTraj.trajs` property to reduce confusion between index and
   state trajectories.
 - Removed Python 3.6 support.
 
 ### Added Features and Improvements 🙌:
-- Add all new mkdocs documentation 🎉
-- Add command line interface for standalone tasks
+- Add an all new mkdocs documentation 🎉
+- Add a command line interface for standalone tasks 🎉
+- Add a follow-along tutorials 🎉
+- Add the submodule `plot` to create commonly-used figures
+
+### Other changes:
 - Add `gaussian_filter` functionality
 - Add implementation of `dynamical_coring`
+- Add estimation of transition times
+
+### Bugfix 🐛:
+- Fixed bug where `propagate_MCMC` returns index trajectory instead of a state
+  trajectory
 
 
 ## [0.6.2] - 2022-09-20
