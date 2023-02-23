@@ -24,7 +24,9 @@ def implied_timescales(trajs, lagtimes, ntimescales=None, reversible=False):
     r"""Calculate the implied timescales.
 
     Calculate the implied timescales, which are defined by
-    $$t_i = - \frac{t_\text{lag}}{\log(\lambda_i)}$$
+
+    $$t_i = - \frac{t_\text{lag}}{\log\lambda_i}$$
+
     the $i$-th eigenvalue $\lambda_i$.
 
     !!! note
@@ -195,8 +197,8 @@ def _estimate_times(
 
     maxtime = max(ts.keys())
     pts = np.zeros(maxtime + 1)
-    for t, count in ts.items():
-        pts[t] = count
+    for time, count in ts.items():
+        pts[time] = count
     return (
         pts / pts.sum(),
         np.arange(len(pts) + 1) * lagtime,
