@@ -15,6 +15,7 @@ import numba
 import numpy as np
 
 from msmhelper.md.comparison import _intersect as intersect
+from msmhelper.md import estimate_paths as md_estimate_paths
 from msmhelper.msm.utils import linalg
 from msmhelper.utils import shift_data
 from msmhelper.statetraj import StateTraj
@@ -379,6 +380,69 @@ def _estimate_transition_times(
                 tpts[wt] = 1
 
     return tpts
+
+
+def estimate_paths(
+    *,
+    trajs,
+    lagtime,
+    start,
+    final,
+    steps,
+):
+    """Estimates paths and waiting times between stated states.
+
+    The stated states (from/to) will be treated as a basin. The function
+    estimates transitions from first entering the start-basin until first
+    reaching the final-basin. The results will be listed by the corresponding
+    pathways, where loops are removed occuring first.
+
+    !!! note
+        This function is a simple wrapper and in contrast to
+        [estimate_wt][msmhelper.msm.estimate_waiting_times] it stores the whole
+        MCMC trajectory in memory. Hence, it memory-hungry.
+
+    Parameters
+    ----------
+    trajs : statetraj or list or ndarray or list of ndarray
+        State trajectory/trajectories. The states should start from zero and
+        need to be integers.
+    lagtime : int
+        Lag time for estimating the markov model given in [frames].
+    start : int or list of
+        States to start counting.
+    final : int or list of
+        States to start counting.
+    steps : int
+        Number of MCMC propagation steps of MCMC run.
+
+    Returns
+    -------
+    paths : dict
+        Dictionary containing the the paths as keys and and an array holding
+        the times of all paths as value.
+
+    """
+    # check correct input format
+    trajs = StateTraj(trajs)
+
+    states_start, states_final = np.unique(start), np.unique(final)
+
+    if intersect(states_start, states_final):
+        raise ValueError('States `start` and `final` do overlap.')
+
+    # check that all states exist in trajectory
+    for states in (states_start, states_final):
+        if intersect(states, trajs.states) != len(states):
+            raise ValueError(
+                'Selected states does not exist in state trajectory.',
+            )
+
+    return md_estimate_paths(
+        propagate_MCMC(trajs, lagtime, steps),
+        start,
+        final,
+    )
 
 
 def propagate_MCMC(
