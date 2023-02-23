@@ -45,8 +45,8 @@ All errors pointing to `./build/` can be neglected.
 
 If you add a new function/method/class please ensure that you add a test function, as well. Running the test simply by
 ```bash
-pytest --benchmark-skip --no-cov
-export NUMBA_DISABLE_JIT=1 && pytest --cov-report=xml --benchmark-skip
+pytest --no-cov
+export NUMBA_DISABLE_JIT=1 && pytest --cov-report=xml
 ```
 Ensure that the coverage does not decrease.
 
