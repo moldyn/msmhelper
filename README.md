@@ -21,7 +21,7 @@
         <img src="https://img.shields.io/pypi/pyversions/msmhelper" /></a>
     <a href="https://moldyn.github.io/msmhelper" alt="Docs">
         <img src="https://img.shields.io/badge/mkdocs-Documentation-brightgreen" /></a>
-    <a href="https://github.com/moldyn/MoSAIC/blob/main/LICENSE" alt="License">
+    <a href="https://github.com/moldyn/moldyn/blob/main/LICENSE" alt="License">
         <img src="https://img.shields.io/github/license/moldyn/msmhelper" /></a>
   </p>
 
