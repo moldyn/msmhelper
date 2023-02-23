@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
+# BSD 3-Clause License
+# Copyright (c) 2019-2023, Daniel Nagel
+# All rights reserved.
 """Set of functions for analyzing the MD trajectory.
 
-BSD 3-Clause License
-Copyright (c) 2019-2020, Daniel Nagel
-All rights reserved.
+This submodule contains methods for estimating various timescales based on a
+given state trajectory.
 
 """
 from collections import defaultdict
@@ -105,8 +107,9 @@ def estimate_paths(trajs, start, final):
 
     Returns
     -------
-    paths : ndarray
-        List of waiting times, given in frames.
+    paths : dict
+        Dictionary containing the the paths as keys and and an array holding
+        the times of all paths as value.
 
     """
     # check correct input format
