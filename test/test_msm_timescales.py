@@ -223,7 +223,16 @@ def test_propagate_MCMC(trajs, lagtime, steps, start, error, rand):
             1,
             2,
             False,
-            {1: 10, 2: 3},
+            (np.array([0, 10, 3, 0, 1]) / 14, [0, 1, 2, 3, 4]),
+            None,
+        ),
+        (
+            [1, 1, 1, 2, 2, 1, 1],
+            2,
+            1,
+            2,
+            False,
+            (np.array([0, 10, 3, 0, 1]) / 14, [0, 2, 4, 6, 8]),
             None,
         ),
         (
@@ -232,7 +241,16 @@ def test_propagate_MCMC(trajs, lagtime, steps, start, error, rand):
             1,
             2,
             True,
-            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 4],
+            None,
+        ),
+        (
+            [1, 1, 1, 2, 2, 1, 1],
+            2,
+            1,
+            2,
+            True,
+            [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 8],
             None,
         ),
         (
@@ -261,7 +279,7 @@ def test__estimate_time(
     """Test WT/TT time wrapper."""
     # define deterministic estimator to debug wrapper only
     def estimator(cummat, start, states_from, states_to, steps):
-        return {1: 10, 2: 3}
+        return {1: 10, 2: 3, 4: 1}
 
     # not used by estimator
     steps = 10
@@ -276,8 +294,9 @@ def test__estimate_time(
             estimator=estimator,
             return_list=return_list,
         )
-        if isinstance(ts, dict):
-            assert ts == result
+        if isinstance(ts, tuple):
+            for idx in (0, 1):
+                np.testing.assert_array_almost_equal(ts[0], result[0])
         else:
             np.testing.assert_array_almost_equal(ts, result)
     else:
