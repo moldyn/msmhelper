@@ -3,11 +3,26 @@
 # Copyright (c) 2019-2023, Daniel Nagel
 # All rights reserved.
 """Set of datasets to use for the tutorials."""
+import functools
+
 import numpy as np
 
 from msmhelper.msm.timescales import _propagate_MCMC
 from .tests import is_transition_matrix
 from ._utils import shift_data
+
+
+def _decorate_tmat(tmat):
+    """Add tmat as attribute of function."""
+    def decorator_tmat(func):
+        @functools.wraps(func)
+        def wrapper_tmat(*args, **kwargs):
+            return func(*args, **kwargs)
+
+        wrapper_tmat.tmat = tmat
+        return wrapper_tmat
+
+    return decorator_tmat
 
 
 def propagate_tmat(tmat, nsteps, start=None):
@@ -179,3 +194,65 @@ def hummer15_8state(rate_k, rate_h, nsteps, return_macrotraj=False):
         nsteps=nsteps,
         return_macrotraj=return_macrotraj,
     )
+
+
+_NAGEL20_4STATE_TMAT = np.array([
+    [0.92, 0.04, 0.04, 0.00],
+    [0.10, 0.70, 0.10, 0.10],
+    [0.10, 0.10, 0.70, 0.10],
+    [0.00, 0.04, 0.04, 0.92],
+])
+
+
+@_decorate_tmat(_NAGEL20_4STATE_TMAT)
+def nagel20_4state(nsteps):
+    """Four state model taken from Nagel et al. 20.
+
+    Daniel Nagel, Anna Weber, and Gerhard Stock
+    Journal of Chemical Theory and Computation 2020 16 (12), 7874-7882
+    DOI: [10.1021/acs.jctc.0c00774](https://doi.org/10.1021/acs.jctc.0c00774)
+
+    Parameters
+    ----------
+    nsteps : int
+        Number of steps to propagate.
+
+    Returns
+    -------
+    traj : ndarray
+        Markov chain Monte Carlo state trajectory.
+
+    """
+    return propagate_tmat(_NAGEL20_4STATE_TMAT, nsteps) + 1
+
+
+_NAGEL20_6STATE_TMAT = np.array([
+    [0.90, 0.03, 0.07, 0.00, 0.00, 0.00],
+    [0.05, 0.63, 0.15, 0.07, 0.10, 0.00],
+    [0.08, 0.04, 0.60, 0.14, 0.14, 0.00],
+    [0.00, 0.12, 0.15, 0.50, 0.15, 0.08],
+    [0.00, 0.04, 0.16, 0.10, 0.60, 0.10],
+    [0.00, 0.00, 0.00, 0.08, 0.02, 0.90],
+])
+
+
+@_decorate_tmat(_NAGEL20_6STATE_TMAT)
+def nagel20_6state(nsteps):
+    """Six state model taken from Nagel et al. 20.
+
+    Daniel Nagel, Anna Weber, and Gerhard Stock
+    Journal of Chemical Theory and Computation 2020 16 (12), 7874-7882
+    DOI: [10.1021/acs.jctc.0c00774](https://doi.org/10.1021/acs.jctc.0c00774)
+
+    Parameters
+    ----------
+    nsteps : int
+        Number of steps to propagate.
+
+    Returns
+    -------
+    traj : ndarray
+        Markov chain Monte Carlo state trajectory.
+
+    """
+    return propagate_tmat(_NAGEL20_6STATE_TMAT, nsteps) + 1

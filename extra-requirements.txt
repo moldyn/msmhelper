@@ -2,7 +2,6 @@
 # package[version_required]: tag1, tag2, ...
 flake8:                       testing
 pytest:                       testing
-pytest-benchmark:             testing
 pytest-cov:                   testing
 pytest-mpl:                   testing
 pytest-rerunfailures:         testing

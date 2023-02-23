@@ -5,7 +5,7 @@ repo_url: "https://github.com/moldyn/msmhelper"
 edit_uri: "blob/main/docs/"
 repo_name: "moldyn/msmhelper"
 site_dir: "site"
-copyright: Copyright &copy; 2022 Daniel Nagel
+copyright: Copyright &copy; 2019-2023 Daniel Nagel
 watch: [src/msmhelper]
 
 nav:
@@ -14,11 +14,16 @@ nav:
   - Benchmark: benchmark.ipynb
   - Changelog: changelog.md
   - License: license.md
-- Code Reference: reference/
-- How-To Guides:
-  - Getting Started: tutorials/tutorial.ipynb
+- Tutorials:
+  - Getting Started: tutorials/index.md
+  - Theoretical Background: tutorials/theory.md
+  - Structure of msmhelper: tutorials/msmhelper.md
+  - Estimation and Validation of MSM: tutorials/msm.ipynb
+  - Waiting Times and Pathways: tutorials/timescales.ipynb
+  - HS-Projection: tutorials/hummerszabo.ipynb
   - CLI: tutorials/cli.ipynb
 - FAQ: faq.md
+- Code Reference: reference/
 - Development:
   - Contributing: contributing.md
 - MolDyn Freiburg: https://moldyn.uni-freiburg.de/

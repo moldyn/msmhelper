@@ -15,6 +15,7 @@ import numba
 import numpy as np
 
 from msmhelper.md.comparison import _intersect as intersect
+from msmhelper.md import estimate_paths as md_estimate_paths
 from msmhelper.msm.utils import linalg
 from msmhelper.utils import shift_data
 from msmhelper.statetraj import StateTraj
@@ -24,7 +25,9 @@ def implied_timescales(trajs, lagtimes, ntimescales=None, reversible=False):
     r"""Calculate the implied timescales.
 
     Calculate the implied timescales, which are defined by
-    $$t_i = - \frac{t_\text{lag}}{\log(\lambda_i)}$$
+
+    $$t_i = - \frac{t_\text{lag}}{\log\lambda_i}$$
+
     the $i$-th eigenvalue $\lambda_i$.
 
     !!! note
@@ -134,14 +137,18 @@ def _estimate_times(
     estimator : function
         Estimator to propagate mcmc and return times.
     return_list : bool
-        If true a list of all events is returned, else a dictionary is
-        returned.
+        If true a list of all events is returned, else the probability density
+        together with the edges is returned.
 
     Returns
     -------
-    ts : dict or ndarray
-        Dict with times as keys and counts as values, given in frames.
-        If `return_list=True`, return a sorted (!) list containing all times.
+    ts : ndarray
+        Density probability of the time distribution. If `return_list=True`,
+        return a sorted (!) list containing all times.
+    edges : ndarray
+        Array containing the edges corresponding to the probability, given in
+        frames. Only for `return_list=False`.
+
 
     """
     # check correct input format
@@ -188,7 +195,15 @@ def _estimate_times(
         return np.repeat(
             list(ts.keys()), list(ts.values()),
         ) * lagtime
-    return {t * lagtime: count for t, count in ts.items()}
+
+    maxtime = max(ts.keys())
+    pts = np.zeros(maxtime + 1)
+    for time, count in ts.items():
+        pts[time] = count
+    return (
+        pts / pts.sum(),
+        np.arange(len(pts) + 1) * lagtime,
+    )
 
 
 @decorit.alias('estimate_wt')
@@ -221,14 +236,17 @@ def estimate_waiting_times(
     steps : int
         Number of MCMC propagation steps of MCMC run.
     return_list : bool
-        If true a list of all events is returned, else a dictionary is
-        returned.
+        If true a list of all events is returned, else the probability density
+        together with the edges is returned.
 
     Returns
     -------
-    wt : dict or ndarray
-        Dict with times as keys and counts as values, given in frames.
-        If `return_list=True`, return a sorted (!) list containing all times.
+    ts : ndarray
+        Density probability of the time distribution. If `return_list=True`,
+        return a sorted (!) list containing all times.
+    edges : ndarray
+        Array containing the edges corresponding to the probability, given in
+        frames. Only for `return_list=False`.
 
     """
     return _estimate_times(
@@ -272,14 +290,17 @@ def estimate_transition_times(
     steps : int
         Number of MCMC propagation steps of MCMC run.
     return_list : bool
-        If true a list of all events is returned, else a dictionary is
-        returned.
+        If true a list of all events is returned, else the probability density
+        together with the edges is returned.
 
     Returns
     -------
-    wt : dict or ndarray
-        Dict with times as keys and counts as values, given in frames.
-        If `return_list=True`, return a sorted (!) list containing all times.
+    ts : ndarray
+        Density probability of the time distribution. If `return_list=True`,
+        return a sorted (!) list containing all times.
+    edges : ndarray
+        Array containing the edges corresponding to the probability, given in
+        frames. Only for `return_list=False`.
 
     """
     return _estimate_times(
@@ -361,6 +382,69 @@ def _estimate_transition_times(
     return tpts
 
 
+def estimate_paths(
+    *,
+    trajs,
+    lagtime,
+    start,
+    final,
+    steps,
+):
+    """Estimates paths and waiting times between stated states.
+
+    The stated states (from/to) will be treated as a basin. The function
+    estimates transitions from first entering the start-basin until first
+    reaching the final-basin. The results will be listed by the corresponding
+    pathways, where loops are removed occuring first.
+
+    !!! note
+        This function is a simple wrapper and in contrast to
+        [estimate_wt][msmhelper.msm.estimate_waiting_times] it stores the whole
+        MCMC trajectory in memory. Hence, it memory-hungry.
+
+    Parameters
+    ----------
+    trajs : statetraj or list or ndarray or list of ndarray
+        State trajectory/trajectories. The states should start from zero and
+        need to be integers.
+    lagtime : int
+        Lag time for estimating the markov model given in [frames].
+    start : int or list of
+        States to start counting.
+    final : int or list of
+        States to start counting.
+    steps : int
+        Number of MCMC propagation steps of MCMC run.
+
+    Returns
+    -------
+    paths : dict
+        Dictionary containing the the paths as keys and and an array holding
+        the times of all paths as value.
+
+    """
+    # check correct input format
+    trajs = StateTraj(trajs)
+
+    states_start, states_final = np.unique(start), np.unique(final)
+
+    if intersect(states_start, states_final):
+        raise ValueError('States `start` and `final` do overlap.')
+
+    # check that all states exist in trajectory
+    for states in (states_start, states_final):
+        if intersect(states, trajs.states) != len(states):
+            raise ValueError(
+                'Selected states does not exist in state trajectory.',
+            )
+
+    return md_estimate_paths(
+        propagate_MCMC(trajs, lagtime, steps),
+        start,
+        final,
+    )
+
+
 def propagate_MCMC(
     trajs,
     lagtime,
@@ -401,7 +485,7 @@ def propagate_MCMC(
     # convert states to idx
     idx_start = trajs.state_to_idx(start)
 
-    # estimate permuted cummulative transition matrix
+    # estimate permuted cumulative transition matrix
     cummat = _get_cummat(trajs=trajs, lagtime=lagtime)
 
     # do not convert for pytest coverage

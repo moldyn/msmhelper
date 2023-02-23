@@ -5,7 +5,7 @@ This depends heavily on the task, but in general it should be comparable or even
 
 
 ### Is there a command line interface?
-Yes, indeed. Please check out the short tutorial [CLI](../tutorials/cli).
+Yes, indeed. Some useful plots (e.g. CK-test) and tools can be used directly from the command line. Please check out the short tutorial [CLI](../tutorials/cli).
 
 
 ### Is there a shell completion
