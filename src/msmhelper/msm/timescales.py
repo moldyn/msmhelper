@@ -134,14 +134,18 @@ def _estimate_times(
     estimator : function
         Estimator to propagate mcmc and return times.
     return_list : bool
-        If true a list of all events is returned, else a dictionary is
-        returned.
+        If true a list of all events is returned, else the probability density
+        together with the edges is returned.
 
     Returns
     -------
-    ts : dict or ndarray
-        Dict with times as keys and counts as values, given in frames.
-        If `return_list=True`, return a sorted (!) list containing all times.
+    ts : ndarray
+        Density probability of the time distribution. If `return_list=True`,
+        return a sorted (!) list containing all times.
+    edges : ndarray
+        Array containing the edges corresponding to the probability, given in
+        frames. Only for `return_list=False`.
+
 
     """
     # check correct input format
@@ -188,7 +192,15 @@ def _estimate_times(
         return np.repeat(
             list(ts.keys()), list(ts.values()),
         ) * lagtime
-    return {t * lagtime: count for t, count in ts.items()}
+
+    maxtime = max(ts.keys())
+    pts = np.zeros(maxtime + 1)
+    for t, count in ts.items():
+        pts[t] = count
+    return (
+        pts / pts.sum(),
+        np.arange(len(pts) + 1) * lagtime,
+    )
 
 
 @decorit.alias('estimate_wt')
@@ -221,14 +233,17 @@ def estimate_waiting_times(
     steps : int
         Number of MCMC propagation steps of MCMC run.
     return_list : bool
-        If true a list of all events is returned, else a dictionary is
-        returned.
+        If true a list of all events is returned, else the probability density
+        together with the edges is returned.
 
     Returns
     -------
-    wt : dict or ndarray
-        Dict with times as keys and counts as values, given in frames.
-        If `return_list=True`, return a sorted (!) list containing all times.
+    ts : ndarray
+        Density probability of the time distribution. If `return_list=True`,
+        return a sorted (!) list containing all times.
+    edges : ndarray
+        Array containing the edges corresponding to the probability, given in
+        frames. Only for `return_list=False`.
 
     """
     return _estimate_times(
@@ -272,14 +287,17 @@ def estimate_transition_times(
     steps : int
         Number of MCMC propagation steps of MCMC run.
     return_list : bool
-        If true a list of all events is returned, else a dictionary is
-        returned.
+        If true a list of all events is returned, else the probability density
+        together with the edges is returned.
 
     Returns
     -------
-    wt : dict or ndarray
-        Dict with times as keys and counts as values, given in frames.
-        If `return_list=True`, return a sorted (!) list containing all times.
+    ts : ndarray
+        Density probability of the time distribution. If `return_list=True`,
+        return a sorted (!) list containing all times.
+    edges : ndarray
+        Array containing the edges corresponding to the probability, given in
+        frames. Only for `return_list=False`.
 
     """
     return _estimate_times(
@@ -401,7 +419,7 @@ def propagate_MCMC(
     # convert states to idx
     idx_start = trajs.state_to_idx(start)
 
-    # estimate permuted cummulative transition matrix
+    # estimate permuted cumulative transition matrix
     cummat = _get_cummat(trajs=trajs, lagtime=lagtime)
 
     # do not convert for pytest coverage
