@@ -9,3 +9,4 @@ __all__ = [
 ]
 
 from ._ck_test import plot_ck_test
+from ._wtd import plot_wtd
