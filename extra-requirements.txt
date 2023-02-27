@@ -12,5 +12,6 @@ mkdocs-literate-nav:          docs
 mkdocs-gen-files:             docs
 mkdocs-section-index:         docs
 mkdocs-jupyter:               docs
+mkdocs-click:                 docs
 jupyter_contrib_nbextensions: docs
 pyemma:                       docs
