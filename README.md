@@ -39,10 +39,10 @@
 > This package is still in beta stage. Please open an issue if you encounter
 > any bug/error.
 
-This is a package with helper functions to work with discrete state trajectories and Markov state models. In contrast to [pyemma](https://github.com/markovmodel/PyEMMA) and [msmbuilder](https://github.com/msmbuilder/msmbuilder), it focuses on Markov state modeling based on an already existing state trajectory. Therefore, neither dimensionality reduction methods nor clustering methods are included. For a methodological overview, we recommend [Sittel and Stock](https://doi.org/10.1063/1.5049637)
+This is a package with helper functions to work with discrete state trajectories and Markov state models. In contrast to [pyemma](https://github.com/markovmodel/PyEMMA) and [msmbuilder](https://github.com/msmbuilder/msmbuilder), it focuses on Markov state modeling based on an already existing state trajectory. Therefore, neither dimensionality reduction methods nor clustering methods are included. For a methodological overview, we recommend [Sittel and Stock](https://doi.org/10.1063/1.5049637).
 
 This package will be published soon:
-> D. Nagel, and G. Stock,
+> D. Nagel, and G. Stock,  
 > *msmhelper: A Python Package for Markov State Modeling of Protein Dynamics*,
 > in preparation
 
