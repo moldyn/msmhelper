@@ -1,11 +1,8 @@
-# -*- coding: utf-8 -*-
-"""Class for handling discrete state trajectories.
-
-BSD 3-Clause License
-Copyright (c) 2019-2020, Daniel Nagel
-All rights reserved.
-
-"""
+## -*- coding: utf-8 -*-
+# BSD 3-Clause License
+# Copyright (c) 2019-2023, Daniel Nagel
+# All rights reserved.
+"""Class for handling discrete state trajectories."""
 import numpy as np
 
 import msmhelper as mh
