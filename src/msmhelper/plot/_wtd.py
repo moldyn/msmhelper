@@ -18,11 +18,14 @@ def plot_wtd(
 ):
     """Plot waiting time distribution.
 
+    This is a wrapper function to plot the return value of
+    [msmhelper.msm.estimate_waiting_time_dist][].
+
     Parameters
     ----------
     wtd : dict
-        Dictionary returned from [msmhelper.msm.estimate_wtd][], holding
-        stats of waiting time distributions.
+        Dictionary returned from `msmhelper.msm.estimate_wtd`, holding stats of
+        waiting time distributions.
     frames_per_unit : float, optional
         Number of frames per given unit. This is used to scale the axis
         accordingly.
