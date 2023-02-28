@@ -23,6 +23,8 @@ __all__ = [
     'implied_timescales',
     'estimate_waiting_times',
     'estimate_wt',
+    'estimate_waiting_time_dist',
+    'estimate_wtd',
     'estimate_paths',
 ]
 
@@ -42,5 +44,7 @@ from .timescales import (
     implied_timescales,
     estimate_waiting_times,
     estimate_wt,
+    estimate_waiting_time_dist,
+    estimate_wtd,
     estimate_paths,
 )
