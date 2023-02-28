@@ -77,7 +77,11 @@ def plot_wtd(
             lagtimes, FL, FU, color=colors[3], label=r'fliers',
         )
     ax.fill_between(
-        lagtimes, LB, UB, color=colors[2], label=r'$Q_{1/3}\pm\mathrm{IQR}$',
+        lagtimes,
+        LB,
+        UB,
+        color=colors[2],
+        label=r'$Q_{1/3}\pm1.5\mathrm{IQR}$',
     )
     ax.fill_between(lagtimes, Q1, Q3, color=colors[1], label='IQR')
     ax.plot(lagtimes, Q2, color=colors[0], label='$Q_2$')
