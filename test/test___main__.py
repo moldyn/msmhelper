@@ -97,6 +97,38 @@ def test_implied_timescale(tmpdir):
     assert result.exit_code == 0
 
 
+def test_waiting_time_dist(tmpdir):
+    runner = CliRunner()
+
+    # create trajectories
+    traj = np.loadtxt('test/assets/8state_microtraj')
+    macrotraj = np.loadtxt('test/assets/8state_macrotraj')
+    trajfile = tmpdir.join('traj')
+    macrotrajfile = tmpdir.join('macrotraj')
+    np.savetxt(trajfile, traj, fmt='%.0f')
+    np.savetxt(macrotrajfile, macrotraj, fmt='%.0f')
+
+    params = (
+        '--start 1 --final 4 --nsteps 10000 '
+        '--max-lagtime 25 --frames-per-unit 1 --unit frames'
+    )
+
+    result = runner.invoke(
+        main,
+        f'waiting-time-dist {params} --filename {macrotrajfile}'.split(),
+    )
+    assert result.exit_code == 0
+
+    result = runner.invoke(
+        main,
+        (
+            f'waiting-time-dist {params} --filename {macrotrajfile} '
+            f'--microfilename {trajfile}'
+        ).split(),
+    )
+    assert result.exit_code == 0
+
+
 def test_gaussian_filtering(tmpdir):
     runner = CliRunner()
 
