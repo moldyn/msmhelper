@@ -3,37 +3,13 @@
 # Copyright (c) 2019-2023, Daniel Nagel
 # All rights reserved.
 """Plot the waiting time distribution."""
-import msmhelper as mh
 import numpy as np
 import prettypyplot as pplt
 from matplotlib import pyplot as plt
 
 
-def _estimate_stats(coord):
-    """Return boxplot stats of data."""
-    Q1, Q2, Q3 = np.quantile(
-        coord,
-        [0.25, 0.5, 0.75],
-    )
-    IQR = Q3 - Q1
-    return (
-        coord.min(),
-        max(Q1 - IQR, coord.min()),
-        Q1,
-        Q2,
-        Q3,
-        min(Q3 + IQR, coord.max()),
-        coord.max()
-    )
-
-
 def plot_wtd(
-    trajs,
-    max_lagtime,
-    start,
-    final,
-    steps,
-    n_lagtimes=50,
+    wtd,
     frames_per_unit=1,
     unit='frames',
     ax=None,
@@ -44,17 +20,9 @@ def plot_wtd(
 
     Parameters
     ----------
-    trajs : statetraj or list or ndarray or list of ndarray
-        State trajectory/trajectories. The states should start from zero and
-        need to be integers.
-    max_lagtime : int
-        Maximal lag time for estimating the markov model given in [frames].
-    start : int or list of
-        States to start counting.
-    final : int or list of
-        States to start counting.
-    steps : int
-        Number of MCMC propagation steps of MCMC run.
+    wtd : dict
+        Dictionary returned from [msmhelper.msm.estimate_wtd][], holding
+        stats of waiting time distributions.
     frames_per_unit : float, optional
         Number of frames per given unit. This is used to scale the axis
         accordingly.
@@ -76,26 +44,30 @@ def plot_wtd(
     if ax is None:
         ax = plt.gca()
 
-    lagtimes = np.unique(
-        np.linspace(1, max_lagtime, num=n_lagtimes, dtype=int),
+    lagtimes = np.array(
+        [time for time in wtd.keys() if time != 'MD'], dtype=int,
     )
+    max_lagtime = lagtimes.max()
 
-    # get stats
-    FL, LB, Q1, Q2, Q3, UB, FU = (
+    # convert stats to array
+    LB, UB, Q1, Q2, Q3 = np.array([
         np.array([
-            _estimate_stats(
-                mh.msm.estimate_waiting_times(
-                    trajs=trajs,
-                    lagtime=lagtime,
-                    start=start,
-                    final=final,
-                    steps=steps,
-                    return_list=True,
-                )
-            )
-            for lagtime in lagtimes
+            wtd[lagtime][key] for lagtime in lagtimes
         ]) / frames_per_unit
-    ).T
+        for key in ['whislo', 'whishi', 'q1', 'med', 'q3']
+    ])
+    FL = np.array([
+        min(
+            np.min(wtd[lagtime]['fliers']),
+            wtd[lagtime]['whislo'],
+        ) for lagtime in lagtimes
+    ]) / frames_per_unit
+    FU = np.array([
+        max(
+            np.max(wtd[lagtime]['fliers']),
+            wtd[lagtime]['whishi'],
+        ) for lagtime in lagtimes
+    ]) / frames_per_unit
 
     # plot results
     colors = pplt.categorical_color(4, 'C0')
@@ -112,14 +84,9 @@ def plot_wtd(
 
     max_lagtime_unit = max_lagtime / frames_per_unit
     if show_md:
-        wt_md = mh.md.estimate_waiting_times(
-            trajs=trajs,
-            start=start,
-            final=final,
-        )
-        bxp = ax.boxplot(
-            wt_md / frames_per_unit,
-            positions=[max_lagtime_unit * 1.25],
+        bxp = ax.bxp(
+            wtd['MD'],
+            positions=[max_lagtime_unit * 1.125],
             widths=max_lagtime_unit * 0.075,
             showfliers=show_fliers,
         )
@@ -127,7 +94,7 @@ def plot_wtd(
             median.set_color('k')
 
         ax.axvline(
-            max_lagtime_unit * 1.125,
+            max_lagtime_unit,
             0,
             1,
             lw=plt.rcParams['axes.linewidth'],
@@ -135,10 +102,10 @@ def plot_wtd(
         )
 
     if show_md:
-        ax.set_xlim([0, max_lagtime_unit * 1.375])
+        ax.set_xlim([0, max_lagtime_unit * 1.25])
         xticks = np.array([
             *np.linspace(0, max_lagtime_unit, 4).astype(int),
-            max_lagtime_unit * 1.25,
+            max_lagtime_unit * 1.125,
         ])
         xticklabels = [
             f'{xtick:.0f}' if idx + 1 < len(xticks) else 'MD'
@@ -150,7 +117,7 @@ def plot_wtd(
         ax.set_xlim([0, max_lagtime_unit])
 
     # set legend and labels
-    pplt.legend(ax=ax, outside='top')
+    pplt.legend(ax=ax, outside='top', frameon=False)
     ax.set_ylabel(f'time $t$ [{unit}]')
     ax.set_xlabel(fr'$\tau_\mathrm{{lag}}$ [{unit}]')
 
