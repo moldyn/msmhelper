@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
+# BSD 3-Clause License
+# Copyright (c) 2019-2023, Daniel Nagel
+# All rights reserved.
 """Set of filtering functions.
 
-BSD 3-Clause License
-Copyright (c) 2019-2023, Daniel Nagel
-All rights reserved.
-
-TODO:
+!!! todo
     - Correct border effects of running mean
 
 """

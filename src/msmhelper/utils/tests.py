@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
-"""Set of helpful test functions.
-
-BSD 3-Clause License
-Copyright (c) 2019-2020, Daniel Nagel
-All rights reserved.
-
-"""
+# BSD 3-Clause License
+# Copyright (c) 2019-2023, Daniel Nagel
+# All rights reserved.
+"""Set of helpful test functions."""
 import decorit
 import numpy as np
 

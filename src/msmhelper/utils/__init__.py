@@ -5,9 +5,9 @@ This submodule provides utility functions that can be used to manipulate and tes
 
 The submodule is structured into the following submodules:
 
-- [**datasets:**][msmhelper.msm.datasets] This submodule contains all methods related to create example datasets. This submodule needs to be imported explicitly!
-- [**msm:**][msmhelper.msm.msm] This submodule contains all methods related to estimate the Markov state model.
-- [**tests:**][msmhelper.msm.tests] This submodule holds methods for validating Markov state models.
+- [**datasets:**][msmhelper.utils.datasets] This submodule contains all methods related to create example datasets. This submodule needs to be imported explicitly!
+- [**filtering:**][msmhelper.utils.filtering] This submodule contains all methods related to dynamical smoothening.
+- [**tests:**][msmhelper.utils.tests] This submodule holds functions to tests for given properties, e.g., if a matrix is ergodic, quadratic, etc.
 
 
 """
