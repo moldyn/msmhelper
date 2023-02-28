@@ -1,4 +1,4 @@
-## -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # BSD 3-Clause License
 # Copyright (c) 2019-2023, Daniel Nagel
 # All rights reserved.
