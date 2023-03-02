@@ -40,16 +40,13 @@ def test_ck_test(tmpdir):
     runner = CliRunner()
 
     # create trajectories
-    traj = np.loadtxt('test/assets/8state_microtraj')
-    macrotraj = np.loadtxt('test/assets/8state_macrotraj')
-    trajfile = tmpdir.join('traj')
-    macrotrajfile = tmpdir.join('macrotraj')
-    np.savetxt(trajfile, traj, fmt='%.0f')
-    np.savetxt(macrotrajfile, macrotraj, fmt='%.0f')
+    trajfile = 'test/assets/8state_microtraj'
+    macrotrajfile = 'test/assets/8state_macrotraj'
+    output = tmpdir.join('output.pdf')
 
     params = (
         '--lagtimes 1 2 3 4 5 --frames-per-unit 1 '
-        '--unit frames --grid 2 2 --max-time 500 '
+        f'--unit frames --grid 2 2 --max-time 500 -o {output}'
     )
 
     result = runner.invoke(

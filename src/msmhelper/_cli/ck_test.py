@@ -3,6 +3,8 @@
 # Copyright (c) 2019-2023, Daniel Nagel
 # All rights reserved.
 """Plot the Chapman-Kolmogorov test."""
+from os.path import splitext
+
 import click
 import msmhelper as mh
 import prettypyplot as pplt
@@ -34,6 +36,15 @@ from matplotlib import pyplot as plt
     help=(
         'Path to concatination limit file given the length of all ' +
         r'trajectories, e.g. "3\n3\n5"'
+    ),
+)
+@click.option(
+    '--output',
+    '-o',
+    type=click.Path(),
+    help=(
+        'Output basename of figure. Needs to have a valid extension (".pdf", '
+        '".svg", ".png"). Default format is pdf.'
     ),
 )
 @click.option(
@@ -75,6 +86,7 @@ def ck_test(
     filename,
     microfilename,
     concat_limits,
+    output,
     lagtimes,
     frames_per_unit,
     unit,
@@ -114,14 +126,12 @@ def ck_test(
         )
 
         # save figure and continue
-        output = f'{filename}.sh' if microfilename else filename
-        pplt.savefig(
-            '{f}.cktest.state{start:.0f}-{to:.0f}.pdf'.format(
-                f=output,
-                start=chunk[0],
-                to=chunk[-1],
-            )
-        )
+        if output is None:
+            basename = f'{filename}.sh' if microfilename else filename
+            output = f'{basename}.cktest.pdf'
+        # insert state_str between pathname and extension
+        path, ext = splitext(output)
+        pplt.savefig(f'{path}.state{chunk[0]:.0f}-{chunk[-1]:.0f}{ext}')
         plt.close()
 
 
