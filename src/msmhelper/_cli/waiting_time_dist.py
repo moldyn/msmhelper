@@ -37,6 +37,15 @@ from matplotlib import pyplot as plt
     ),
 )
 @click.option(
+    '--output',
+    '-o',
+    type=click.Path(),
+    help=(
+        'Output name of figure. Needs to have a valid suffix (".pdf", ".svg", '
+        '".png"). Default format is pdf.'
+    ),
+)
+@click.option(
     '--max-lagtime',
     required=True,
     type=click.IntRange(min=1),
@@ -80,6 +89,7 @@ def waiting_time_dist(
     filename,
     microfilename,
     concat_limits,
+    output,
     max_lagtime,
     start,
     final,
@@ -111,8 +121,10 @@ def waiting_time_dist(
     _, ax = plt.subplots()
     mh.plot.plot_wtd(wtd, ax=ax)
 
-    output = f'{filename}.sh' if microfilename else filename
-    pplt.savefig(f'{output}.wtd.pdf')
+    if output is None:
+        basename = f'{filename}.sh' if microfilename else filename
+        output = f'{basename}.wtd.pdf'
+    pplt.savefig(output)
 
 
 if __name__ == '__main__':
