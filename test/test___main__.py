@@ -72,14 +72,11 @@ def test_implied_timescale(tmpdir):
     runner = CliRunner()
 
     # create trajectories
-    traj = np.loadtxt('test/assets/8state_microtraj')
-    macrotraj = np.loadtxt('test/assets/8state_macrotraj')
-    trajfile = tmpdir.join('traj')
-    macrotrajfile = tmpdir.join('macrotraj')
-    np.savetxt(trajfile, traj, fmt='%.0f')
-    np.savetxt(macrotrajfile, macrotraj, fmt='%.0f')
+    trajfile = 'test/assets/8state_microtraj'
+    macrotrajfile = 'test/assets/8state_macrotraj'
+    output = tmpdir.join('output.pdf')
 
-    params = '--max-lagtime 25 --frames-per-unit 1 --unit frames'
+    params = f'--max-lagtime 25 --frames-per-unit 1 --unit frames -o {output} '
 
     result = runner.invoke(
         main,
