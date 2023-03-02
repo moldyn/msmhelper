@@ -8,7 +8,6 @@ All rights reserved.
 """
 import os.path
 
-import numpy as np
 import pytest
 from click.testing import CliRunner
 from msmhelper.__main__ import main
