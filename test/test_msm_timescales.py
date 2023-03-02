@@ -232,7 +232,7 @@ def test_propagate_MCMC(trajs, lagtime, steps, start, error, rand):
             1,
             2,
             False,
-            (np.array([0, 10, 3, 0, 1]) / 14, [0, 2, 4, 6, 8]),
+            (np.array([0, 10, 3, 0, 1]) / 14 / 2, [0, 2, 4, 6, 8]),
             None,
         ),
         (

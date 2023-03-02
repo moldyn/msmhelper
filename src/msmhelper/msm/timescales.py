@@ -203,7 +203,7 @@ def _estimate_times(
     for time, count in ts.items():
         pts[time] = count
     return (
-        pts / pts.sum(),
+        pts / (pts.sum() * lagtime),
         np.arange(len(pts) + 1) * lagtime,
     )
 
