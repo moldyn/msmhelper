@@ -112,12 +112,13 @@ tmat, states = mh.estimate_markov_model(traj, lagtime=1)
 
 ## Hummer-Szabo Projection
 In the following we show some sample figures produced directly with the command line tools. For more information on that, there is a [tutorial](tutorials/hummerszabo) explaining the methods more in depth. In general we can see, that applying the HS-projection removes most projection artifacts based on coarse-graining many microstates into a few macrostates.
-Method | MSM | Hummer-Szabo MSM
-:---: | :---: | :---:
-Implied Timescales | [![Implied Timescales](assets/8state_macrotraj.impl.jpg)](reference/cli/#msmhelper-implied-timescales) | [![Implied Timescales](assets/8state_macrotraj.sh.impl.jpg)](reference/cli/#msmhelper-implied-timescales)
-Chapman-Kolmogorov test | [![Chapman-Kolmogorov Test](assets/8state_macrotraj.cktest.state1-4.jpg)](reference/cli/#msmhelper-ck-test) | [![Chapman-Kolmogorov Test](assets/8state_macrotraj.sh.cktest.state1-4.jpg)](reference/cli/#msmhelper-ck-test)
-Waiting Time Distributions | [![waiting time distribution](assets/8state_macrotraj.wtd.jpg)](reference/cli/#msmhelper-waiting-time-dist) | [![waiting time distribution](assets/8state_macrotraj.sh.wtd.jpg)](reference/cli/#msmhelper-waiting-time-dist)
-Waiting Times | [![waiting times](assets/8state_macrotraj.wts.jpg)](reference/cli/#msmhelper-waiting-times) | [![waiting times](assets/8state_macrotraj.sh.wts.jpg)](reference/cli/#msmhelper-waiting-times)
+
+| Method | MSM | Hummer-Szabo MSM |
+| :---: | :---: | :---: |
+| Implied Timescales | [![Implied Timescales](assets/8state_macrotraj.impl.jpg)](reference/cli/#msmhelper-implied-timescales) | [![Implied Timescales](assets/8state_macrotraj.sh.impl.jpg)](reference/cli/#msmhelper-implied-timescales) |
+| Chapman-Kolmogorov test | [![Chapman-Kolmogorov Test](assets/8state_macrotraj.cktest.state1-4.jpg)](reference/cli/#msmhelper-ck-test) | [![Chapman-Kolmogorov Test](assets/8state_macrotraj.sh.cktest.state1-4.jpg)](reference/cli/#msmhelper-ck-test) |
+| Waiting Time Distributions | [![waiting time distribution](assets/8state_macrotraj.wtd.jpg)](reference/cli/#msmhelper-waiting-time-dist) | [![waiting time distribution](assets/8state_macrotraj.sh.wtd.jpg)](reference/cli/#msmhelper-waiting-time-dist) |
+| Waiting Times | [![waiting times](assets/8state_macrotraj.wts.jpg)](reference/cli/#msmhelper-waiting-times) | [![waiting times](assets/8state_macrotraj.sh.wts.jpg)](reference/cli/#msmhelper-waiting-times) |
 
 For more examples checkout the [tutorials](https://moldyn.github.io/msmhelper/tutorials).
 
