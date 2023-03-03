@@ -116,11 +116,11 @@ In the following we show some sample figures produced directly with the command 
 
 | Method | MSM | Hummer-Szabo MSM |
 | :---: | :---: | :---: |
-| Implied Timescales | [![Implied Timescales](assets/8state_macrotraj.impl.jpg)](reference/cli/#msmhelper-implied-timescales) | [![Implied Timescales](assets/8state_macrotraj.sh.impl.jpg)](reference/cli/#msmhelper-implied-timescales) |
-| Chapman-Kolmogorov test | [![Chapman-Kolmogorov Test](assets/8state_macrotraj.cktest.state1-4.jpg)](reference/cli/#msmhelper-ck-test) | [![Chapman-Kolmogorov Test](assets/8state_macrotraj.sh.cktest.state1-4.jpg)](reference/cli/#msmhelper-ck-test) |
-| Waiting Time Distributions | [![waiting time distribution](assets/8state_macrotraj.wtd.jpg)](reference/cli/#msmhelper-waiting-time-dist) | [![waiting time distribution](assets/8state_macrotraj.sh.wtd.jpg)](reference/cli/#msmhelper-waiting-time-dist) |
-| Waiting Times | [![waiting times](assets/8state_macrotraj.wts.jpg)](reference/cli/#msmhelper-waiting-times) | [![waiting times](assets/8state_macrotraj.sh.wts.jpg)](reference/cli/#msmhelper-waiting-times) |
-| Contact Representation | [![contact representation](assets/hp35.contactRep.state1-12.jpg)](reference/cli/#msmhelper-contact-rep) | |
+| Implied Timescales | [![Implied Timescales](https://moldyn.github.io/msmhelper/assets/8state_macrotraj.impl.jpg)](reference/cli/#msmhelper-implied-timescales) | [![Implied Timescales](https://moldyn.github.io/msmhelper/assets/8state_macrotraj.sh.impl.jpg)](reference/cli/#msmhelper-implied-timescales) |
+| Chapman-Kolmogorov test | [![Chapman-Kolmogorov Test](https://moldyn.github.io/msmhelper/assets/8state_macrotraj.cktest.state1-4.jpg)](reference/cli/#msmhelper-ck-test) | [![Chapman-Kolmogorov Test](https://moldyn.github.io/msmhelper/assets/8state_macrotraj.sh.cktest.state1-4.jpg)](reference/cli/#msmhelper-ck-test) |
+| Waiting Time Distributions | [![waiting time distribution](https://moldyn.github.io/msmhelper/assets/8state_macrotraj.wtd.jpg)](reference/cli/#msmhelper-waiting-time-dist) | [![waiting time distribution](https://moldyn.github.io/msmhelper/assets/8state_macrotraj.sh.wtd.jpg)](reference/cli/#msmhelper-waiting-time-dist) |
+| Waiting Times | [![waiting times](https://moldyn.github.io/msmhelper/assets/8state_macrotraj.wts.jpg)](reference/cli/#msmhelper-waiting-times) | [![waiting times](https://moldyn.github.io/msmhelper/assets/8state_macrotraj.sh.wts.jpg)](reference/cli/#msmhelper-waiting-times) |
+| Contact Representation | [![contact representation](https://moldyn.github.io/msmhelper/assets/hp35.contactRep.state1-12.jpg)](reference/cli/#msmhelper-contact-rep) | |
 
 For more examples checkout the [tutorials](https://moldyn.github.io/msmhelper/tutorials).
 
