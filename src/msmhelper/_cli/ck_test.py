@@ -114,9 +114,7 @@ def ck_test(
 
     # plot result
     nrows, ncols = grid
-    for nfig, chunk in enumerate(
-        mh.plot._ck_test._split_array(trajs.states, nrows * ncols)
-    ):
+    for chunk in mh.plot._ck_test._split_array(trajs.states, nrows * ncols):
         mh.plot.plot_ck_test(
             ck=ck,
             states=chunk,
