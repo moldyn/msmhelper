@@ -58,7 +58,7 @@ README = remove_gh_dark_mode_only_tags(
 # This call to setup() does all the work
 setuptools.setup(
     name='msmhelper',
-    version='0.6.2',
+    version='1.0.0',
     description='Helper functions for Markov State Models.',
     long_description=README,
     long_description_content_type='text/markdown',
