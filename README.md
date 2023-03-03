@@ -61,7 +61,7 @@ We kindly ask you to cite this article in case you use this software package for
 - Dynamical coring by [Nagel et al. 2019](https://doi.org/10.1063/1.5081767)
 - Fast extraction of pathways and MSM-based prediction of pathways based on the definition of [Nagel et al. 2020](https://pubs.acs.org/doi/10.1021/acs.jctc.0c00774)
 - Fast calculation of waiting times based on both, state trajectories and MSMs
-- [Chapman-Kolmogorov](https://www.wikiwand.com/en/Chapman%E2%80%93Kolmogorov_equation) test
+- Blazing fast [Chapman-Kolmogorov](https://www.wikiwand.com/en/Chapman%E2%80%93Kolmogorov_equation) test implementation
 - Entropy-based comparison of different state discretizations
 - Contact representation by Nagel et al. 2023 (submitted) for a compact structural representation of the states
 - Provide (non-reversible) transition matrix of all states (corresponds in pyemma to `connectivity='none', 'all'` which will (probably) [never be implemented](https://github.com/markovmodel/PyEMMA/blob/5315b8699eff2941e84577932921f694dca76f59/pyemma/msm/estimators/_msm_estimator_base.py#L110))
@@ -125,4 +125,6 @@ In the following we show some sample figures produced directly with the command 
 For more examples checkout the [tutorials](https://moldyn.github.io/msmhelper/tutorials).
 
 ## Roadmap
+- Add [Buchete-Hummer test](https://doi.org/10.1021/jp0761665) as alternative for the Chapman-Kolmogorov test.
+- Add a numba implementation of a parallelized autocorrelation function estimation.
 - Use static type hints together with [beartype](https://github.com/beartype/beartype)
