@@ -12,8 +12,6 @@ The submodule is structured into the following submodules:
 
 """
 __all__ = [
-    'bh_test',
-    'buchete_hummer_test',
     'chapman_kolmogorov_test',
     'ck_test',
     'estimate_markov_model',
@@ -29,8 +27,6 @@ __all__ = [
 ]
 
 from .tests import (
-    bh_test,
-    buchete_hummer_test,
     chapman_kolmogorov_test,
     ck_test,
 )
