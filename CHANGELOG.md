@@ -14,8 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+
+
+## [1.0.0] - 2023-03-03
 ### API changes warning ⚠️:
-- Completely refactoring of the API
+- Completely refactoring of the API, this release has many breaking changes to v0.6.2
   - Renamed module `iotext` to `io`
   - Moved all functions related to msm to `msm` module
   - Moved all functions related to raw state trajectories to `md` module
@@ -25,15 +28,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed Python 3.6 support.
 
 ### Added Features and Improvements 🙌:
-- Add an all new mkdocs documentation 🎉
+- Add an all new mkdocs documentation with material design 🎉
 - Add a command line interface for standalone tasks 🎉
-- Add a follow-along tutorials 🎉
+- Add follow-along tutorials, FAQ, and better code references 🎉
 - Add the submodule `plot` to create commonly-used figures
+- Improved MSM generation by a factor of 2-3 for continuously named states. 
 
 ### Other changes:
 - Add `gaussian_filter` functionality
 - Add implementation of `dynamical_coring`
 - Add estimation of transition times
+- Add contact representation of states
+- And many more improvements
 
 ### Bugfix 🐛:
 - Fixed bug where `propagate_MCMC` returns index trajectory instead of a state
@@ -131,7 +137,9 @@ Chapman-Kolmogorov test
 - Initial release
 
 
-[Unreleased]: https://github.com/moldyn/msmhelper/compare/v0.6.2...main
+[Unreleased]: https://github.com/moldyn/msmhelper/compare/v1.0.0...main
+[1.0.0]: https://github.com/moldyn/msmhelper/compare/v0.6.2...v1.0.0
+[0.6.2]: https://github.com/moldyn/msmhelper/compare/v0.6.1...v0.6.2
 [0.6.2]: https://github.com/moldyn/msmhelper/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/moldyn/msmhelper/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/moldyn/msmhelper/compare/v0.5.0...v0.6.0
