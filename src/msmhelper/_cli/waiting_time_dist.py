@@ -97,7 +97,7 @@ def waiting_time_dist(
     frames_per_unit,
     unit,
 ):
-    """Calculate and plot CK test."""
+    """Estimation and visualization of the waiting time distributions."""
     # setup matplotlib
     pplt.use_style(
         figsize=2.4, true_black=True, colors='pastel_autunm', latex=False,

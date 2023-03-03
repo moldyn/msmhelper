@@ -93,7 +93,7 @@ def ck_test(
     grid,
     max_time,
 ):
-    """Calculate and plot CK test."""
+    """Estimation and visualization of the Chapman-Kolmogorov test."""
     # setup matplotlib
     pplt.use_style(
         figsize=0.8, true_black=True, colors='pastel_autunm', latex=False,

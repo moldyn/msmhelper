@@ -89,7 +89,7 @@ def implied_timescales(
     n_lagtimes,
     ylog,
 ):
-    """Calculate and plot the implied timescales."""
+    """Estimation and visualization of the implied timescales."""
     # load file
     trajs = mh.openmicrostates(filename, limits_file=concat_limits)
     if microfilename:

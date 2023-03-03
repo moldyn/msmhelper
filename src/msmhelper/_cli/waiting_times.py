@@ -99,7 +99,7 @@ def waiting_times(
     frames_per_unit,
     unit,
 ):
-    """Calculate and plot the waiting times."""
+    """Estimation and visualization of the waiting times."""
     # setup matplotlib
     pplt.use_style(
         figsize=2.4, true_black=True, colors='pastel_autunm', latex=False,
