@@ -16,21 +16,28 @@ from matplotlib.cbook import boxplot_stats
     'contact_file',
     required=True,
     type=click.Path(exists=True),
-    help='Path to contacts file.',
+    help=(
+        'Path to file holding all contacts (features) of shape `(n_frames, '
+        'n_contacts)`.'
+    ),
 )
 @click.option(
     '--clusters',
     'cluster_file',
     required=True,
     type=click.Path(exists=True),
-    help='Path to contacts cluster file.',
+    help=(
+        'Path to contacts cluster file, where every row is a cluster and in '
+        'each row the indices corresponding to the columns of the clusters '
+        'are stated.'
+    ),
 )
 @click.option(
     '--state',
     'state_file',
     required=True,
     type=click.Path(exists=True),
-    help='Path to states trajectory',
+    help='Path to state trajectory.',
 )
 @click.option(
     '--output',
@@ -49,7 +56,16 @@ from matplotlib.cbook import boxplot_stats
     help='Number of rows and cols per figure.',
 )
 def contact_rep(contact_file, cluster_file, state_file, output, grid):
-    """Contact representation of states."""
+    """Contact representation of states.
+
+    This script creates a contact representation of states. Were the states
+    are obtained by [MoSAIC](https://github.com/moldyn/MoSAIC) and the contact
+    representation was introduced in Nagel et al.[^1].
+
+    [^1]: Nagel et al., **Selecting Features for Markov Modeling: A Case Study
+          on HP35.**, *J. Chem. Theory Comput.*, submitted,
+
+    """
     # setup matplotlib
     pplt.use_style(
         figsize=0.8, colors='pastel_autunm', true_black=True, latex=False,

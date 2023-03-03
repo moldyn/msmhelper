@@ -63,6 +63,7 @@ We kindly ask you to cite this article in case you use this software package for
 - Fast calculation of waiting times based on both, state trajectories and MSMs
 - [Chapman-Kolmogorov](https://www.wikiwand.com/en/Chapman%E2%80%93Kolmogorov_equation) test
 - Entropy-based comparison of different state discretizations
+- Contact representation by Nagel et al. 2023 (submitted) for a compact structural representation of the states
 - Provide (non-reversible) transition matrix of all states (corresponds in pyemma to `connectivity='none', 'all'` which will (probably) [never be implemented](https://github.com/markovmodel/PyEMMA/blob/5315b8699eff2941e84577932921f694dca76f59/pyemma/msm/estimators/_msm_estimator_base.py#L110))
 
 ## Getting started
@@ -119,6 +120,7 @@ In the following we show some sample figures produced directly with the command 
 | Chapman-Kolmogorov test | [![Chapman-Kolmogorov Test](assets/8state_macrotraj.cktest.state1-4.jpg)](reference/cli/#msmhelper-ck-test) | [![Chapman-Kolmogorov Test](assets/8state_macrotraj.sh.cktest.state1-4.jpg)](reference/cli/#msmhelper-ck-test) |
 | Waiting Time Distributions | [![waiting time distribution](assets/8state_macrotraj.wtd.jpg)](reference/cli/#msmhelper-waiting-time-dist) | [![waiting time distribution](assets/8state_macrotraj.sh.wtd.jpg)](reference/cli/#msmhelper-waiting-time-dist) |
 | Waiting Times | [![waiting times](assets/8state_macrotraj.wts.jpg)](reference/cli/#msmhelper-waiting-times) | [![waiting times](assets/8state_macrotraj.sh.wts.jpg)](reference/cli/#msmhelper-waiting-times) |
+| Contact Representation | [![contact representation](assets/hp35.contactRep.state1-12.jpg)](reference/cli/#msmhelper-contact-rep) | |
 
 For more examples checkout the [tutorials](https://moldyn.github.io/msmhelper/tutorials).
 
