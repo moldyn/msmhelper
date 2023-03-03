@@ -29,3 +29,12 @@ python -m msmhelper ck-test $CKTEST_ARGS \
     --filename $MACROTRAJ -o ${OUTPUT}.cktest.jpg
 python -m msmhelper ck-test $CKTEST_ARGS \
     --filename $MACROTRAJ --microfilename $MICROTRAJ -o ${OUTPUT}.sh.cktest.jpg
+
+
+## CONTACT REP
+# python -m msmhelper contact-rep \
+#     --contacts $CONTACTS \
+#     --clusters $CLUSTERS \
+#     --state $TRAJ \
+#     --grid 4 3 \
+#     --output hp35.contactRep.jpg
