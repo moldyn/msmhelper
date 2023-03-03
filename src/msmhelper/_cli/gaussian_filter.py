@@ -9,7 +9,6 @@ import msmhelper as mh
 
 
 @click.command(
-    help='Applying gaussian filter on time series.',
     no_args_is_help=True,
 )
 @click.option(
@@ -48,6 +47,7 @@ import msmhelper as mh
     help='Path to output file, will be of same shape as input',
 )
 def gaussian_filtering(input_file, concat_limits, sigma, output_file):
+    """Applying gaussian filter on time series."""
     if not output_file:
         output_file = f'{input_file}.gaussian{sigma:.0f}f'
     data = mh.opentxt_limits(

@@ -8,7 +8,6 @@ All rights reserved.
 """
 import os.path
 
-import numpy as np
 import pytest
 from click.testing import CliRunner
 from msmhelper.__main__ import main
@@ -40,16 +39,13 @@ def test_ck_test(tmpdir):
     runner = CliRunner()
 
     # create trajectories
-    traj = np.loadtxt('test/assets/8state_microtraj')
-    macrotraj = np.loadtxt('test/assets/8state_macrotraj')
-    trajfile = tmpdir.join('traj')
-    macrotrajfile = tmpdir.join('macrotraj')
-    np.savetxt(trajfile, traj, fmt='%.0f')
-    np.savetxt(macrotrajfile, macrotraj, fmt='%.0f')
+    trajfile = 'test/assets/8state_microtraj'
+    macrotrajfile = 'test/assets/8state_macrotraj'
+    output = tmpdir.join('output.pdf')
 
     params = (
         '--lagtimes 1 2 3 4 5 --frames-per-unit 1 '
-        '--unit frames --grid 2 2 --max-time 500 '
+        f'--unit frames --grid 2 2 --max-time 500 -o {output}'
     )
 
     result = runner.invoke(
@@ -72,14 +68,11 @@ def test_implied_timescale(tmpdir):
     runner = CliRunner()
 
     # create trajectories
-    traj = np.loadtxt('test/assets/8state_microtraj')
-    macrotraj = np.loadtxt('test/assets/8state_macrotraj')
-    trajfile = tmpdir.join('traj')
-    macrotrajfile = tmpdir.join('macrotraj')
-    np.savetxt(trajfile, traj, fmt='%.0f')
-    np.savetxt(macrotrajfile, macrotraj, fmt='%.0f')
+    trajfile = 'test/assets/8state_microtraj'
+    macrotrajfile = 'test/assets/8state_macrotraj'
+    output = tmpdir.join('output.pdf')
 
-    params = '--max-lagtime 25 --frames-per-unit 1 --unit frames'
+    params = f'--max-lagtime 25 --frames-per-unit 1 --unit frames -o {output} '
 
     result = runner.invoke(
         main,
@@ -91,6 +84,35 @@ def test_implied_timescale(tmpdir):
         main,
         (
             f'implied-timescales {params} --filename {macrotrajfile} '
+            f'--microfilename {trajfile}'
+        ).split(),
+    )
+    assert result.exit_code == 0
+
+
+def test_waiting_time_dist(tmpdir):
+    runner = CliRunner()
+
+    # create trajectories
+    trajfile = 'test/assets/8state_microtraj'
+    macrotrajfile = 'test/assets/8state_macrotraj'
+    output = tmpdir.join('output.pdf')
+
+    params = (
+        f'--start 1 --final 4 --nsteps 10000 -o {output} '
+        '--max-lagtime 25 --frames-per-unit 1 --unit frames'
+    )
+
+    result = runner.invoke(
+        main,
+        f'waiting-time-dist {params} --filename {macrotrajfile}'.split(),
+    )
+    assert result.exit_code == 0
+
+    result = runner.invoke(
+        main,
+        (
+            f'waiting-time-dist {params} --filename {macrotrajfile} '
             f'--microfilename {trajfile}'
         ).split(),
     )

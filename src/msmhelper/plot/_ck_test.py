@@ -18,7 +18,7 @@ def plot_ck_test(
     """Plot CK-Test results.
 
     This routine is a basic helper function to visualize the results of
-    [msmhelper.msm.ck_test][].
+    [msmhelper.msm.chapman_kolmogorov_test][].
 
     Parameters
     ----------

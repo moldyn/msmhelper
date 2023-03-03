@@ -61,11 +61,13 @@ We kindly ask you to cite this article in case you use this software package for
 - Dynamical coring by [Nagel et al. 2019](https://doi.org/10.1063/1.5081767)
 - Fast extraction of pathways and MSM-based prediction of pathways based on the definition of [Nagel et al. 2020](https://pubs.acs.org/doi/10.1021/acs.jctc.0c00774)
 - Fast calculation of waiting times based on both, state trajectories and MSMs
-- [Chapman-Kolmogorov](https://www.wikiwand.com/en/Chapman%E2%80%93Kolmogorov_equation) test
+- Blazing fast [Chapman-Kolmogorov](https://www.wikiwand.com/en/Chapman%E2%80%93Kolmogorov_equation) test implementation
 - Entropy-based comparison of different state discretizations
+- Contact representation by Nagel et al. 2023 (submitted) for a compact structural representation of the states
 - Provide (non-reversible) transition matrix of all states (corresponds in pyemma to `connectivity='none', 'all'` which will (probably) [never be implemented](https://github.com/markovmodel/PyEMMA/blob/5315b8699eff2941e84577932921f694dca76f59/pyemma/msm/estimators/_msm_estimator_base.py#L110))
 
-## Installation
+## Getting started
+### Installation
 The package is called `msmhelper` and is available via [PyPI](https://pypi.org/project/msmhelper) or [conda](https://anaconda.org/conda-forge/msmhelper). To install it, simply call:
 ```bash
 python3 -m pip install --upgrade msmhelper
@@ -84,7 +86,7 @@ python3 -m pip install git+ssh://git@github.com/moldyn/msmhelper.git
 python3 -m pip install git+https://github.com/moldyn/msmhelper.git
 ```
 
-## Shell Completion
+### Shell Completion
 Using the `bash`, `zsh` or `fish` shell click provides an easy way to
 provide shell completion, checkout the
 [docs](https://click.palletsprojects.com/en/8.1.x/shell-completion).
@@ -92,16 +94,13 @@ In the case of bash you need to add following line to your `~/.bashrc`
 ```bash
 eval "$(_MSMHELPER_COMPLETE=bash_source msmhelper)"
 ```
-
 In general one can call the module directly by its entry point `$ msmhelper`
 or by calling the module `$ python -m msmhelper`. The latter method is
 preferred to ensure using the desired python environment. For enabling
 the shell completion, the entry point needs to be used.
 
-
-
 ## Usage
-Check out the documentation for an overview over all modules and some example workflows.
+This package offers either a [command line interface](https://moldyn.github.io/msmhelper/reference/cli) to run standalone analysis and to create commonly-used figures, or its much more powerful [API](https://moldyn.github.io/msmhelper/reference/msmhelper) can be used to embedded it into an existing Python workflow. Check out the documentation for an overview over all modules and some example workflows, and for some examples see the (following section)[#Hummer-Szabo-Projection].
 ```python
 import msmhelper as mh
 
@@ -111,7 +110,21 @@ traj = mh.openmicrostates(filename, limitsfile)
 tmat, states = mh.estimate_markov_model(traj, lagtime=1)
 ...
 ```
-For more examples checkout the [tutorials](https://moldyn.github.io/msmhelper/tutorials)
+
+## Hummer-Szabo Projection
+In the following we show some sample figures produced directly with the command line tools. For more information on that, there is a [tutorial](tutorials/hummerszabo) explaining the methods more in depth. In general we can see, that applying the HS-projection removes most projection artifacts based on coarse-graining many microstates into a few macrostates.
+
+| Method | MSM | Hummer-Szabo MSM |
+| :---: | :---: | :---: |
+| Implied Timescales | [![Implied Timescales](assets/8state_macrotraj.impl.jpg)](reference/cli/#msmhelper-implied-timescales) | [![Implied Timescales](assets/8state_macrotraj.sh.impl.jpg)](reference/cli/#msmhelper-implied-timescales) |
+| Chapman-Kolmogorov test | [![Chapman-Kolmogorov Test](assets/8state_macrotraj.cktest.state1-4.jpg)](reference/cli/#msmhelper-ck-test) | [![Chapman-Kolmogorov Test](assets/8state_macrotraj.sh.cktest.state1-4.jpg)](reference/cli/#msmhelper-ck-test) |
+| Waiting Time Distributions | [![waiting time distribution](assets/8state_macrotraj.wtd.jpg)](reference/cli/#msmhelper-waiting-time-dist) | [![waiting time distribution](assets/8state_macrotraj.sh.wtd.jpg)](reference/cli/#msmhelper-waiting-time-dist) |
+| Waiting Times | [![waiting times](assets/8state_macrotraj.wts.jpg)](reference/cli/#msmhelper-waiting-times) | [![waiting times](assets/8state_macrotraj.sh.wts.jpg)](reference/cli/#msmhelper-waiting-times) |
+| Contact Representation | [![contact representation](assets/hp35.contactRep.state1-12.jpg)](reference/cli/#msmhelper-contact-rep) | |
+
+For more examples checkout the [tutorials](https://moldyn.github.io/msmhelper/tutorials).
 
 ## Roadmap
+- Add [Buchete-Hummer test](https://doi.org/10.1021/jp0761665) as alternative for the Chapman-Kolmogorov test.
+- Add a numba implementation of a parallelized autocorrelation function estimation.
 - Use static type hints together with [beartype](https://github.com/beartype/beartype)

@@ -13,9 +13,11 @@ import random
 import decorit
 import numba
 import numpy as np
+from matplotlib.cbook import boxplot_stats
 
 from msmhelper.md.comparison import _intersect as intersect
 from msmhelper.md import estimate_paths as md_estimate_paths
+from msmhelper.md import estimate_waiting_times as md_estimate_wt
 from msmhelper.msm.utils import linalg
 from msmhelper.utils import shift_data
 from msmhelper.statetraj import StateTraj
@@ -201,7 +203,7 @@ def _estimate_times(
     for time, count in ts.items():
         pts[time] = count
     return (
-        pts / pts.sum(),
+        pts / (pts.sum() * lagtime),
         np.arange(len(pts) + 1) * lagtime,
     )
 
@@ -531,3 +533,82 @@ def _get_cummat(trajs, lagtime):
 
     cummat_perm[:, -1] = 1  # enforce that probability sums up to 1
     return cummat_perm, state_perm
+
+
+def _estimate_stats(coord):
+    """Return boxplot stats of data."""
+    Q1, Q2, Q3 = np.quantile(
+        coord,
+        [0.25, 0.5, 0.75],
+    )
+    IQR = Q3 - Q1
+    return (
+        coord.min(),
+        max(Q1 - IQR, coord.min()),
+        Q1,
+        Q2,
+        Q3,
+        min(Q3 + IQR, coord.max()),
+        coord.max()
+    )
+
+
+@decorit.alias('estimate_wtd')
+def estimate_waiting_time_dist(
+    trajs,
+    max_lagtime,
+    start,
+    final,
+    steps,
+    n_lagtimes=50,
+):
+    """Estimate waiting time distribution.
+
+    Parameters
+    ----------
+    trajs : statetraj or list or ndarray or list of ndarray
+        State trajectory/trajectories. The states should start from zero and
+        need to be integers.
+    max_lagtime : int
+        Maximal lag time for estimating the markov model given in [frames].
+    start : int or list of
+        States to start counting.
+    final : int or list of
+        States to start counting.
+    steps : int
+        Number of MCMC propagation steps of MCMC run.
+
+    Returns
+    -------
+    wtd : dict
+        Dictionary containing waiting time distribution.
+
+    """
+    lagtimes = np.unique(
+        np.linspace(1, max_lagtime, num=n_lagtimes, dtype=int),
+    )
+
+    # get stats
+    wtd = {
+        lagtime: boxplot_stats(
+            estimate_waiting_times(
+                trajs=trajs,
+                lagtime=lagtime,
+                start=start,
+                final=final,
+                steps=steps,
+                return_list=True,
+            ),
+        )[0]
+        for lagtime in lagtimes
+    }
+
+    # include MD
+    wtd['MD'] = boxplot_stats(
+        md_estimate_wt(
+            trajs=trajs,
+            start=start,
+            final=final,
+        ),
+    )
+    return wtd

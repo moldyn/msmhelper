@@ -2,9 +2,7 @@
 # BSD 3-Clause License
 # Copyright (c) 2019-2023, Daniel Nagel
 # All rights reserved.
-"""Plot the Chapman-Kolmogorov test."""
-from os.path import splitext
-
+"""Plot the waiting time distribution."""
 import click
 import msmhelper as mh
 import prettypyplot as pplt
@@ -43,16 +41,34 @@ from matplotlib import pyplot as plt
     '-o',
     type=click.Path(),
     help=(
-        'Output basename of figure. Needs to have a valid extension (".pdf", '
-        '".svg", ".png"). Default format is pdf.'
+        'Output name of figure. Needs to have a valid suffix (".pdf", ".svg", '
+        '".png"). Default format is pdf.'
     ),
 )
 @click.option(
-    '--lagtimes',
+    '--max-lagtime',
     required=True,
-    nargs=5,
     type=click.IntRange(min=1),
-    help='5 (!) Lag times given in frames to estimate Markov state model.',
+    help='Maximal lag time given in frames to estimate Markov state model.',
+)
+@click.option(
+    '--start',
+    required=True,
+    type=click.IntRange(min=1),
+    help='State to start from.',
+)
+@click.option(
+    '--final',
+    required=True,
+    type=click.IntRange(min=1),
+    help='State to end in.',
+)
+@click.option(
+    '--nsteps',
+    required=True,
+    type=click.IntRange(min=1),
+    default=int(1e8),
+    help='State to end in.',
 )
 @click.option(
     '--frames-per-unit',
@@ -69,34 +85,22 @@ from matplotlib import pyplot as plt
     ),
     help='Unit of data.',
 )
-@click.option(
-    '--grid',
-    type=click.IntRange(min=1),
-    nargs=2,
-    default=(1, 1),
-    help='Number of rows and cols.',
-)
-@click.option(
-    '--max-time',
-    type=click.IntRange(min=1),
-    default=int(10**4),
-    help='Largest time value to evaluate and plot the test.',
-)
-def ck_test(
+def waiting_time_dist(
     filename,
     microfilename,
     concat_limits,
     output,
-    lagtimes,
+    max_lagtime,
+    start,
+    final,
+    nsteps,
     frames_per_unit,
     unit,
-    grid,
-    max_time,
 ):
-    """Estimation and visualization of the Chapman-Kolmogorov test."""
+    """Estimation and visualization of the waiting time distributions."""
     # setup matplotlib
     pplt.use_style(
-        figsize=0.8, true_black=True, colors='pastel_autunm', latex=False,
+        figsize=2.4, true_black=True, colors='pastel_autunm', latex=False,
     )
 
     # load file
@@ -105,33 +109,23 @@ def ck_test(
         microtrajs = mh.openmicrostates(
             microfilename, limits_file=concat_limits,
         )
-        trajs = mh.LumpedStateTraj(trajs, microtrajs)
+        trajs = mh.LumpedStateTraj(trajs, microtrajs, positive=True)
     else:
         trajs = mh.StateTraj(trajs)
 
     # perform test
-    ck = mh.msm.ck_test(trajs, lagtimes=lagtimes, tmax=max_time)
+    wtd = mh.msm.estimate_wtd(
+        trajs, max_lagtime=max_lagtime, start=start, final=final, steps=nsteps,
+    )
 
-    # plot result
-    nrows, ncols = grid
-    for chunk in mh.plot._ck_test._split_array(trajs.states, nrows * ncols):
-        mh.plot.plot_ck_test(
-            ck=ck,
-            states=chunk,
-            frames_per_unit=frames_per_unit,
-            unit=unit,
-            grid=grid,
-        )
+    _, ax = plt.subplots()
+    mh.plot.plot_wtd(wtd, ax=ax)
 
-        # save figure and continue
-        if output is None:
-            basename = f'{filename}.sh' if microfilename else filename
-            output = f'{basename}.cktest.pdf'
-        # insert state_str between pathname and extension
-        path, ext = splitext(output)
-        pplt.savefig(f'{path}.state{chunk[0]:.0f}-{chunk[-1]:.0f}{ext}')
-        plt.close()
+    if output is None:
+        basename = f'{filename}.sh' if microfilename else filename
+        output = f'{basename}.wtd.pdf'
+    pplt.savefig(output)
 
 
 if __name__ == '__main__':
-    ck_test()  # pragma: no cover
+    waiting_time_dist()  # pragma: no cover

@@ -38,6 +38,15 @@ import prettypyplot as pplt
     ),
 )
 @click.option(
+    '--output',
+    '-o',
+    type=click.Path(),
+    help=(
+        'Output name of figure. Needs to have a valid suffix (".pdf", ".svg", '
+        '".png"). Default format is pdf.'
+    ),
+)
+@click.option(
     '--max-lagtime',
     required=True,
     type=click.IntRange(min=0),
@@ -73,13 +82,14 @@ def implied_timescales(
     filename,
     microfilename,
     concat_limits,
+    output,
     max_lagtime,
     frames_per_unit,
     unit,
     n_lagtimes,
     ylog,
 ):
-    """Calculate and plot the implied timescales."""
+    """Estimation and visualization of the implied timescales."""
     # load file
     trajs = mh.openmicrostates(filename, limits_file=concat_limits)
     if microfilename:
@@ -140,12 +150,12 @@ def implied_timescales(
     if ylog:
         ax.set_yscale('log')
 
+    if output is None:
+        basename = f'{filename}.sh' if microfilename else filename
+        output = f'{basename}.impltime.tmax{max_lagtime:.0f}.pdf'
+
     # save figure
-    pplt.savefig(
-        f'{filename}.impltime' +
-        ('.sh' if microfilename else '') +
-        f'.tmax{max_lagtime:.0f}.pdf'
-    )
+    pplt.savefig(output)
 
 
 if __name__ == '__main__':

@@ -1,5 +1,9 @@
 # Frequently Asked Questions
 
+### Is T~ij~ going from i to j or j to i?
+This is a confusing topic and depending on the field, other conventions are used. Here, we rely on the definition that $T_{ij}$ is the probability that we jump from $i\to j$. This means&mdash;due to probability conversation&mdash;that we have a row-normalized transition matrix $1 = \sum_j T_{ij}$ and that we need to estimate the left-handed eigenvectors for estimating the stationary distribution or implied timescales.
+
+
 ### How is the performance compared to PyEmma?
 This depends heavily on the task, but in general it should be comparable or even faster, see [Benchmark](../benchmark/).
 
@@ -19,6 +23,13 @@ eval "$(_MSMHELPER_COMPLETE=bash_source msmhelper)"
 In general one can call the module directly by its entry point `$ msmhelper`
 or by calling the module `$ python -m msmhelper`. For enabling
 the shell completion, the entry point needs to be used.
+
+### How do I use the Hummer-Szabo projection?
+Following the tutorials, you find in [Hummer-Szabo projection](../tutorials/hummerszabo) a detailed explanation. To make it short, simply create a state trajectory `traj = mh.LumpedStateTraj(macrotrajs, microtrajs)` and pass this object to the analysis methods.
+
+
+### I get negative values for the Hummer-Szabo projection?
+This is sadly not a bug, but a limitation of the projection formalism. This should occur only for bad lumping and with values close to zero. For a detailed description of this issue please take a look at the original publication, ([10.1021/jp508375q](https://doi.org/10.1021/jp508375q)). To avoid it, you can use the flag `positive=True` while initialization to enforce $T_{ij} \ge 0$.
 
 
 ### Feature X is missing

@@ -29,12 +29,12 @@ def opentxt(file_name, comment='#', nrows=None, **kwargs):
     r"""Open a text file.
 
     This method can load an nxm array of floats from an ascii file. It uses
-    either pandas read_csv for a single comment or as fallback the slower numpy
-    laodtxt for multiple comments.
+    either pandas read_csv for a single comment or as fallback the slower
+    [np.loadtxt][numpy.loadtxt] for multiple comments.
 
     !!! warning
         In contrast to pandas the order of usecols will be used. So if
-        using ´data = opentxt(..., uscols=[1, 0])´ you acces the first column
+        using `data = opentxt(..., uscols=[1, 0])` you access the first column
         by `data[:, 0]` and the second one by `data[:, 1]`.
 
     Parameters

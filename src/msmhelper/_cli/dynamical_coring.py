@@ -8,7 +8,6 @@ import msmhelper as mh
 
 
 @click.command(
-    help='Applying dynamical coring on state trajectory.',
     no_args_is_help=True,
 )
 @click.option(
@@ -47,6 +46,7 @@ import msmhelper as mh
     help='Path to output file.',
 )
 def dynamical_coring(input_file, concat_limits, tcor, output_file):
+    """Applying dynamical coring on state trajectory."""
     if not output_file:
         output_file = f'{input_file}.dyncor{tcor:.0f}f'
     traj = mh.openmicrostates(
