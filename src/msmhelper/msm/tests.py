@@ -8,10 +8,9 @@ This submodule holds methods for validating Markov state models.
 # Copyright (c) 2019-2023, Daniel Nagel
 # All rights reserved.
 import decorit
-import numba
 import numpy as np
 
-from msmhelper import msm, utils
+from msmhelper import utils
 from msmhelper.statetraj import LumpedStateTraj, StateTraj
 
 
