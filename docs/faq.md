@@ -25,7 +25,7 @@ or by calling the module `$ python -m msmhelper`. For enabling
 the shell completion, the entry point needs to be used.
 
 ### How do I use the Hummer-Szabo projection?
-Following the tutorial, you find in [#hummer-szabo-projection][] a detailed explanation. To make it short, simply create a state trajectory `traj = mh.LumpedStateTraj(macrotrajs, microtrajs)` and pass this object to the analysis methods.
+Following the tutorials, you find in [Hummer-Szabo projection](../tutorials/hummerszabo) a detailed explanation. To make it short, simply create a state trajectory `traj = mh.LumpedStateTraj(macrotrajs, microtrajs)` and pass this object to the analysis methods.
 
 
 ### I get negative values for the Hummer-Szabo projection?
