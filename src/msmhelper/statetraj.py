@@ -2,7 +2,7 @@
 # BSD 3-Clause License
 # Copyright (c) 2019-2023, Daniel Nagel
 # All rights reserved.
-"""Classes for handling discrete state trajectories.
+r"""Classes for handling discrete state trajectories.
 
 - [`StateTraj`][#msmhelper.statetraj.StateTraj] is a fast implementation
   of a state trajectory and should be used for microstate dynamics.
@@ -498,7 +498,7 @@ class LumpedStateTraj(StateTraj):
         )
 
     def estimate_markov_model(self, lagtime):
-        """Estimates Markov State Model.
+        r"""Estimates Markov State Model.
 
         This method estimates the microstate MSM based on the transition count
         matrix, followed by Szabo-Hummer projection[^1] formalism to
