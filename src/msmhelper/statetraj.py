@@ -2,7 +2,26 @@
 # BSD 3-Clause License
 # Copyright (c) 2019-2023, Daniel Nagel
 # All rights reserved.
-"""Class for handling discrete state trajectories."""
+"""Classes for handling discrete state trajectories.
+
+- [`StateTraj`][#msmhelper.statetraj.StateTraj] is a fast implementation
+  of a state trajectory and should be used for microstate dynamics.
+
+- [`LumpedStateTraj`][#msmhelper.statetraj.LumpedStateTraj] is an
+  implementation of the Hummer-Szabo projection[^1] and allows to reproduce
+  the microstates dynamics on the macrostates space.
+
+!!! note
+    One should also mention that for bad coarse-graining one can get negative
+    entries in the transition matrix $T_{ij} < 0$. To prevent this, one can
+    explicitly force $T_{ij} \ge 0$ by setting the flag `positive=True`.
+
+[^1]: Hummer and Szabo, **Optimal Dimensionality Reduction of
+      Multistate Kinetic and Markov-State Models**, *J. Phys. Chem. B*,
+      119 (29), 9029-9037 (2015),
+      doi: [10.1021/jp508375q](https://doi.org/10.1021/jp508375q)
+
+"""
 import numpy as np
 
 import msmhelper as mh
@@ -242,7 +261,7 @@ class StateTraj:  # noqa: WPS214
 
 
 class LumpedStateTraj(StateTraj):
-    """Class for handling lumped discrete state trajectories."""
+    """Class for using the Hummer-Szabo projection with state trajectories."""
     __slots__ = (
         '_trajs',
         '_states',
@@ -258,9 +277,15 @@ class LumpedStateTraj(StateTraj):
         return super().__new__(cls, None)
 
     def __init__(self, macrotrajs, microtrajs=None, positive=False):
-        r"""Initialize LumpedStateTraj and convert to index trajectories.
+        r"""Initialize LumpedStateTraj.
 
         If called with LumpedStateTraj instance, it will be returned instead.
+        This class is an implementation of the Hummer-Szabo projection[^1].
+
+        [^1]: Hummer and Szabo, **Optimal Dimensionality Reduction of
+              Multistate Kinetic and Markov-State Models**, *J. Phys. Chem. B*,
+              119 (29), 9029-9037 (2015),
+              doi: [10.1021/jp508375q](https://doi.org/10.1021/jp508375q)
 
         Parameters
         ----------
@@ -476,7 +501,13 @@ class LumpedStateTraj(StateTraj):
         """Estimates Markov State Model.
 
         This method estimates the microstate MSM based on the transition count
-        matrix, followed by Szabo-Hummer projection formalism to macrostates.
+        matrix, followed by Szabo-Hummer projection[^1] formalism to
+        macrostates.
+
+        [^1]: Hummer and Szabo, **Optimal Dimensionality Reduction of
+              Multistate Kinetic and Markov-State Models**, *J. Phys. Chem. B*,
+              119 (29), 9029-9037 (2015),
+              doi: [10.1021/jp508375q](https://doi.org/10.1021/jp508375q)
 
         Parameters
         ----------
