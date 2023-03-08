@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+### Other changes:
+- Added basic test for `msmhelper waiting-times` command-line interface
+
+### Bugfix 🐛:
+- Fix bug where `--frames-per-unit` and `unit` where neglected in the cli `msmhelper waiting-time-dist`
 
 
 ## [1.0.0] - 2023-03-03
@@ -42,8 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - And many more improvements
 
 ### Bugfix 🐛:
-- Fixed bug where `propagate_MCMC` returns index trajectory instead of a state
-  trajectory
+- Fixed bug where `propagate_MCMC` returns index trajectory instead of a state trajectory
 
 
 ## [0.6.2] - 2022-09-20
