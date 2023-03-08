@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Bugfix 🐛:
 - Fix bug where `--frames-per-unit` and `unit` where neglected in the cli `msmhelper waiting-time-dist`
+- Fix undesired behavior where `msmhelper implied-timescales` used gray spines instead of true black
 
 
 ## [1.0.0] - 2023-03-03
