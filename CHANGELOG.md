@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+
+
+## [1.0.0] - 2023-03-08
 ### Other changes:
 - Added basic test for `msmhelper waiting-times` command-line interface
 - Using scientific y-labels for `msmhelper waiting-times` and `msmhelper waiting-time-dist` command-line interfaces to improve figures for real data
@@ -143,7 +146,8 @@ Chapman-Kolmogorov test
 - Initial release
 
 
-[Unreleased]: https://github.com/moldyn/msmhelper/compare/v1.0.0...main
+[Unreleased]: https://github.com/moldyn/msmhelper/compare/v1.0.1...main
+[1.0.1]: https://github.com/moldyn/msmhelper/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/moldyn/msmhelper/compare/v0.6.2...v1.0.0
 [0.6.2]: https://github.com/moldyn/msmhelper/compare/v0.6.1...v0.6.2
 [0.6.2]: https://github.com/moldyn/msmhelper/compare/v0.6.1...v0.6.2
