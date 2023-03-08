@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Other changes:
 - Added basic test for `msmhelper waiting-times` command-line interface
+- Using scientific y-labels for `msmhelper waiting-times` and `msmhelper waiting-time-dist` command-line interfaces to improve figures for real data
 
 ### Bugfix 🐛:
 - Fix bug where `--frames-per-unit` and `unit` where neglected in the cli `msmhelper waiting-time-dist`
