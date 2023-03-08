@@ -166,6 +166,12 @@ def waiting_times(
     ax.set_ylabel('probability $P$')
     ax.set_xlabel(fr'$\tau_\mathrm{{lag}}$ [{unit}]')
 
+    # use scientific notation for small values
+    ax.ticklabel_format(
+        axis='y', style='scientific', scilimits=[-1, 1], useMathText=True,
+    )
+    ax.get_yaxis().get_offset_text().set_ha('right')
+
     if output is None:
         basename = f'{filename}.sh' if microfilename else filename
         output = f'{basename}.wts.pdf'

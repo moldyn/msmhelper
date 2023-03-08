@@ -110,7 +110,7 @@ def implied_timescales(
     if n_lagtimes > 5:
         kwargs = {'colors': 'macaw', 'ncs': n_lagtimes + 1}
 
-    pplt.use_style(figsize=2.2, **kwargs, latex=False)
+    pplt.use_style(figsize=2.2, **kwargs, latex=False, true_black=True)
 
     # plot result
     fig, ax = plt.subplots()

@@ -119,7 +119,12 @@ def waiting_time_dist(
     )
 
     _, ax = plt.subplots()
-    mh.plot.plot_wtd(wtd, ax=ax)
+    mh.plot.plot_wtd(
+        wtd,
+        ax=ax,
+        frames_per_unit=frames_per_unit,
+        unit=unit,
+    )
 
     if output is None:
         basename = f'{filename}.sh' if microfilename else filename
