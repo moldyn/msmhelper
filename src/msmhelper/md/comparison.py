@@ -66,7 +66,8 @@ def compare_discretization(traj1, traj2, method='symmetric'):
 
 def _compare_discretization(traj1, traj2, method):
     """Compare similarity of two state discretizations."""
-    traj1_flat, traj2_flat = traj1.trajs_flatten, traj2.trajs_flatten
+    traj1_flat = traj1.index_trajs_flatten
+    traj2_flat = traj2.index_trajs_flatten
     idx1 = [
         np.where(traj1_flat == state)[0] for state in range(traj1.nstates)
     ]
