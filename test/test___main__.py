@@ -178,3 +178,21 @@ def test_dynamical_coring(tmpdir):
         f'dynamical-coring {params} -i {input} -o {output}'.split(),
     )
     assert result.exit_code == 0
+
+
+def test_compare_discretization(tmpdir):
+    runner = CliRunner()
+
+    # create trajectories
+    microfile = 'test/assets/8state_microtraj'
+    macrofile = 'test/assets/8state_macrotraj'
+
+    for method in ('symmetric', 'directed'):
+        result = runner.invoke(
+            main,
+            (
+                f'compare-discretization --method {method} '
+                f'--traj1 {microfile} --traj2 {macrofile}'
+            ).split(),
+        )
+        assert result.exit_code == 0

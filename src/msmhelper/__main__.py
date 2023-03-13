@@ -15,6 +15,7 @@ from msmhelper._cli.dynamical_coring import dynamical_coring
 from msmhelper._cli.implied_timescales import implied_timescales
 from msmhelper._cli.gaussian_filter import gaussian_filtering
 from msmhelper._cli.contact_rep import contact_rep
+from msmhelper._cli.compare_discretization import compare_discretization
 from msmhelper._cli.waiting_time_dist import waiting_time_dist
 from msmhelper._cli.waiting_times import waiting_times
 
@@ -40,6 +41,7 @@ main.add_command(waiting_times)
 main.add_command(contact_rep)
 main.add_command(dynamical_coring)
 main.add_command(gaussian_filtering)
+main.add_command(compare_discretization)
 
 
 if __name__ == '__main__':
