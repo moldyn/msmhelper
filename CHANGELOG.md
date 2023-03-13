@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+
+
+## [1.0.2] - 2023-03-13
 ### Added Features and Improvements 🙌:
 - Added cli for `compare-discretization`
 
@@ -22,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix bug of similarity measure (`mh.md.compare_discretization`) being infinite
 
 
-## [1.0.0] - 2023-03-08
+## [1.0.1] - 2023-03-08
 ### Other changes:
 - Added basic test for `msmhelper waiting-times` command-line interface
 - Using scientific y-labels for `msmhelper waiting-times` and `msmhelper waiting-time-dist` command-line interfaces to improve figures for real data
@@ -48,7 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add a command line interface for standalone tasks 🎉
 - Add follow-along tutorials, FAQ, and better code references 🎉
 - Add the submodule `plot` to create commonly-used figures
-- Improved MSM generation by a factor of 2-3 for continuously named states. 
+- Improved MSM generation by a factor of 2-3 for continuously named states.
 
 ### Other changes:
 - Add `gaussian_filter` functionality
@@ -152,7 +155,8 @@ Chapman-Kolmogorov test
 - Initial release
 
 
-[Unreleased]: https://github.com/moldyn/msmhelper/compare/v1.0.1...main
+[Unreleased]: https://github.com/moldyn/msmhelper/compare/v1.0.2...main
+[1.0.2]: https://github.com/moldyn/msmhelper/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/moldyn/msmhelper/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/moldyn/msmhelper/compare/v0.6.2...v1.0.0
 [0.6.2]: https://github.com/moldyn/msmhelper/compare/v0.6.1...v0.6.2
