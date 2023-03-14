@@ -48,9 +48,8 @@ We kindly ask you to cite this article in case you use this software package for
 - Simple usage with sleek function-based API
 - High performance due to [numba](https://numba.pydata.org/)-optimized source code, checkout the [benchmark comparing to PyEMMA](https://moldyn.github.io/msmhelper/benchmark)
 - [Documentation](https://moldyn.github.io/msmhelper) including tutorials
-- Powerful command line interface (CLI) to create publication-ready figures
+- Powerful command-line interface (CLI) to create publication-ready figures
 - Supports Python 3.7-3.10
-- Many helpful functions for dealing with state trajectories
 
 ## Implemented Key Functionalities
 - Hummer-Szabo projection of optimal dimensionality reduction by [Hummer and Szabo 2014](https://doi.org/10.1021/jp508375q)
@@ -58,8 +57,9 @@ We kindly ask you to cite this article in case you use this software package for
 - Fast extraction of pathways and MSM-based prediction of pathways based on the definition of [Nagel et al. 2020](https://pubs.acs.org/doi/10.1021/acs.jctc.0c00774)
 - Fast calculation of waiting times based on both, state trajectories and MSMs
 - Blazing fast [Chapman-Kolmogorov](https://www.wikiwand.com/en/Chapman%E2%80%93Kolmogorov_equation) test implementation
-- Entropy-based comparison of different state discretizations
-- Contact representation by Nagel et al. 2023 (submitted) for a compact structural representation of the states
+- Entropy-based similarity measure to compare different state discretizations, this method will be published soon in Nagel 2023
+- Contact representation by [Nagel et al. 2023](arxiv.org/abs/2303.03814) for a compact structural representation of the states
+- Command-line interface providing both, visualization and analysis methods
 - Provide (non-reversible) transition matrix of all states (corresponds in pyemma to `connectivity='none', 'all'` which will (probably) [never be implemented](https://github.com/markovmodel/PyEMMA/blob/5315b8699eff2941e84577932921f694dca76f59/pyemma/msm/estimators/_msm_estimator_base.py#L110))
 
 ## Getting started
