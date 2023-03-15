@@ -102,7 +102,7 @@ def waiting_times(
     """Estimation and visualization of the waiting times."""
     # setup matplotlib
     pplt.use_style(
-        figsize=2.4, true_black=True, colors='pastel_autunm', latex=False,
+        figsize=2.2, true_black=True, colors='pastel_autunm', latex=False,
     )
 
     # load file
@@ -135,7 +135,7 @@ def waiting_times(
     _, ax = plt.subplots()
 
     # ensure using bins as multiple of frames
-    n_bins = 50
+    n_bins = 20
     bins = np.arange(
         0,
         wts_md.max() + 1,
@@ -149,11 +149,12 @@ def waiting_times(
         color='k',
         label='MD',
     )
-    for lagtime in lagtimes:
+    for idx, lagtime in enumerate(lagtimes):
         ax.stairs(
             wts[lagtime][0],
             wts[lagtime][1] / frames_per_unit,
             label=f'{lagtime / frames_per_unit}',
+            color=f'C{idx + 1}',
         )
 
     # set legend and labels
@@ -171,6 +172,12 @@ def waiting_times(
         axis='y', style='scientific', scilimits=[-1, 1], useMathText=True,
     )
     ax.get_yaxis().get_offset_text().set_ha('right')
+
+    # set x limits
+    ax.set_xlim(
+        0,
+        wts_md.max() * 2 / frames_per_unit,
+    )
 
     if output is None:
         basename = f'{filename}.sh' if microfilename else filename

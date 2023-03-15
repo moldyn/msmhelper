@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+### Other changes:
+- Improve the x-axis limits, use more distinguishable colors, and lower the number of bins for the MD for the cli `msmhelper waiting-times`
 
 
 ## [1.0.2] - 2023-03-13
