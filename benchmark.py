@@ -107,19 +107,24 @@ def main():
             ax=axs[axstr],
         )
 
+    for ax in axs.values():
+        pplt.grid(True, ax=ax)
+
     pplt.savefig('benchmark.pdf')
 
 
 
 # method to visualize results
 def visualize_benchmark_results(times, labels, title, colors, ax):
-    times = np.array(times)
-    bar = ax.bar(labels, 1 / times, color=colors)
-    ax.bar_label(bar,
-        labels=[f'x{fac:.1f}' for fac in times[0] / times],
-    )
-    ax.set_ylabel(r'no. of runs [1/s]')
-    ax.set_ylim(np.min(1 / times) / 3, np.max(1 / times) * 3)
+    times = np.array(times) * 1e3
+    # bar = ax.bar(labels, 1 / times, color=colors)
+    # ax.bar_label(bar,
+    #     labels=[f'x{fac:.1f}' for fac in times[0] / times],
+    # )
+    bar = ax.bar(labels, times, color=colors)
+    ax.set_ylabel('wall time [ms]')
+    #ax.set_ylim(np.min(1 / times) / 3, np.max(1 / times) * 3)
+    ax.set_ylim(np.min(times) / 2, np.max(times) * 2)
     ax.set_yscale('log')
 
     # highlight relative performance
