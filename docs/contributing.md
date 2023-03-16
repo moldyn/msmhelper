@@ -37,7 +37,7 @@ If you want to request a change, you first have to [fork the repository](https:/
 
 === "zsh + conda"
 
-    ``` bash
+    ``` zsh
     conda create -n msmhelper -c conda-forge python
     conda activate msmhelper
     python -m pip install -e .\[all]
@@ -45,7 +45,7 @@ If you want to request a change, you first have to [fork the repository](https:/
 
 === "zsh + venv"
 
-    ``` bash
+    ``` zsh
     python -m venv ./msmhelper
     source ./msmhelper/bin/activate
     python -m pip install -e .\[all]

@@ -26,6 +26,7 @@ nav:
 - Code Reference: reference/
 - Development:
   - Contributing: contributing.md
+  - Maintenance: maintenance.md
 - MolDyn Freiburg: https://moldyn.uni-freiburg.de/
 
 theme:
