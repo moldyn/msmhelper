@@ -1,4 +1,4 @@
-# Welcome to Msmhelper Contributing Guide
+# Welcome to the `msmhelper` Contributing Guide
 
 This guide will give you an overview of the contribution workflow from opening an issue and creating a PR. To get an overview of the project, read the [module overview][msmhelper].
 
@@ -19,7 +19,7 @@ If you want to request a change, you first have to [fork the repository](https:/
 
 ### Setup a development environment
 
-=== "conda"
+=== "bash + conda"
 
     ``` bash
     conda create -n msmhelper -c conda-forge python
@@ -27,7 +27,7 @@ If you want to request a change, you first have to [fork the repository](https:/
     python -m pip install -e .[all]
     ```
 
-=== "venv"
+=== "bash + venv"
 
     ``` bash
     python -m venv ./msmhelper
@@ -35,9 +35,25 @@ If you want to request a change, you first have to [fork the repository](https:/
     python -m pip install -e .[all]
     ```
 
+=== "zsh + conda"
+
+    ``` bash
+    conda create -n msmhelper -c conda-forge python
+    conda activate msmhelper
+    python -m pip install -e .\[all]
+    ```
+
+=== "zsh + venv"
+
+    ``` bash
+    python -m venv ./msmhelper
+    source ./msmhelper/bin/activate
+    python -m pip install -e .\[all]
+    ```
+
 ### Make changes and run tests
 
-Apply your changes and check if you followed the codeing style (PEP8) by running
+Apply your changes and check if you followed the coding style (PEP8) by running
 ```bash
 python -m flake8 --config flake8-CI.cfg
 ```
@@ -46,10 +62,10 @@ All errors pointing to `./build/` can be neglected.
 If you add a new function/method/class please ensure that you add a test function, as well. Running the test simply by
 ```bash
 pytest --no-cov
-export NUMBA_DISABLE_JIT=1 && pytest --cov-report=xml
+export NUMBA_DISABLE_JIT=1 && pytest
 ```
 Ensure that the coverage does not decrease.
 
 ### Open a pull request
 
-Now you are ready to open a pull request.
+Now you are ready to open a pull request and please do not forget to add a description.
