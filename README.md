@@ -3,6 +3,8 @@
   <img class="lightmode" style="width: 400px;" src="https://github.com/moldyn/msmhelper/blob/main/docs/logo_large_light.svg?raw=true#gh-light-mode-only" />
 
   <p>
+    <a href="https://joss.theoj.org/papers/0c2a2cd2ca10b5c0bdca4d0234eb94fd">
+        <img src="https://joss.theoj.org/papers/0c2a2cd2ca10b5c0bdca4d0234eb94fd/status.svg" /></a>
     <a href="https://github.com/wemake-services/wemake-python-styleguide" alt="wemake-python-styleguide">
         <img src="https://img.shields.io/badge/style-wemake-000000.svg" /></a>
     <a href="https://pypi.org/project/msmhelper" alt="PyPI">
