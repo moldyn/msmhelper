@@ -98,7 +98,7 @@ preferred to ensure using the desired python environment. For enabling
 the shell completion, the entry point needs to be used.
 
 ## Usage
-This package offers either a [command line interface](https://moldyn.github.io/msmhelper/reference/cli) to run standalone analysis and to create commonly-used figures, or its much more powerful [API](https://moldyn.github.io/msmhelper/reference/msmhelper) can be used to embedded it into an existing Python workflow. Check out the documentation for an overview over all modules and some example workflows, and for some examples see the (following section)[#Hummer-Szabo-Projection].
+This package offers either a [command line interface](https://moldyn.github.io/msmhelper/reference/cli) to run standalone analysis and to create commonly-used figures, or its much more powerful [API](https://moldyn.github.io/msmhelper/tutorials/msmhelper) can be used to embedded it into an existing Python workflow. Check out the documentation for an overview over all modules and some example workflows, and for some examples see the [following section](#hummer-szabo-projection).
 ```python
 import msmhelper as mh
 
@@ -110,7 +110,7 @@ tmat, states = mh.estimate_markov_model(traj, lagtime=1)
 ```
 
 ## Hummer-Szabo Projection
-In the following we show some sample figures produced directly with the command line tools. For more information on that, there is a [tutorial](tutorials/hummerszabo) explaining the methods more in depth. In general we can see, that applying the HS-projection removes most projection artifacts based on coarse-graining many microstates into a few macrostates.
+In the following we show some sample figures produced directly with the command line tools. For more information on that, there is a [tutorial](https://moldyn.github.io/msmhelper/tutorials/hummerszabo) explaining the methods more in depth. In general we can see, that applying the HS-projection removes most projection artifacts based on coarse-graining many microstates into a few macrostates.
 
 | Method | MSM | Hummer-Szabo MSM |
 | :---: | :---: | :---: |
