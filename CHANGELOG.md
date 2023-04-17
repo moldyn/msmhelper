@@ -14,9 +14,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+### Bugfix 🐛:
+- Fix that `mh.LumpedStateTraj.index_trajs` and `mh.LumpedStateTraj.index_trajs_flatten` return now index trajectories corresponding to the macrostate trajectories
+
 ### Other changes:
 - Improve the x-axis limits, use more distinguishable colors, and lower the number of bins for the MD for the cli `msmhelper waiting-times`
 - Updated contribution and added maintenance guidelines
+- Minor improvements of docs suggested by JOSS reviewer
 
 
 ## [1.0.2] - 2023-03-13
