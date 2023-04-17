@@ -423,6 +423,22 @@ class LumpedStateTraj(StateTraj):
         )
 
     @property
+    def index_trajs(self):
+        """Return index trajectory.
+
+        Returns
+        -------
+        trajs : list of ndarrays
+            List of ndarrays holding the input data.
+
+        """
+        return mh.shift_data(
+            self._trajs,
+            np.arange(self.nmicrostates),
+            self._state_assignment_idx,
+        )
+
+    @property
     def microstates(self):
         """Return active set of microstates.
 
