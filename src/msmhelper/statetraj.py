@@ -4,10 +4,10 @@
 # All rights reserved.
 r"""Classes for handling discrete state trajectories.
 
-- [`StateTraj`][#msmhelper.statetraj.StateTraj] is a fast implementation
+- [**StateTraj**][msmhelper.statetraj.StateTraj] is a fast implementation
   of a state trajectory and should be used for microstate dynamics.
 
-- [`LumpedStateTraj`][#msmhelper.statetraj.LumpedStateTraj] is an
+- [**LumpedStateTraj**][msmhelper.statetraj.LumpedStateTraj] is an
   implementation of the Hummer-Szabo projection[^1] and allows to reproduce
   the microstates dynamics on the macrostates space.
 
