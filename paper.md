@@ -92,7 +92,7 @@ than conventional multi-purpose programs such as `PyEmma`.
 For example, adopting a 10-state trajectory with $10^5$ time steps, both the
 run time of the MSM estimation (transition probability matrix) and its
 validation by the well-established Chapman-Kolomogorov test are more than an
-order of magnitude faster. If we compare the performance of the Monte chain
+order of magnitude faster. If we compare the performance of the Markov chain
 Monte Carlo (MCMC) propagation, which is commonly used to determine pathways
 including their corresponding time scale distributions, `msmhelper` outperforms
 `PyEMMA` by up to two orders of magnitude. More details and additional
