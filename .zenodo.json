@@ -1,0 +1,17 @@
+{
+    "creators": [
+        {
+            "orcid": "0000-0002-2863-2646",
+            "affiliation": "Biomolecular Dynamics, Institute of Physics, Albert-Ludwigs-Universität Freiburg",
+            "name": "Nagel, Daniel"
+        },
+        {
+            "orcid": "0000-0002-3302-3044",
+            "affiliation": "Biomolecular Dynamics, Institute of Physics, Albert-Ludwigs-Universität Freiburg",
+            "name": "Stock, Gerhard"
+        }
+    ],
+    "title": "msmhelper: A Python package for Markov state modeling of protein dynamics",
+    "keywords": ["Python", "Markov state analysis", "MSM", "protein dynamics", "MD simulations"]
+}
+
