@@ -60,7 +60,7 @@ We kindly ask you to cite this article in case you use this software package for
 - Fast calculation of waiting times based on both, state trajectories and MSMs
 - Blazing fast [Chapman-Kolmogorov](https://www.wikiwand.com/en/Chapman%E2%80%93Kolmogorov_equation) test implementation
 - Entropy-based similarity measure to compare different state discretizations, this method will be published soon in Nagel 2023
-- Contact representation by [Nagel et al. 2023](arxiv.org/abs/2303.03814) for a compact structural representation of the states
+- Contact representation by [Nagel et al. 2023](https://arxiv.org/abs/2303.03814) for a compact structural representation of the states
 - Command-line interface providing both, visualization and analysis methods
 - Provide (non-reversible) transition matrix of all states (corresponds in pyemma to `connectivity='none', 'all'` which will (probably) [never be implemented](https://github.com/markovmodel/PyEMMA/blob/5315b8699eff2941e84577932921f694dca76f59/pyemma/msm/estimators/_msm_estimator_base.py#L110))
 
