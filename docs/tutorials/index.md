@@ -7,7 +7,7 @@ If you are interested in analyzing protein dynamics using Markov state modeling,
 ## Disclaimer
 Please note that the Python package `msmhelper` for Markov state modeling that we will be discussing in this tutorial provides only methods and tools for analyzing preprocessed data, in the form of a given state trajectory. The remaining workflow from the raw molecular dynamics (MD) trajectory, consisting of feature extraction, feature selection, dimensionality reduction, geometrical clustering, and dynamical lumping of states, is not provided by this package.
 
-For feature extraction, we recommend using common packages like [MDAnalysis](https://www.mdanalysis.org/). For dimensionality reduction methods such as principal component analysis (PCA) or time-lagged independent component analysis (tICA), we recommend using [scikit-learn](https://scikit-learn.org/stable/) or [PyEMMA](http://emma-project.org/latest/). For clustering methods, scikit-learn provides many commonly used algorithms, such as $k$-means and hierarchical clustering. Finally, for dynamical coarse-graining, we recommend using packages such as [pyGPCCA](https://pygpcca.readthedocs.io/) and [MPP](https://moldyn.github.io/Clustering). For a more detailed review of existing methods, we recommend the following article ["Perspective: Identification of collective variables and metastable states of protein dynamics" by Sittel and Stock](https://doi.org/10.1063/1.5049637).
+We recommend using established packages like [MDAnalysis](https://www.mdanalysis.org/) for feature extraction in molecular dynamics simulations. For dimensionality reduction methods, such as principal component analysis (PCA) or time-lagged independent component analysis (tICA), we suggest using [scikit-learn](https://scikit-learn.org/stable/) or [PyEMMA](http://emma-project.org/latest/). These libraries offer a variety of clustering algorithms, including commonly used methods like $k$-means and hierarchical clustering. To perform dynamical coarse-graining, we recommend using packages like [pyGPCCA](https://pygpcca.readthedocs.io/) and [MPP](https://moldyn.github.io/Clustering). For a more comprehensive review of available methods, we recommend reading the article "Perspective: Identification of collective variables and metastable states of protein dynamics" by Sittel and Stock, which can be accessed at ["https://doi.org/10.1063/1.5049637"](https://doi.org/10.1063/1.5049637).
 
 By combining the methods and tools provided by the Markov state modeling package with these other packages, you can perform a complete analysis of protein dynamics from a raw MD trajectory.
 
@@ -33,13 +33,13 @@ Once you have installed the package, you are ready to head over to the tutorial!
 ## Sections
 - [**Theoretical Background:**](theory) In this section, you will learn the basic concepts behind Markov state modeling and how it can be used to analyze protein dynamics. We will cover the key mathematical concepts, including transition matrices, equilibrium distributions, and Markov chains.
 
-- [**Structure of `msmhelper`:**](msmhelper) This section gives a brief overview of the structure of the module, by describing the usage of every submodule itself. For more details refere to the [code reference](../reference).
+- [**Structure of `msmhelper`:**](msmhelper) This section gives a brief overview of the structure of the module, by describing the usage of every submodule itself. For more details refer to the [code reference](../reference).
 
 - [**Estimation and Validation of an MSM:**](msm) Here, we will walk you through the process of constructing a Markov state model from clustered state trajectory of a protein dynamics simulation. We will cover data model creation, and model validation.
 
 - [**Estimation of Waiting Times and Pathways:**](msm) In this section, we will show you how to estimate the timescales of protein conformational transitions and how to extract the most probable pathways from an MSM.
 
-- [**HS-Projection:**](hummerszabo) Here, we will introduce you to the concept of the Hummer-Szabo (HS) projection, which allows for the optimal coarse-graining/reduction together with PCCA or MPP. We will show the dramantic improvements relying on this technique.
+- [**HS-Projection:**](hummerszabo) Here, we will introduce you to the concept of the Hummer-Szabo (HS) projection, which allows for the optimal coarse-graining/reduction together with PCCA or MPP. We will show the dramatic improvements relying on this technique.
 
 - [**Command Line Interface:**](cli) In this section, we will provide a short guide to the command line interface of `msmhelper`, which provides some common analysis and visualization functionality.
 

@@ -10,6 +10,6 @@ The module is structured into the following submodules:
 
 - [**msm:**][msmhelper.msm] This submodule contains methods related to Markov state modeling, a powerful technique for analyzing complex systems. It provides a set of functions for constructing and analyzing Markov models, including methods for calculating transition probabilities and estimating various time scales.
 
-- [**statetraj:**][msmhelper.statetraj] This submodule contains the two classes [StateTraj][msmhelper.statetraj.StateTraj] and [LumpedStateTraj][msmhelper.statetraj.LumpedStateTraj] which are used to represent the time series and allows for a improved performance.
+- [**statetraj:**][msmhelper.statetraj] This submodule contains the two classes [StateTraj][msmhelper.statetraj.StateTraj] and [LumpedStateTraj][msmhelper.statetraj.LumpedStateTraj] which are used to represent the time series and allows for an improved performance.
 
 - [**utils:**][msmhelper.utils] This submodule provides utility functions that can be used to manipulate and test data, such as filtering and validation methods. The functions in this submodule can be used in conjunction with other parts of the software to perform a variety of tasks, making it an essential part of the package.
