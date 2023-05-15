@@ -223,10 +223,10 @@ class StateTraj:  # noqa: WPS214
         Returns
         -------
         T : ndarray
-            Transition rate matrix.
-
-        permutation : ndarray
-            Array with corresponding states.
+            Transition probability matrix $T_{ij}$, containing the transition
+            probability transition from state $i\to j$.
+        states : ndarray
+            Array holding states corresponding to the columns of $T_{ij}$.
 
         """
         return mh.msm.msm._estimate_markov_model(
@@ -533,10 +533,10 @@ class LumpedStateTraj(StateTraj):
         Returns
         -------
         T : ndarray
-            Transition rate matrix.
-
-        permutation : ndarray
-            Array with corresponding states.
+            Transition probability matrix $T_{ij}$, containing the transition
+            probability transition from state $i\to j$.
+        states : ndarray
+            Array holding states corresponding to the columns of $T_{ij}$.
 
         """
         # in the following corresponds 'i' to micro and 'a' to macro
