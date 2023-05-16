@@ -24,18 +24,18 @@ def estimate_markov_model(trajs, lagtime):
 
     Parameters
     ----------
-    trajs : statetraj or list or ndarray or list of ndarray
-        State trajectory/trajectories. The states should start from zero and
-        need to be integers.
+    trajs : StateTraj or list or ndarray or list of ndarray
+        State trajectory/trajectories used to estimate the MSM.
     lagtime : int
         Lag time for estimating the markov model given in [frames].
 
     Returns
     -------
     T : ndarray
-        Transition rate matrix.
-    permutation : ndarray
-        Array with corresponding states.
+        Transition probability matrix $T_{ij}$, containing the transition
+        probability transition from state $i\to j$.
+    states : ndarray
+        Array holding states corresponding to the columns of $T_{ij}$.
 
     """
     trajs = StateTraj(trajs)
