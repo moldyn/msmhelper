@@ -114,6 +114,22 @@ a well-studied fast folding protein, that allows us to test common MSM
 analysis, including state characterization, MSM validation, and folding
 timescale estimation. All results shown in \autoref{fig:cli} were generated
 directly from the command-line interface of `msmhelper`.
+(Top left) To characterize the structure of the metastable states, @Nagel23
+introduced a contact-based representation, each state is described by the
+distribution of contacts within the contact clusters obtained using the
+correlation-based feature selection method MoSAIC [@Diez22].
+(Top center) When estimating a Markov state model, selecting a sufficiently
+long lag time $\tau_\text{lag}$ is of importance to ensure the Markovianity of
+the data [see, e.g., @Prinz11].
+That is, the implied timescales $t_i$ should be constant, given by $t_i = -
+\tau_\text{lag} / \log(\lambda_i)$, where $\lambda_i$ denotes the $i$-th
+largest left-handed eigenvalue.
+(Top right) Another approach to validate the Markovianity is the
+Chapman-Kolmogorov test which compares the model's predictions of time
+evolution with the results of molecular dynamics (MD) simulations.
+(Bottom) To relate to experiment, we compare the predicted folding time
+distributions with the MD simulation results. Using the median, interquartile
+range (IQR), and corresponding bounds.
 
 # Acknowledgements
 The computationally efficient implementations of `msmhelper` are made possible
