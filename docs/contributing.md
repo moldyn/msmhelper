@@ -61,8 +61,8 @@ All errors pointing to `./build/` can be neglected.
 
 If you add a new function/method/class please ensure that you add a test function, as well. Running the test simply by
 ```bash
-pytest --no-cov
-export NUMBA_DISABLE_JIT=1 && pytest
+python -m pytest --no-cov
+export NUMBA_DISABLE_JIT=1 && python -m pytest
 ```
 Ensure that the coverage does not decrease.
 
