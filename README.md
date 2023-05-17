@@ -85,7 +85,7 @@ python3 -m pip install git+https://github.com/moldyn/msmhelper.git
 ```
 
 ### Documentation and Tutorials
-
+
 The [documentation](https://moldyn.github.io/msmhelper) serves as a comprehensive resource, offering a broad range of information such as general guidelines, API code references, and command line tool details. It also includes a Frequently Asked Questions (FAQ) section and outlines the procedures for contributing to the project. 
 Moreover, a suite of [tutorials](https://moldyn.github.io/msmhelper/tutorials/) is available, covering all the primary functionalities of the package. These tutorials are provided in the form of Jupyter notebooks. You can easily obtain these notebooks either directly from the [docs/tutorials](https://github.com/moldyn/msmhelper/tree/main/docs/tutorials) directory on our GitHub repository or by clicking the download buttons available on each tutorial page within the documentation.
 
