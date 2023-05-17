@@ -38,3 +38,13 @@ First, if you are looking for a feature complete package, I would recommand you 
 
 ### I found a bug. What to do next?
 If you find a bug in this package, it is very kind of you to open an issue/bug report. This allows us to identify and fix the problem, thus improving the overall quality of the software for all users. By providing a clear and concise description of the problem, including steps to reproduce it, and relevant information such as device, operating system, and software version, you will help us resolve the problem quickly and effectively. Submitting a [bug report](https://github.com/moldyn/msmhelper/issues) is a valuable contribution to the software and its community, and is greatly appreciated by the development team.
+
+
+### Is it possible to build the documentation for offline use?
+Yes, for sure. You can compile the documentation on your local machine by executing the following commands:
+```bash
+# install all additional dependencies
+python -m pip install msmhelper[docs]
+# build the docs inside the site directory
+python -m mkdocs build
+```

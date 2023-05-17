@@ -84,6 +84,20 @@ python3 -m pip install git+ssh://git@github.com/moldyn/msmhelper.git
 python3 -m pip install git+https://github.com/moldyn/msmhelper.git
 ```
 
+### Documentation and Tutorials
+
+The [documentation](https://moldyn.github.io/msmhelper) serves as a comprehensive resource, offering a broad range of information such as general guidelines, API code references, and command line tool details. It also includes a Frequently Asked Questions (FAQ) section and outlines the procedures for contributing to the project. 
+Moreover, a suite of [tutorials](https://moldyn.github.io/msmhelper/tutorials/) is available, covering all the primary functionalities of the package. These tutorials are provided in the form of Jupyter notebooks. You can easily obtain these notebooks either directly from the [docs/tutorials](https://github.com/moldyn/msmhelper/tree/main/docs/tutorials) directory on our GitHub repository or by clicking the download buttons available on each tutorial page within the documentation.
+
+If you prefer, you can compile the documentation on your local machine by executing the following commands:
+
+```bash
+# install all additional dependencies
+python -m pip install msmhelper[docs]
+# build the docs inside the site directory
+python -m mkdocs build
+```
+
 ### Shell Completion
 Using the `bash`, `zsh` or `fish` shell click provides an easy way to
 provide shell completion, checkout the
@@ -97,7 +111,7 @@ or by calling the module `$ python -m msmhelper`. The latter method is
 preferred to ensure using the desired python environment. For enabling
 the shell completion, the entry point needs to be used.
 
-## Usage
+### Usage
 This package offers either a [command line interface](https://moldyn.github.io/msmhelper/reference/cli) to run standalone analysis and to create commonly-used figures, or its much more powerful [API](https://moldyn.github.io/msmhelper/tutorials/msmhelper) can be used to embedded it into an existing Python workflow. Check out the documentation for an overview over all modules and some example workflows, and for some examples see the [following section](#hummer-szabo-projection).
 ```python
 import msmhelper as mh
@@ -109,7 +123,7 @@ tmat, states = mh.estimate_markov_model(traj, lagtime=1)
 ...
 ```
 
-## Hummer-Szabo Projection
+### Hummer-Szabo Projection
 In the following we show some sample figures produced directly with the command line tools. For more information on that, there is a [tutorial](https://moldyn.github.io/msmhelper/tutorials/hummerszabo) explaining the methods more in depth. In general we can see, that applying the HS-projection removes most projection artifacts based on coarse-graining many microstates into a few macrostates.
 
 | Method | MSM | Hummer-Szabo MSM |
