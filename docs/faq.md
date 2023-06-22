@@ -4,6 +4,11 @@
 This is a confusing topic and depending on the field, other conventions are used. Here, we rely on the definition that $T_{ij}$ is the probability that we jump from $i\to j$. This means&mdash;due to probability conversation&mdash;that we have a row-normalized transition matrix $1 = \sum_j T_{ij}$ and that we need to estimate the left-handed eigenvectors for estimating the stationary distribution or implied timescales.
 
 
+### Is Python 3.7 supported?
+Starting from version 1.1.x Python 3.7 supported will be dropped, due to its
+EOL status. If support is needed, please use the latest 1.0.x version.
+
+
 ### How is the performance compared to PyEmma?
 This depends heavily on the task, but in general it should be comparable or even faster, see [Benchmark](../benchmark/).
 
