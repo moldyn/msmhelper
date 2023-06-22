@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+### API changes warning ⚠️:
+- Python 3.7 support was dropped!
+
+### Added Features and Improvements 🙌:
+- Supporting latest Python 3.11 🎉
 
 
 ## [1.0.4] - 2023-05-22
