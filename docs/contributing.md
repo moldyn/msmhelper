@@ -22,7 +22,7 @@ If you want to request a change, you first have to [fork the repository](https:/
 === "bash + conda"
 
     ``` bash
-    conda create -n msmhelper -c conda-forge python=3.10
+    conda create -n msmhelper -c conda-forge python=3.11
     conda activate msmhelper
     python -m pip install -e .[all]
     ```
@@ -38,7 +38,7 @@ If you want to request a change, you first have to [fork the repository](https:/
 === "zsh + conda"
 
     ``` zsh
-    conda create -n msmhelper -c conda-forge python=3.10
+    conda create -n msmhelper -c conda-forge python=3.11
     conda activate msmhelper
     python -m pip install -e .\[all]
     ```
