@@ -52,7 +52,7 @@ We kindly ask you to cite this article in case you use this software package for
 - High performance due to [numba](https://numba.pydata.org/)-optimized source code, checkout the [benchmark comparing to PyEMMA](https://moldyn.github.io/msmhelper/benchmark)
 - [Documentation](https://moldyn.github.io/msmhelper) including tutorials
 - Powerful command-line interface (CLI) to create publication-ready figures
-- Supports Python 3.7-3.10
+- Supports Python 3.8-3.11
 
 ## Implemented Key Functionalities
 - Hummer-Szabo projection of optimal dimensionality reduction by [Hummer and Szabo 2014](https://doi.org/10.1021/jp508375q)
