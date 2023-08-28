@@ -12,7 +12,7 @@
     <a href="https://anaconda.org/conda-forge/msmhelper" alt="conda version">
         <img src="https://img.shields.io/conda/vn/conda-forge/msmhelper" /></a>
     <a href="https://pepy.tech/project/msmhelper" alt="Downloads">
-        <img src="https://pepy.tech/badge/msmhelper" /></a>
+        <img src="https://static.pepy.tech/badge/msmhelper" /></a>
     <a href="https://github.com/moldyn/msmhelper/actions/workflows/pytest.yml" alt="GitHub Workflow Status">
         <img src="https://img.shields.io/github/actions/workflow/status/moldyn/msmhelper/pytest.yml?branch=main"></a>
     <a href="https://codecov.io/gh/moldyn/msmhelper" alt="Code coverage">
