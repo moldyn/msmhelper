@@ -119,6 +119,35 @@ def test_waiting_time_dist(tmpdir):
     assert result.exit_code == 0
 
 
+def test_waiting_times(tmpdir):
+    runner = CliRunner()
+
+    # create trajectories
+    trajfile = 'test/assets/8state_microtraj'
+    macrotrajfile = 'test/assets/8state_macrotraj'
+    output = tmpdir.join('output.pdf')
+
+    params = (
+        f'--start 1 --final 4 --nsteps 10000 -o {output} '
+        '--lagtimes 1 2 3 --frames-per-unit 1 --unit frames'
+    )
+
+    result = runner.invoke(
+        main,
+        f'waiting-times {params} --filename {macrotrajfile}'.split(),
+    )
+    assert result.exit_code == 0
+
+    result = runner.invoke(
+        main,
+        (
+            f'waiting-times {params} --filename {macrotrajfile} '
+            f'--microfilename {trajfile}'
+        ).split(),
+    )
+    assert result.exit_code == 0
+
+
 def test_gaussian_filtering(tmpdir):
     runner = CliRunner()
 
@@ -149,3 +178,21 @@ def test_dynamical_coring(tmpdir):
         f'dynamical-coring {params} -i {input} -o {output}'.split(),
     )
     assert result.exit_code == 0
+
+
+def test_compare_discretization(tmpdir):
+    runner = CliRunner()
+
+    # create trajectories
+    microfile = 'test/assets/8state_microtraj'
+    macrofile = 'test/assets/8state_macrotraj'
+
+    for method in ('symmetric', 'directed'):
+        result = runner.invoke(
+            main,
+            (
+                f'compare-discretization --method {method} '
+                f'--traj1 {microfile} --traj2 {macrofile}'
+            ).split(),
+        )
+        assert result.exit_code == 0

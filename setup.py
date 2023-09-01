@@ -6,8 +6,8 @@ from collections import defaultdict
 import setuptools
 
 # check for python version
-if sys.version_info < (3, 7):
-    raise SystemExit('Python 3.7+ is required!')
+if sys.version_info < (3, 8):
+    raise SystemExit('Python 3.8+ is required!')
 
 
 def get_extra_requirements(path, add_all=True):
@@ -58,7 +58,7 @@ README = remove_gh_dark_mode_only_tags(
 # This call to setup() does all the work
 setuptools.setup(
     name='msmhelper',
-    version='0.6.2',
+    version='1.0.4',
     description='Helper functions for Markov State Models.',
     long_description=README,
     long_description_content_type='text/markdown',
@@ -76,10 +76,10 @@ setuptools.setup(
         'Intended Audience :: Science/Research',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
         'Topic :: Scientific/Engineering :: Physics',
         'Topic :: Scientific/Engineering :: Bio-Informatics',
         'Topic :: Software Development :: Libraries :: Python Modules',
@@ -93,15 +93,15 @@ setuptools.setup(
     package_dir={'': 'src'},
     packages=setuptools.find_packages(where='src'),
     include_package_data=True,
-    python_requires='>=3.7',
+    python_requires='>=3.8',
     entry_points={
         'console_scripts': [
             'mosaic = mosaic.__main__:main',
         ],
     },
     install_requires=[
-        'numpy',
-        'numba',
+        'numpy>=1.21',
+        'numba>=0.57',
         'pandas',
         'decorit',
         'scipy',

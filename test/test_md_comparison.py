@@ -53,6 +53,10 @@ def test__intersect_array(arr1, arr2, result):
         {'method': 'directed'}, 1.0,
     ),
     (
+        [0, 0, 0, 0, 0, 1, 1, 1], [1, 1, 2, 2, 2, 3, 3, 3],
+        {'method': 'directed'}, 1.0,
+    ),
+    (
         [0, 0, 1, 1, 1, 2, 2, 2], [0, 0, 0, 0, 0, 1, 1, 1],
         {'method': 'directed'}, 0.7,
     ),

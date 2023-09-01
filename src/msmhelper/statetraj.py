@@ -4,10 +4,10 @@
 # All rights reserved.
 r"""Classes for handling discrete state trajectories.
 
-- [`StateTraj`][#msmhelper.statetraj.StateTraj] is a fast implementation
+- [**StateTraj**][msmhelper.statetraj.StateTraj] is a fast implementation
   of a state trajectory and should be used for microstate dynamics.
 
-- [`LumpedStateTraj`][#msmhelper.statetraj.LumpedStateTraj] is an
+- [**LumpedStateTraj**][msmhelper.statetraj.LumpedStateTraj] is an
   implementation of the Hummer-Szabo projection[^1] and allows to reproduce
   the microstates dynamics on the macrostates space.
 
@@ -223,10 +223,10 @@ class StateTraj:  # noqa: WPS214
         Returns
         -------
         T : ndarray
-            Transition rate matrix.
-
-        permutation : ndarray
-            Array with corresponding states.
+            Transition probability matrix $T_{ij}$, containing the transition
+            probability transition from state $i\to j$.
+        states : ndarray
+            Array holding states corresponding to the columns of $T_{ij}$.
 
         """
         return mh.msm.msm._estimate_markov_model(
@@ -423,6 +423,22 @@ class LumpedStateTraj(StateTraj):
         )
 
     @property
+    def index_trajs(self):
+        """Return index trajectory.
+
+        Returns
+        -------
+        trajs : list of ndarrays
+            List of ndarrays holding the input data.
+
+        """
+        return mh.shift_data(
+            self._trajs,
+            np.arange(self.nmicrostates),
+            self._state_assignment_idx,
+        )
+
+    @property
     def microstates(self):
         """Return active set of microstates.
 
@@ -517,10 +533,10 @@ class LumpedStateTraj(StateTraj):
         Returns
         -------
         T : ndarray
-            Transition rate matrix.
-
-        permutation : ndarray
-            Array with corresponding states.
+            Transition probability matrix $T_{ij}$, containing the transition
+            probability transition from state $i\to j$.
+        states : ndarray
+            Array holding states corresponding to the columns of $T_{ij}$.
 
         """
         # in the following corresponds 'i' to micro and 'a' to macro

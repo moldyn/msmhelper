@@ -17,14 +17,24 @@ from msmhelper.statetraj import LumpedStateTraj, StateTraj
 
 @decorit.alias('ck_test')
 def chapman_kolmogorov_test(trajs, lagtimes, tmax):
-    r"""Calculate the Chapman Kolmogorov equation.
+    r"""Calculate the Chapman-Kolmogorov equation.
 
-    This method estimates the Chapman Kolmogorov equation
+    This method evaluates both sides of the Chapman-Kolmogorov equation
 
     $$T(\tau n) = T^n(\tau)\;.$$
 
-    Projected onto the diagonal this is known as the Chapman Kolmogorov test.
-    For more details see, e.g., the review Prinz et al.[^1].
+    So to compare the transition probability estimated based on the lag time
+    $n\tau$ (referred as "MD") with the transition probability estimated based
+    on the lag time $\tau$ and propagated $n$ times (referred as "MSM"), we can
+    use the Chapman-Kolmogorov test. If the model is Markovian, both sides are
+    identical, and the deviation indicates how Markovian the model is. The
+    Chapman-Kolmogorov test is commonly projected onto the diagonal (so
+    limiting to $T_{ii}$). For more details, see the review by Prinz et al.
+    [^1].
+
+    The returned dictionary can be visualized using
+    [msmhelper.plot.plot_ck_test][]. An example can be found in the
+    [tutorial](/msmhelper/tutorials/msm/#chapman-kolmogorov-test).
 
     [^1]: Prinz et al., **Markov models of molecular kinetics: Generation and
         validation**, *J. Chem. Phys.*, 134, 174105 (2011),
@@ -43,7 +53,7 @@ def chapman_kolmogorov_test(trajs, lagtimes, tmax):
     Returns
     -------
     cktest : dict
-        Dictionary holding for each lagtime the ckequation and with 'md' the
+        Dictionary holding for each lagtime the CK equation and with 'md' the
         reference.
 
     """

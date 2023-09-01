@@ -60,6 +60,15 @@ def macrotraj():
 
 
 @pytest.fixture
+def macro_indextraj():
+    """Define state trajectory."""
+    return np.array(
+        [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1],
+        dtype=np.int32,
+    )
+
+
+@pytest.fixture
 def macro_traj():
     """Define index trajectory."""
     traj = np.array(
@@ -145,6 +154,18 @@ def test_index_trajs(state_traj, index_traj):
         state_traj.trajs = 5
     with pytest.raises(AttributeError):
         state_traj.index_trajs = 5
+
+
+def test_macroindex_trajs(macro_traj, indextraj, macro_indextraj):
+    """Test index trajs property."""
+    np.testing.assert_array_equal(
+        macro_traj.index_trajs_flatten,
+        macro_indextraj,
+    )
+    np.testing.assert_array_equal(
+        macro_traj.microstate_index_trajs_flatten,
+        indextraj,
+    )
 
 
 def test_trajs_flatten(state_traj, index_traj):

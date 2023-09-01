@@ -233,10 +233,6 @@ def open_limits(data_length, limits_file=None):
 def _get_runtime_user_information():
     r"""Get user runtime information.
 
-    !!! warning
-        For python 3.5 or lower the date is not formatted and contains
-        microscends.
-
     Returns
     -------
     RUI : dict
@@ -254,8 +250,7 @@ def _get_runtime_user_information():
 
     # get time without microseconds
     date = datetime.datetime.now()
-    if sys.version_info >= (3, 6):
-        date = date.isoformat(sep=' ', timespec='seconds')
+    date = date.isoformat(sep=' ', timespec='seconds')
 
     return {
         'user': getpass.getuser(),

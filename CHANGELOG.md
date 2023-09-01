@@ -15,7 +15,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### API changes warning ⚠️:
-- Completely refactoring of the API
+- Python 3.7 support was dropped!
+
+### Added Features and Improvements 🙌:
+- Supporting latest Python 3.11 🎉
+
+
+## [1.0.4] - 2023-05-22
+### Other changes:
+- Improvements of the README and the documentation, suggested by the JOSS reviewers @yuxuanzhuang and @lorenzo-rovigatti
+- Added zenodo setup
+- Added issue templates
+
+
+## [1.0.3] - 2023-04-17
+### Bugfix 🐛:
+- Fix that `mh.LumpedStateTraj.index_trajs` and `mh.LumpedStateTraj.index_trajs_flatten` return now index trajectories corresponding to the macrostate trajectories
+
+### Other changes:
+- Improve the x-axis limits, use more distinguishable colors, and lower the number of bins for the MD for the cli `msmhelper waiting-times`
+- Updated contribution and added maintenance guidelines
+- Minor improvements of docs suggested by JOSS reviewer
+
+
+## [1.0.2] - 2023-03-13
+### Added Features and Improvements 🙌:
+- Added cli for `compare-discretization`
+
+### Bugfix 🐛:
+- Fix missing import of `msm.utils.linalg` when importing `msm.utils`
+- Fix bug of similarity measure (`mh.md.compare_discretization`) being infinite
+
+
+## [1.0.1] - 2023-03-08
+### Other changes:
+- Added basic test for `msmhelper waiting-times` command-line interface
+- Using scientific y-labels for `msmhelper waiting-times` and `msmhelper waiting-time-dist` command-line interfaces to improve figures for real data
+
+### Bugfix 🐛:
+- Fix bug where `--frames-per-unit` and `unit` where neglected in the cli `msmhelper waiting-time-dist`
+- Fix undesired behavior where `msmhelper implied-timescales` used gray spines instead of true black
+
+
+## [1.0.0] - 2023-03-03
+### API changes warning ⚠️:
+- Completely refactoring of the API, this release has many breaking changes to v0.6.2
   - Renamed module `iotext` to `io`
   - Moved all functions related to msm to `msm` module
   - Moved all functions related to raw state trajectories to `md` module
@@ -25,19 +69,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed Python 3.6 support.
 
 ### Added Features and Improvements 🙌:
-- Add an all new mkdocs documentation 🎉
+- Add an all new mkdocs documentation with material design 🎉
 - Add a command line interface for standalone tasks 🎉
-- Add a follow-along tutorials 🎉
+- Add follow-along tutorials, FAQ, and better code references 🎉
 - Add the submodule `plot` to create commonly-used figures
+- Improved MSM generation by a factor of 2-3 for continuously named states.
 
 ### Other changes:
 - Add `gaussian_filter` functionality
 - Add implementation of `dynamical_coring`
 - Add estimation of transition times
+- Add contact representation of states
+- And many more improvements
 
 ### Bugfix 🐛:
-- Fixed bug where `propagate_MCMC` returns index trajectory instead of a state
-  trajectory
+- Fixed bug where `propagate_MCMC` returns index trajectory instead of a state trajectory
 
 
 ## [0.6.2] - 2022-09-20
@@ -131,7 +177,13 @@ Chapman-Kolmogorov test
 - Initial release
 
 
-[Unreleased]: https://github.com/moldyn/msmhelper/compare/v0.6.2...main
+[Unreleased]: https://github.com/moldyn/msmhelper/compare/v1.0.4...main
+[1.0.4]: https://github.com/moldyn/msmhelper/compare/v1.0.3...v1.0.4
+[1.0.3]: https://github.com/moldyn/msmhelper/compare/v1.0.2...v1.0.3
+[1.0.2]: https://github.com/moldyn/msmhelper/compare/v1.0.1...v1.0.2
+[1.0.1]: https://github.com/moldyn/msmhelper/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/moldyn/msmhelper/compare/v0.6.2...v1.0.0
+[0.6.2]: https://github.com/moldyn/msmhelper/compare/v0.6.1...v0.6.2
 [0.6.2]: https://github.com/moldyn/msmhelper/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/moldyn/msmhelper/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/moldyn/msmhelper/compare/v0.5.0...v0.6.0

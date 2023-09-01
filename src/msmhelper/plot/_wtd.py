@@ -92,7 +92,10 @@ def plot_wtd(
     max_lagtime_unit = max_lagtime / frames_per_unit
     if show_md:
         bxp = ax.bxp(
-            wtd['MD'],
+            [{
+                key: time / frames_per_unit
+                for key, time in wtd['MD'][0].items()
+            }],
             positions=[max_lagtime_unit * 1.125],
             widths=max_lagtime_unit * 0.075,
             showfliers=show_fliers,
@@ -122,6 +125,12 @@ def plot_wtd(
         ax.set_xticklabels(xticklabels)
     else:
         ax.set_xlim([0, max_lagtime_unit])
+
+    # use scientific notation for large values
+    ax.ticklabel_format(
+        axis='y', style='scientific', scilimits=[0, 2], useMathText=True,
+    )
+    ax.get_yaxis().get_offset_text().set_ha('right')
 
     # set legend and labels
     pplt.legend(ax=ax, outside='top', frameon=False)

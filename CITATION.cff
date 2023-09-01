@@ -1,0 +1,34 @@
+cff-version: "1.2.0"
+authors:
+- family-names: Nagel
+  given-names: Daniel
+  orcid: "https://orcid.org/0000-0002-2863-2646"
+- family-names: Stock
+  given-names: Gerhard
+  orcid: "https://orcid.org/0000-0002-3302-3044"
+doi: 10.5281/zenodo.7957966
+message: If you use this software, please cite our article in the
+  Journal of Open Source Software.
+preferred-citation:
+  authors:
+  - family-names: Nagel
+    given-names: Daniel
+    orcid: "https://orcid.org/0000-0002-2863-2646"
+  - family-names: Stock
+    given-names: Gerhard
+    orcid: "https://orcid.org/0000-0002-3302-3044"
+  date-published: 2023-05-24
+  doi: 10.21105/joss.05339
+  issn: 2475-9066
+  issue: 85
+  journal: Journal of Open Source Software
+  publisher:
+    name: Open Journals
+  start: 5339
+  title: "msmhelper: A Python package for Markov state modeling of
+    protein dynamics"
+  type: article
+  url: "https://joss.theoj.org/papers/10.21105/joss.05339"
+  volume: 8
+title: "msmhelper: A Python package for Markov state modeling of protein
+  dynamics"
