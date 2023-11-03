@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added Features and Improvements 🙌:
 - Supporting latest Python 3.11 🎉
 
+### Bugfix 🐛:
+- Fixed wrong connectivity in `mh.datasets.utils.propagate_MCMC` for different datatypes, #39
+
 
 ## [1.0.4] - 2023-05-22
 ### Other changes:
