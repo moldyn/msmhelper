@@ -7,6 +7,7 @@ import functools
 
 import numpy as np
 
+from msmhelper.msm.msm import row_normalize_matrix
 from msmhelper.msm.timescales import _propagate_MCMC
 from .tests import is_transition_matrix
 from ._utils import shift_data
@@ -47,8 +48,10 @@ def propagate_tmat(tmat, nsteps, start=None):
         raise ValueError('tmat needs to be a row-normalized matrix.')
 
     n_states = len(tmat)
-    cummat = np.cumsum(tmat, axis=1)
-    cummat[:, -1] = 1  # enforce exact normalization
+    cummat = np.cumsum(  # enforce exact normalization
+        row_normalize_matrix(tmat),
+        axis=1,
+    )
     cummat_perm = np.tile(np.arange(n_states), (n_states, 1))
 
     if start is None:

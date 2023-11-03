@@ -321,15 +321,15 @@ def _propagate_MCMC_step(cummat, idx_from):
     """Propagate a single step Markov chain Monte Carlo."""
     rand = random.random()  # noqa: S311
     cummat_perm, state_perm = cummat
-    cummat_perm, state_perm = cummat_perm[idx_from], state_perm[idx_from]
+    cummat_from, state_from = cummat_perm[idx_from], state_perm[idx_from]
 
-    for idx, cummat_idx in enumerate(cummat_perm):
+    for idx, cummat_idx in enumerate(cummat_from):
         # strict less to ensure that rand=0 does not jump along unconnected
         # states with Tij=0.
         if rand < cummat_idx:
-            return state_perm[idx]
+            return state_from[idx]
     # this should never be reached, but needed for numba to ensure int return
-    return len(cummat_perm) - 1
+    return state_from[np.argmax(cummat_from)]  # pragma: no cover
 
 
 @numba.njit
