@@ -329,7 +329,7 @@ def _propagate_MCMC_step(cummat, idx_from):
         if rand < cummat_idx:
             return state_from[idx]
     # this should never be reached, but needed for numba to ensure int return
-    return state_from[np.argmax(cummat_from)]
+    return state_from[np.argmax(cummat_from)]  # pragma: no cover
 
 
 @numba.njit
