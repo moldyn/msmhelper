@@ -96,6 +96,14 @@ def test_StateTraj_constructor(statetraj):
     lumpedTraj = LumpedStateTraj(statetraj, statetraj)
     assert lumpedTraj is StateTraj(lumpedTraj)
 
+    # check that immutable
+    assert traj._trajs[0] is not StateTraj(traj.trajs)._trajs[0]
+    # check for index trajs
+    assert (
+        StateTraj(traj.index_trajs)._trajs[0] is not
+        StateTraj(traj.index_trajs)._trajs[0]
+    )
+
 
 def test_LumpedStateTraj_constructor(macrotraj, statetraj):
     """Test construction of object."""
