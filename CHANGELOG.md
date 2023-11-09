@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+### Bugfix 🐛:
+- Fix mutable properties of `mh.StateTraj` and `mh.LumpedStateTraj`, #43
+
+### Other changes:
+- Improved performance of `mh.LumpedStateTraj.microtrajs`
 
 
 ## [1.1.0] - 2023-11-03

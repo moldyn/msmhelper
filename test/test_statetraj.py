@@ -129,12 +129,10 @@ def test_nstates(state_traj, statetraj, macro_traj, macrotraj):
 
 def test_states(state_traj):
     """Test immutability of states property."""
-    states = state_traj.states
-    states += 2
-    assert np.testing.assert_array_almost_equal(states - 2, state_traj.states)
+    assert state_traj.states is not state_traj.states
 
     with pytest.raises(AttributeError):
-        state_traj.states = states
+        state_traj.states = state_traj.states
 
 
 def test_nframes(state_traj):
