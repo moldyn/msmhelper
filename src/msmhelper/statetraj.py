@@ -60,11 +60,14 @@ class StateTraj:  # noqa: WPS214
         # get number of states
         self._states = mh.utils.unique(self._trajs)
 
+        # enforce true copy of trajs
+        if np.array_equal(self._states, np.arange(self.nstates)):
+            self._trajs = [traj.copy() for traj in self._trajs]
         # shift to indices
-        if np.array_equal(self._states, np.arange(1, self.nstates + 1)):
+        elif np.array_equal(self._states, np.arange(1, self.nstates + 1)):
             self._states = np.arange(1, self.nstates + 1)
             self._trajs = [traj - 1 for traj in self._trajs]
-        elif not np.array_equal(self._states, np.arange(self.nstates)):
+        else:  # not np.array_equal(self._states, np.arange(self.nstates)):
             self._trajs, self._states = mh.utils.rename_by_index(
                 self._trajs,
                 return_permutation=True,
@@ -80,7 +83,7 @@ class StateTraj:  # noqa: WPS214
             Numpy array holding active set of states.
 
         """
-        return self._states
+        return self._states.copy()
 
     @property
     def nstates(self):
@@ -108,7 +111,7 @@ class StateTraj:  # noqa: WPS214
 
     @property
     def nframes(self):
-        """Return cummulative length of all trajectories.
+        """Return cumulative length of all trajectories.
 
         Returns
         -------
@@ -131,7 +134,7 @@ class StateTraj:  # noqa: WPS214
         if np.array_equal(self.states, np.arange(1, self.nstates + 1)):
             return [traj + 1 for traj in self._trajs]
         if np.array_equal(self.states, np.arange(self.nstates)):
-            return self._trajs
+            return self.index_trajs
         return mh.shift_data(
             self._trajs,
             np.arange(self.nstates),
@@ -160,7 +163,7 @@ class StateTraj:  # noqa: WPS214
             List of ndarrays holding the input data.
 
         """
-        return self._trajs
+        return [traj.copy() for traj in self._trajs]
 
     @property
     def index_trajs_flatten(self):
@@ -338,7 +341,7 @@ class LumpedStateTraj(StateTraj):
             Numpy array holding active set of states.
 
         """
-        return self._macrostates
+        return self._macrostates.copy()
 
     @property
     def nstates(self):
@@ -362,8 +365,10 @@ class LumpedStateTraj(StateTraj):
             List of ndarrays holding the input data.
 
         """
-        if np.array_equal(self.microstates, np.arange(self.nmicrostates)):
-            return self._trajs
+        if np.array_equal(self.microstates, np.arange(1, self.nstates + 1)):
+            return [traj + 1 for traj in self._trajs]
+        elif np.array_equal(self.microstates, np.arange(self.nmicrostates)):
+            return self.microstate_index_trajs
         return mh.shift_data(
             self._trajs,
             np.arange(self.nmicrostates),
@@ -392,7 +397,7 @@ class LumpedStateTraj(StateTraj):
             List of ndarrays holding the microstate index trajectory.
 
         """
-        return self._trajs
+        return [traj.copy() for traj in self._trajs]
 
     @property
     def microstate_index_trajs_flatten(self):
@@ -448,7 +453,7 @@ class LumpedStateTraj(StateTraj):
             Numpy array holding active set of states.
 
         """
-        return self._states
+        return self._states.copy()
 
     @property
     def nmicrostates(self):
@@ -472,7 +477,7 @@ class LumpedStateTraj(StateTraj):
             Micro to macrostate assignment vector.
 
         """
-        return self._state_assignment
+        return self._state_assignment.copy()
 
     @property
     def _state_assignment_idx(self):

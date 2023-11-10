@@ -96,6 +96,14 @@ def test_StateTraj_constructor(statetraj):
     lumpedTraj = LumpedStateTraj(statetraj, statetraj)
     assert lumpedTraj is StateTraj(lumpedTraj)
 
+    # check that immutable
+    assert traj._trajs[0] is not StateTraj(traj.trajs)._trajs[0]
+    # check for index trajs
+    assert (
+        StateTraj(traj.index_trajs)._trajs[0] is not
+        StateTraj(traj.index_trajs)._trajs[0]
+    )
+
 
 def test_LumpedStateTraj_constructor(macrotraj, statetraj):
     """Test construction of object."""
@@ -125,6 +133,14 @@ def test_nstates(state_traj, statetraj, macro_traj, macrotraj):
 
     with pytest.raises(AttributeError):
         state_traj.nstates = 5
+
+
+def test_states(state_traj):
+    """Test immutability of states property."""
+    assert state_traj.states is not state_traj.states
+
+    with pytest.raises(AttributeError):
+        state_traj.states = state_traj.states
 
 
 def test_nframes(state_traj):
