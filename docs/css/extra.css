@@ -65,6 +65,7 @@ a[href^="https://"]::after
 
 a[href^="https://github.com/moldyn/msmhelper"]::after,
 a[href^="https://moldyn.github.io/msmhelper"]::after,
+a[href^="https://joss.theoj.org"]::after,
 a[href^="https://github.com/wemake-services"]::after,
 a[href^="https://pypi.org"]::after,
 a[href^="https://anaconda.org"]::after,
