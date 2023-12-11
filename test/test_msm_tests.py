@@ -67,3 +67,30 @@ def test__chapman_kolmogorov_test(trajs, lagtime, tmax, result):
                 )
         else:
             np.testing.assert_array_almost_equal(cktest[key], result[key])
+
+
+@pytest.mark.parametrize('trajs, lagtime, tmax', [
+    ([1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1], 2, 5),
+])
+def test_buchete_hummer_test(trajs, lagtime, tmax):
+    """Test Buchete Hummer test."""
+    # check float as lag times
+    with pytest.raises(TypeError):
+        _ = tests.bh_test(trajs, lagtime=[1.2], tmax=tmax)
+
+    # check negative lag times
+    with pytest.raises(TypeError):
+        _ = tests.bh_test(trajs, lagtime=-1, tmax=tmax)
+
+    # check maximal time negative
+    with pytest.raises(TypeError):
+        _ = tests.bh_test(trajs, lagtime=lagtime, tmax=-1)
+
+    # check maximal time float
+    with pytest.raises(TypeError):
+        _ = tests.bh_test(trajs, lagtime=lagtime, tmax=5.7)
+
+    # check if all keys exists
+    bhtest = tests.bh_test(trajs, lagtime=lagtime, tmax=tmax)
+    assert 'md' in bhtest
+    assert lagtime in bhtest
