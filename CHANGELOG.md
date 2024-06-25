@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added Features and Improvements 🙌:
 - Supporting latest Python 3.12 🎉
 
+### Other changes:
+- Support latest version of `pplt`
+- Fix docs
 
 ## [1.1.1] - 2023-11-10
 ### Bugfix 🐛:
