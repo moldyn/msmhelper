@@ -96,7 +96,7 @@ def ck_test(
     """Estimation and visualization of the Chapman-Kolmogorov test."""
     # setup matplotlib
     pplt.use_style(
-        figsize=0.8, true_black=True, colors='pastel_autunm', latex=False,
+        figsize=0.8, true_black=True, colors='pastel_autumn', latex=False,
     )
 
     # load file

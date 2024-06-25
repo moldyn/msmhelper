@@ -102,7 +102,7 @@ def waiting_times(
     """Estimation and visualization of the waiting times."""
     # setup matplotlib
     pplt.use_style(
-        figsize=2.2, true_black=True, colors='pastel_autunm', latex=False,
+        figsize=2.2, true_black=True, colors='pastel_autumn', latex=False,
     )
 
     # load file

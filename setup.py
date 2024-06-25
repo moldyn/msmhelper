@@ -107,7 +107,7 @@ setuptools.setup(
         'decorit',
         'scipy',
         'click',
-        'prettypyplot',
+        'prettypyplot>=0.11',
     ],
     extras_require=get_extra_requirements('extra-requirements.txt'),
 )

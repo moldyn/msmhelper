@@ -68,7 +68,7 @@ def contact_rep(contact_file, cluster_file, state_file, output, grid):
     """
     # setup matplotlib
     pplt.use_style(
-        figsize=0.8, colors='pastel_autunm', true_black=True, latex=False,
+        figsize=0.8, colors='pastel_autumn', true_black=True, latex=False,
     )
 
     # load files

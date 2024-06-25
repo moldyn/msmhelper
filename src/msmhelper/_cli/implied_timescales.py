@@ -106,7 +106,7 @@ def implied_timescales(
     n_lagtimes = np.min((n_lagtimes, len(impl_times)))
 
     # setup pyplot
-    kwargs = {'colors': 'pastel_autunm'}
+    kwargs = {'colors': 'pastel_autumn'}
     if n_lagtimes > 5:
         kwargs = {'colors': 'macaw', 'ncs': n_lagtimes + 1}
 
